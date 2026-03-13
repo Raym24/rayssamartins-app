@@ -13,6 +13,10 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        display: ['Space Grotesk', 'sans-serif'],
+        body: ['Inter', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -38,6 +42,11 @@ export default {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+          yellow: "hsl(var(--accent-yellow))",
+          blue: "hsl(var(--accent-blue))",
+          pink: "hsl(var(--accent-pink))",
+          mint: "hsl(var(--accent-mint))",
+          coral: "hsl(var(--accent-coral))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
