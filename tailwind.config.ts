@@ -74,25 +74,60 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0) rotate(0deg)" },
+          "33%": { transform: "translateY(-12px) rotate(3deg)" },
+          "66%": { transform: "translateY(6px) rotate(-2deg)" },
+        },
+        "spin-slow": {
+          from: { transform: "rotate(0deg)" },
+          to: { transform: "rotate(360deg)" },
+        },
+        "bounce-soft": {
+          "0%, 100%": { transform: "translateY(0) scale(1)" },
+          "50%": { transform: "translateY(-8px) scale(1.05)" },
+        },
+        marquee: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
+        },
+        "pop-in": {
+          "0%": { opacity: "0", transform: "scale(0.6) rotate(-5deg)" },
+          "70%": { transform: "scale(1.08) rotate(1deg)" },
+          "100%": { opacity: "1", transform: "scale(1) rotate(0deg)" },
+        },
+        "fade-up": {
+          from: { opacity: "0", transform: "translateY(30px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
+        wiggle: {
+          "0%, 100%": { transform: "rotate(0deg)" },
+          "25%": { transform: "rotate(6deg)" },
+          "75%": { transform: "rotate(-6deg)" },
+        },
+        sparkle: {
+          "0%, 100%": { opacity: "1", transform: "scale(1)" },
+          "50%": { opacity: "0.4", transform: "scale(0.7)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        float: "float 4s ease-in-out infinite",
+        "spin-slow": "spin-slow 8s linear infinite",
+        "bounce-soft": "bounce-soft 2.5s ease-in-out infinite",
+        marquee: "marquee var(--marquee-duration, 20s) linear infinite",
+        "pop-in": "pop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "fade-up": "fade-up 0.6s ease-out",
+        wiggle: "wiggle 1.5s ease-in-out infinite",
+        sparkle: "sparkle 2s ease-in-out infinite",
       },
     },
   },
