@@ -1,13 +1,12 @@
 import { useState, useCallback } from "react";
-import heroIllustration from "@/assets/hero-illustration.png";
 
-const floatingStickers = [
-  { emoji: "⭐", x: 75, y: 10, anim: "animate-float", size: "text-4xl" },
-  { emoji: "🎨", x: 85, y: 40, anim: "animate-bounce-soft", size: "text-3xl" },
-  { emoji: "✏️", x: 70, y: 70, anim: "animate-wiggle", size: "text-3xl" },
-  { emoji: "💖", x: 90, y: 65, anim: "animate-float-alt", size: "text-2xl" },
-  { emoji: "✨", x: 10, y: 80, anim: "animate-sparkle", size: "text-3xl" },
-  { emoji: "🌟", x: 5, y: 30, anim: "animate-float", size: "text-2xl" },
+const decorativeElements = [
+  { content: "★", x: 80, y: 15, anim: "animate-float", size: "text-5xl", color: "text-primary" },
+  { content: "✦", x: 10, y: 20, anim: "animate-bounce-soft", size: "text-3xl", color: "text-foreground" },
+  { content: "●", x: 88, y: 70, anim: "animate-sparkle", size: "text-2xl", color: "text-primary" },
+  { content: "✶", x: 5, y: 75, anim: "animate-float-alt", size: "text-4xl", color: "text-primary" },
+  { content: "○", x: 92, y: 40, anim: "animate-spin-slow", size: "text-3xl", color: "text-foreground opacity-30" },
+  { content: "◆", x: 15, y: 50, anim: "animate-wiggle", size: "text-xl", color: "text-foreground opacity-20" },
 ];
 
 const HeroSection = () => {
@@ -23,73 +22,89 @@ const HeroSection = () => {
   return (
     <section
       id="hero"
-      className="min-h-screen flex items-center pt-16 relative overflow-hidden"
+      className="min-h-screen flex items-center justify-center pt-16 relative overflow-hidden"
       onMouseMove={handleMouseMove}
     >
-      <div className="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center relative z-10">
-        <div className="space-y-6">
-          <div className="flex flex-wrap gap-2">
-            <span className="sticker-pink animate-bounce-soft" style={{ animationDelay: "0.5s" }}>
-              ✨ Disponível para projetos
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="flex flex-col items-center text-center space-y-6">
+          {/* Year badge */}
+          <div className="flex items-center gap-3 scroll-reveal">
+            <span className="sticker-red text-xs tracking-widest uppercase font-semibold">
+              Portfolio 2025
             </span>
-            <span className="sticker-blue animate-bounce-soft" style={{ animationDelay: "0.8s" }}>
+            <span className="sticker-outline text-xs tracking-widest uppercase font-semibold">
               🇧🇷 Brasil
             </span>
           </div>
-          <h1 className="font-display text-5xl md:text-7xl font-bold leading-tight tracking-tight">
-            Rayssa<br />
-            <span className="text-gradient">Martins</span>
+
+          {/* Main name - massive bold typography */}
+          <h1 className="font-display-bold text-[clamp(4rem,15vw,12rem)] leading-[0.85] tracking-tight scroll-reveal">
+            RAYSSA
+            <br />
+            <span className="text-primary">MARTINS</span>
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-md font-body">
+
+          {/* Subtitle */}
+          <p className="text-lg md:text-xl text-muted-foreground font-body max-w-lg scroll-reveal">
             UI/UX Designer & Web Designer criando experiências digitais que encantam e convertem.
           </p>
-          <div className="flex gap-3 pt-2">
+
+          {/* CTA buttons */}
+          <div className="flex gap-4 pt-4 scroll-reveal">
             <a
               href="#projects"
               onClick={(e) => { e.preventDefault(); document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" }); }}
-              className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 text-sm font-medium hover:scale-105 hover:shadow-lg transition-all duration-300 animate-glow-pulse"
+              className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 text-sm font-semibold uppercase tracking-wider hover:scale-105 hover:shadow-lg transition-all duration-300"
             >
-              ✦ Ver Projetos
+              Ver Projetos →
             </a>
             <a
               href="#contact"
               onClick={(e) => { e.preventDefault(); document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" }); }}
-              className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium hover:bg-secondary hover:scale-105 transition-all duration-300"
+              className="inline-flex items-center gap-2 border-2 border-foreground px-8 py-3 text-sm font-semibold uppercase tracking-wider hover:bg-foreground hover:text-background transition-all duration-300"
             >
-              💬 Contato
+              Contato
             </a>
           </div>
         </div>
-        <div className="flex justify-center relative">
-          <img
-            src={heroIllustration}
-            alt="Ilustração de workspace criativo"
-            className="w-full max-w-lg drop-shadow-xl hover:scale-[1.02] transition-transform duration-500"
-            loading="eager"
-            style={{
-              transform: `translate(${mouse.x * 8}px, ${mouse.y * 8}px)`,
-              transition: "transform 0.3s ease-out",
-            }}
-          />
-        </div>
       </div>
 
-      {/* Floating stickers with parallax */}
-      {floatingStickers.map((s, i) => (
+      {/* Floating decorative elements with parallax */}
+      {decorativeElements.map((el, i) => (
         <span
           key={i}
-          className={`absolute ${s.anim} ${s.size} pointer-events-none select-none`}
+          className={`absolute ${el.anim} ${el.size} ${el.color} pointer-events-none select-none`}
           style={{
-            left: `${s.x}%`,
-            top: `${s.y}%`,
+            left: `${el.x}%`,
+            top: `${el.y}%`,
             transform: `translate(${mouse.x * (15 + i * 5)}px, ${mouse.y * (15 + i * 5)}px)`,
             transition: "transform 0.4s ease-out",
             animationDelay: `${i * 0.3}s`,
           }}
         >
-          {s.emoji}
+          {el.content}
         </span>
       ))}
+
+      {/* Geometric shapes */}
+      <div
+        className="absolute w-32 h-32 border-2 border-primary/20 rotate-45 pointer-events-none"
+        style={{
+          right: "10%",
+          bottom: "20%",
+          transform: `rotate(45deg) translate(${mouse.x * 20}px, ${mouse.y * 20}px)`,
+          transition: "transform 0.5s ease-out",
+        }}
+      />
+      <div
+        className="absolute w-20 h-20 border-2 border-foreground/10 rounded-full pointer-events-none"
+        style={{
+          left: "8%",
+          bottom: "30%",
+          transform: `translate(${mouse.x * 12}px, ${mouse.y * 12}px)`,
+          transition: "transform 0.5s ease-out",
+        }}
+      />
     </section>
   );
 };

@@ -1,28 +1,23 @@
 import Marquee from "./Marquee";
 
 interface AnimatedDividerProps {
-  variant?: "stars" | "tools" | "sparkles";
+  text?: string;
+  variant?: "red" | "black";
 }
 
-const dividerContent = {
-  stars: ["⭐", "✨", "🌟", "💫", "⭐", "✨", "🌟", "💫", "⭐", "✨"],
-  tools: ["🎨", "✏️", "🖌️", "💻", "📐", "🎯", "🖥️", "📱", "🎨", "✏️"],
-  sparkles: ["✦", "◆", "●", "✦", "◇", "○", "✦", "◆", "●", "✦"],
-};
-
-const AnimatedDivider = ({ variant = "stars" }: AnimatedDividerProps) => {
-  const items = dividerContent[variant];
+const AnimatedDivider = ({ text = "RAYSSA MARTINS", variant = "red" }: AnimatedDividerProps) => {
+  const items = Array(10).fill(null);
+  const isRed = variant === "red";
 
   return (
-    <div className="py-4 border-y border-border overflow-hidden">
-      <Marquee speed={15}>
-        {items.map((item, i) => (
+    <div className={isRed ? "marquee-band" : "marquee-band-black"}>
+      <Marquee speed={12}>
+        {items.map((_, i) => (
           <span
             key={i}
-            className="mx-6 text-2xl opacity-60"
-            style={{ animationDelay: `${i * 0.2}s` }}
+            className="mx-8 text-lg md:text-2xl font-display-bold tracking-[0.2em] uppercase"
           >
-            {item}
+            {text} <span className="mx-4 opacity-60">✦</span>
           </span>
         ))}
       </Marquee>

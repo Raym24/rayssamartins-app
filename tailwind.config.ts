@@ -14,7 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['Space Grotesk', 'sans-serif'],
+        display: ['Bebas Neue', 'Space Grotesk', 'sans-serif'],
+        heading: ['Space Grotesk', 'sans-serif'],
         body: ['Inter', 'sans-serif'],
       },
       colors: {
@@ -42,11 +43,6 @@ export default {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
-          yellow: "hsl(var(--accent-yellow))",
-          blue: "hsl(var(--accent-blue))",
-          pink: "hsl(var(--accent-pink))",
-          mint: "hsl(var(--accent-mint))",
-          coral: "hsl(var(--accent-coral))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -86,6 +82,10 @@ export default {
           "33%": { transform: "translateY(-12px) rotate(3deg)" },
           "66%": { transform: "translateY(6px) rotate(-2deg)" },
         },
+        "float-alt": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-18px)" },
+        },
         "spin-slow": {
           from: { transform: "rotate(0deg)" },
           to: { transform: "rotate(360deg)" },
@@ -116,11 +116,16 @@ export default {
           "0%, 100%": { opacity: "1", transform: "scale(1)" },
           "50%": { opacity: "0.4", transform: "scale(0.7)" },
         },
+        "glow-pulse": {
+          "0%, 100%": { boxShadow: "0 0 5px hsl(0 100% 50% / 0.3)" },
+          "50%": { boxShadow: "0 0 20px hsl(0 100% 50% / 0.6), 0 0 40px hsl(0 100% 50% / 0.2)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         float: "float 4s ease-in-out infinite",
+        "float-alt": "float-alt 5s ease-in-out infinite",
         "spin-slow": "spin-slow 8s linear infinite",
         "bounce-soft": "bounce-soft 2.5s ease-in-out infinite",
         marquee: "marquee var(--marquee-duration, 20s) linear infinite",
@@ -128,6 +133,7 @@ export default {
         "fade-up": "fade-up 0.6s ease-out",
         wiggle: "wiggle 1.5s ease-in-out infinite",
         sparkle: "sparkle 2s ease-in-out infinite",
+        "glow-pulse": "glow-pulse 2s ease-in-out infinite",
       },
     },
   },

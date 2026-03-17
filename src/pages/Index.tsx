@@ -14,13 +14,13 @@ const Index = () => {
       <FloatingElements />
       <Navbar />
       <HeroSection />
-      <AnimatedDivider variant="tools" />
+      <AnimatedDivider text="ABOUT ME" variant="red" />
       <AboutSection />
-      <AnimatedDivider variant="sparkles" />
+      <AnimatedDivider text="SKILLS & TOOLS" variant="black" />
       <SkillsSection />
-      <AnimatedDivider variant="stars" />
+      <AnimatedDivider text="PROJECTS" variant="red" />
       <ProjectsSection />
-      <AnimatedDivider variant="tools" />
+      <AnimatedDivider text="GET IN TOUCH" variant="black" />
       <ContactSection />
       <Footer />
     </div>
