@@ -2,72 +2,69 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import Marquee from "./Marquee";
 
 const hardSkills = [
-  { name: "UI/UX Design", sticker: "sticker-pink" },
-  { name: "Web Design", sticker: "sticker-blue" },
-  { name: "Figma", sticker: "sticker-yellow" },
-  { name: "Adobe XD", sticker: "sticker-coral" },
-  { name: "Photoshop", sticker: "sticker-mint" },
-  { name: "Illustrator", sticker: "sticker-pink" },
-  { name: "InDesign", sticker: "sticker-blue" },
-  { name: "Lightroom", sticker: "sticker-yellow" },
+  "UI/UX Design", "Web Design", "Figma", "Adobe XD",
+  "Photoshop", "Illustrator", "InDesign", "Lightroom",
 ];
 
 const softSkills = [
-  { name: "Resolução de Problemas", sticker: "sticker-mint" },
-  { name: "Comunicação", sticker: "sticker-coral" },
-  { name: "Criatividade", sticker: "sticker-pink" },
-  { name: "Trabalho em Equipe", sticker: "sticker-blue" },
-  { name: "Gestão de Tempo", sticker: "sticker-yellow" },
-  { name: "Pensamento Crítico", sticker: "sticker-mint" },
+  "Resolução de Problemas", "Comunicação", "Criatividade",
+  "Trabalho em Equipe", "Gestão de Tempo", "Pensamento Crítico",
 ];
 
-const marqueeSkills = ["Figma", "✦", "Photoshop", "✦", "UI/UX", "✦", "Web Design", "✦", "Illustrator", "✦", "Adobe XD", "✦", "Criatividade", "✦", "Inovação", "✦"];
+const marqueeSkills = ["FIGMA", "✦", "PHOTOSHOP", "✦", "UI/UX", "✦", "WEB DESIGN", "✦", "ILLUSTRATOR", "✦", "ADOBE XD", "✦", "CRIATIVIDADE", "✦", "INOVAÇÃO", "✦"];
 
 const SkillsSection = () => {
   const ref = useScrollReveal();
 
   return (
-    <section id="skills" className="py-24 bg-secondary relative" ref={ref}>
-      <span className="absolute top-8 left-8 text-2xl animate-sparkle opacity-30 pointer-events-none">✨</span>
-      <span className="absolute bottom-12 right-12 text-3xl animate-float opacity-30 pointer-events-none">🎨</span>
-
+    <section id="skills" className="py-24 relative" ref={ref}>
       <div className="container mx-auto px-6">
-        <h2 className="font-display text-3xl md:text-4xl font-bold mb-12 scroll-reveal">
-          Habili<span className="text-gradient">dades</span>
-        </h2>
+        <div className="flex items-center gap-4 mb-12 scroll-reveal">
+          <h2 className="font-display-bold text-5xl md:text-7xl tracking-tight uppercase">
+            SKI<span className="text-primary">LLS</span>
+          </h2>
+          <div className="hidden md:block flex-1 h-[2px] bg-foreground/10" />
+          <span className="text-3xl animate-sparkle text-primary">★</span>
+        </div>
 
-        {/* Marquee ticker */}
-        <div className="mb-12 scroll-reveal">
-          <Marquee speed={25} className="py-3 border-y border-border text-lg font-display font-semibold text-muted-foreground">
+        {/* Skills marquee */}
+        <div className="mb-16 scroll-reveal marquee-band-black py-4">
+          <Marquee speed={20}>
             {marqueeSkills.map((skill, i) => (
-              <span key={i} className="mx-4">{skill}</span>
+              <span key={i} className="mx-6 text-lg md:text-xl font-display-bold tracking-[0.15em]">
+                {skill}
+              </span>
             ))}
           </Marquee>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12">
-          <div>
-            <h3 className="font-display text-lg font-semibold mb-4 scroll-reveal">Hard Skills</h3>
+        <div className="grid md:grid-cols-2 gap-16">
+          <div className="scroll-reveal-left">
+            <h3 className="font-heading text-sm font-bold uppercase tracking-[0.2em] mb-6 text-primary">
+              Hard Skills
+            </h3>
             <div className="flex flex-wrap gap-3">
               {hardSkills.map((skill, i) => (
                 <span
-                  key={skill.name}
-                  className={`${skill.sticker} scroll-reveal-pop stagger-${i + 1} hover:scale-110 transition-transform cursor-default`}
+                  key={skill}
+                  className={`px-5 py-2.5 border-2 border-foreground text-sm font-semibold uppercase tracking-wider hover:bg-foreground hover:text-background transition-all duration-300 cursor-default scroll-reveal-pop stagger-${i + 1}`}
                 >
-                  {skill.name}
+                  {skill}
                 </span>
               ))}
             </div>
           </div>
-          <div>
-            <h3 className="font-display text-lg font-semibold mb-4 scroll-reveal">Soft Skills</h3>
+          <div className="scroll-reveal-right">
+            <h3 className="font-heading text-sm font-bold uppercase tracking-[0.2em] mb-6 text-primary">
+              Soft Skills
+            </h3>
             <div className="flex flex-wrap gap-3">
               {softSkills.map((skill, i) => (
                 <span
-                  key={skill.name}
-                  className={`${skill.sticker} scroll-reveal-pop stagger-${i + 1} hover:scale-110 transition-transform cursor-default`}
+                  key={skill}
+                  className={`px-5 py-2.5 border-2 border-primary/30 text-sm font-semibold uppercase tracking-wider hover:bg-primary hover:text-primary-foreground transition-all duration-300 cursor-default scroll-reveal-pop stagger-${i + 1}`}
                 >
-                  {skill.name}
+                  {skill}
                 </span>
               ))}
             </div>

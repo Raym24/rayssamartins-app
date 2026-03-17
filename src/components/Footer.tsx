@@ -1,30 +1,28 @@
 import Marquee from "./Marquee";
 
-const footerMarquee = ["Rayssa Martins", "✦", "UI/UX Designer", "✦", "Web Designer", "✦", "Criativa", "✦", "Disponível para projetos", "✦"];
+const footerMarquee = ["RAYSSA MARTINS", "✦", "UI/UX DESIGNER", "✦", "WEB DESIGNER", "✦", "DISPONÍVEL PARA PROJETOS", "✦"];
 
 const Footer = () => {
   return (
     <footer className="border-t border-border">
-      {/* Marquee ticker */}
-      <Marquee speed={30} className="py-4 border-b border-border">
-        {footerMarquee.map((item, i) => (
-          <span key={i} className="mx-4 text-sm font-display font-semibold text-muted-foreground">
-            {item}
-          </span>
-        ))}
-      </Marquee>
+      {/* Red marquee band */}
+      <div className="marquee-band">
+        <Marquee speed={25}>
+          {footerMarquee.map((item, i) => (
+            <span key={i} className="mx-6 text-sm font-display-bold tracking-[0.2em]">
+              {item}
+            </span>
+          ))}
+        </Marquee>
+      </div>
 
-      <div className="container mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <p className="font-display text-sm font-semibold">
-          Rayssa<span className="text-gradient">.</span>
-          <span className="inline-block animate-wiggle ml-1">✦</span>
+      <div className="container mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p className="font-display-bold text-xl tracking-wider uppercase">
+          RAYSSA<span className="text-primary">.</span>
         </p>
-        <div className="flex items-center gap-2">
-          <span className="animate-sparkle">✨</span>
-          <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Rayssa Martins. Todos os direitos reservados.
-          </p>
-        </div>
+        <p className="text-xs text-muted-foreground uppercase tracking-wider">
+          © {new Date().getFullYear()} Rayssa Martins. Todos os direitos reservados.
+        </p>
       </div>
     </footer>
   );
