@@ -5,15 +5,22 @@ import SkillsSection from "@/components/SkillsSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
+import FloatingElements from "@/components/FloatingElements";
+import AnimatedDivider from "@/components/AnimatedDivider";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative">
+      <FloatingElements />
       <Navbar />
       <HeroSection />
+      <AnimatedDivider variant="tools" />
       <AboutSection />
+      <AnimatedDivider variant="sparkles" />
       <SkillsSection />
+      <AnimatedDivider variant="stars" />
       <ProjectsSection />
+      <AnimatedDivider variant="tools" />
       <ContactSection />
       <Footer />
     </div>
