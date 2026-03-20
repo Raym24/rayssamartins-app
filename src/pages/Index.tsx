@@ -16,7 +16,7 @@ const Index = () => {
       <HeroSection />
       <AnimatedDivider text="SOBRE MIM" variant="red" />
       <AboutSection />
-      <AnimatedDivider text="HABILIDADES & FERRAMENTAS" variant="black" />
+      
       <SkillsSection />
       <AnimatedDivider text="PROJETOS" variant="red" />
       <ProjectsSection />
