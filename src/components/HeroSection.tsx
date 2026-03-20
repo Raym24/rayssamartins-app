@@ -37,7 +37,7 @@ const HeroSection = () => {
         }}
       />
       {/* Dark overlay */}
-      <div className="absolute inset-0 z-[1] bg-black/40" />
+      <div className="absolute inset-0 z-[1] bg-black" />
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col items-center text-center space-y-6">
