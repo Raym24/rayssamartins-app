@@ -1,5 +1,6 @@
 import { MapPin, Briefcase, Mail, ExternalLink } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import raysaPhoto from "@/assets/rayssa-photo.png";
 
 const AboutSection = () => {
   const ref = useScrollReveal();
@@ -9,22 +10,21 @@ const AboutSection = () => {
       <div className="container mx-auto px-6">
         <div className="flex items-center gap-4 mb-12 scroll-reveal">
           <h2 className="font-display-bold text-5xl md:text-7xl tracking-tight uppercase">
-            ABOUT <span className="text-primary">ME</span>
+            SOBRE <span className="text-primary">MIM</span>
           </h2>
           <div className="hidden md:block flex-1 h-[2px] bg-foreground/10" />
           <span className="text-3xl animate-float">★</span>
         </div>
 
         <div className="grid md:grid-cols-2 gap-16 items-start">
-          {/* Photo placeholder area */}
+          {/* Photo */}
           <div className="scroll-reveal-left">
-            <div className="aspect-[3/4] bg-secondary border-2 border-border flex items-center justify-center relative overflow-hidden group">
-              {/* Placeholder - replace with IMG_1606.webp */}
-              <div className="text-center space-y-4 p-8">
-                <span className="text-6xl">📸</span>
-                <p className="text-muted-foreground text-sm font-medium">Foto de Rayssa Martins</p>
-                <p className="text-muted-foreground text-xs">(IMG_1606.webp)</p>
-              </div>
+            <div className="aspect-[3/4] border-2 border-border flex items-center justify-center relative overflow-hidden group">
+              <img
+                src={raysaPhoto}
+                alt="Rayssa Martins"
+                className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
+              />
               {/* Red corner accent */}
               <div className="absolute top-0 right-0 w-16 h-16 bg-primary" />
               <div className="absolute bottom-0 left-0 w-12 h-12 border-2 border-foreground" />
@@ -65,7 +65,7 @@ const AboutSection = () => {
                 <Mail size={20} className="text-primary shrink-0" />
                 <div>
                   <span className="text-xs uppercase tracking-wider text-muted-foreground">E-mail</span>
-                  <p className="font-semibold">contato@rayssamartins.com</p>
+                  <p className="font-semibold">rayssamartins33@gmail.com</p>
                 </div>
               </div>
             </div>
@@ -79,8 +79,13 @@ const AboutSection = () => {
               >
                 <ExternalLink size={14} /> Behance
               </a>
-              <a href="#contact" className="inline-flex items-center gap-2 border-2 border-foreground px-5 py-2.5 text-sm font-semibold uppercase tracking-wider hover:bg-foreground hover:text-background transition-colors">
-                <ExternalLink size={14} /> LinkedIn
+              <a
+                href="https://wa.me/5585991706850"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 border-2 border-foreground px-5 py-2.5 text-sm font-semibold uppercase tracking-wider hover:bg-foreground hover:text-background transition-colors"
+              >
+                <ExternalLink size={14} /> WhatsApp
               </a>
             </div>
           </div>
