@@ -26,6 +26,19 @@ const HeroSection = () => {
       className="min-h-screen flex flex-col items-center justify-center pt-16 relative overflow-hidden"
       onMouseMove={handleMouseMove}
     >
+      {/* Background image */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: `url(${raysaPhoto})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
+      {/* Dark overlay */}
+      <div className="absolute inset-0 z-[1] bg-black/40" />
+
       <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col items-center text-center space-y-6">
           {/* Year badge */}
