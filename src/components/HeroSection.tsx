@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import raysaPhoto from "@/assets/rayssa-photo.png";
 
 const decorativeElements = [
   { content: "★", x: 80, y: 15, anim: "animate-float", size: "text-5xl", color: "text-primary" },
@@ -22,7 +23,7 @@ const HeroSection = () => {
   return (
     <section
       id="hero"
-      className="min-h-screen flex items-center justify-center pt-16 relative overflow-hidden"
+      className="min-h-screen flex flex-col items-center justify-center pt-16 relative overflow-hidden"
       onMouseMove={handleMouseMove}
     >
       <div className="container mx-auto px-6 relative z-10">
@@ -30,14 +31,14 @@ const HeroSection = () => {
           {/* Year badge */}
           <div className="flex items-center gap-3 scroll-reveal">
             <span className="sticker-red text-xs tracking-widest uppercase font-semibold">
-              Portfolio 2025
+              Portfólio 2025
             </span>
             <span className="sticker-outline text-xs tracking-widest uppercase font-semibold">
               🇧🇷 Brasil
             </span>
           </div>
 
-          {/* Main name - massive bold typography */}
+          {/* Main name */}
           <h1 className="font-display-bold text-[clamp(4rem,15vw,12rem)] leading-[0.85] tracking-tight scroll-reveal">
             RAYSSA
             <br />
@@ -65,6 +66,19 @@ const HeroSection = () => {
             >
               Contato
             </a>
+          </div>
+
+          {/* Photo below interactive elements */}
+          <div className="mt-8 scroll-reveal">
+            <div className="relative w-64 h-64 md:w-80 md:h-80 mx-auto">
+              <img
+                src={raysaPhoto}
+                alt="Rayssa Martins"
+                className="w-full h-full object-cover object-top rounded-full border-4 border-primary shadow-2xl"
+              />
+              <div className="absolute -top-2 -right-2 w-8 h-8 bg-primary rotate-12 animate-bounce-soft" />
+              <div className="absolute -bottom-2 -left-2 w-6 h-6 border-2 border-foreground rotate-45 animate-float" />
+            </div>
           </div>
         </div>
       </div>

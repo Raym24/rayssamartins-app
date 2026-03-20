@@ -4,6 +4,8 @@ import Marquee from "./Marquee";
 const hardSkills = [
   "UI/UX Design", "Web Design", "Figma", "Adobe XD",
   "Photoshop", "Illustrator", "InDesign", "Lightroom",
+  "Especialista em IA", "Automações", "Apps e Sites com IA",
+  "Agentes de IA", "Fotografia",
 ];
 
 const softSkills = [
@@ -11,7 +13,7 @@ const softSkills = [
   "Trabalho em Equipe", "Gestão de Tempo", "Pensamento Crítico",
 ];
 
-const marqueeSkills = ["FIGMA", "✦", "PHOTOSHOP", "✦", "UI/UX", "✦", "WEB DESIGN", "✦", "ILLUSTRATOR", "✦", "ADOBE XD", "✦", "CRIATIVIDADE", "✦", "INOVAÇÃO", "✦"];
+const marqueeSkills = ["FIGMA", "✦", "PHOTOSHOP", "✦", "UI/UX", "✦", "WEB DESIGN", "✦", "ILLUSTRATOR", "✦", "ADOBE XD", "✦", "IA & AUTOMAÇÕES", "✦", "FOTOGRAFIA", "✦"];
 
 const SkillsSection = () => {
   const ref = useScrollReveal();
@@ -21,13 +23,13 @@ const SkillsSection = () => {
       <div className="container mx-auto px-6">
         <div className="flex items-center gap-4 mb-12 scroll-reveal">
           <h2 className="font-display-bold text-5xl md:text-7xl tracking-tight uppercase">
-            SKI<span className="text-primary">LLS</span>
+            HABILI<span className="text-primary">DADES</span>
           </h2>
           <div className="hidden md:block flex-1 h-[2px] bg-foreground/10" />
           <span className="text-3xl animate-sparkle text-primary">★</span>
         </div>
 
-        {/* Skills marquee */}
+        {/* Single skills marquee */}
         <div className="mb-16 scroll-reveal marquee-band-black py-4">
           <Marquee speed={20}>
             {marqueeSkills.map((skill, i) => (
@@ -47,7 +49,7 @@ const SkillsSection = () => {
               {hardSkills.map((skill, i) => (
                 <span
                   key={skill}
-                  className={`px-5 py-2.5 border-2 border-foreground text-sm font-semibold uppercase tracking-wider hover:bg-foreground hover:text-background transition-all duration-300 cursor-default scroll-reveal-pop stagger-${i + 1}`}
+                  className={`px-5 py-2.5 border-2 border-foreground text-sm font-semibold uppercase tracking-wider hover:bg-foreground hover:text-background transition-all duration-300 cursor-default scroll-reveal-pop stagger-${Math.min(i + 1, 8)}`}
                 >
                   {skill}
                 </span>
@@ -62,7 +64,7 @@ const SkillsSection = () => {
               {softSkills.map((skill, i) => (
                 <span
                   key={skill}
-                  className={`px-5 py-2.5 border-2 border-primary/30 text-sm font-semibold uppercase tracking-wider hover:bg-primary hover:text-primary-foreground transition-all duration-300 cursor-default scroll-reveal-pop stagger-${i + 1}`}
+                  className={`px-5 py-2.5 border-2 border-primary/30 text-sm font-semibold uppercase tracking-wider hover:bg-primary hover:text-primary-foreground transition-all duration-300 cursor-default scroll-reveal-pop stagger-${Math.min(i + 1, 8)}`}
                 >
                   {skill}
                 </span>

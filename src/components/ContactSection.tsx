@@ -1,4 +1,4 @@
-import { Mail, ExternalLink } from "lucide-react";
+import { Mail, ExternalLink, Phone } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const ContactSection = () => {
@@ -24,7 +24,7 @@ const ContactSection = () => {
 
         <div className="flex flex-wrap justify-center gap-4 scroll-reveal">
           <a
-            href="mailto:contato@rayssamartins.com"
+            href="mailto:rayssamartins33@gmail.com"
             className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 text-sm font-semibold uppercase tracking-wider hover:scale-105 hover:shadow-lg transition-all duration-300 animate-glow-pulse"
           >
             <Mail size={18} /> Enviar E-mail
@@ -36,6 +36,14 @@ const ContactSection = () => {
             className="inline-flex items-center gap-2 border-2 border-foreground px-8 py-4 text-sm font-semibold uppercase tracking-wider hover:bg-foreground hover:text-background transition-all duration-300"
           >
             <ExternalLink size={18} /> Behance
+          </a>
+          <a
+            href="https://wa.me/5585991706850"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 border-2 border-foreground px-8 py-4 text-sm font-semibold uppercase tracking-wider hover:bg-foreground hover:text-background transition-all duration-300"
+          >
+            <Phone size={18} /> WhatsApp
           </a>
         </div>
       </div>
