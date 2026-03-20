@@ -26,6 +26,19 @@ const HeroSection = () => {
       className="min-h-screen flex flex-col items-center justify-center pt-16 relative overflow-hidden"
       onMouseMove={handleMouseMove}
     >
+      {/* Background image */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: `url(${raysaPhoto})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
+      {/* Dark overlay */}
+      <div className="absolute inset-0 z-[1] bg-black/40" />
+
       <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col items-center text-center space-y-6">
           {/* Year badge */}
@@ -39,14 +52,14 @@ const HeroSection = () => {
           </div>
 
           {/* Main name */}
-          <h1 className="font-display-bold text-[clamp(4rem,15vw,12rem)] leading-[0.85] tracking-tight scroll-reveal">
+          <h1 className="font-display-bold text-[clamp(4rem,15vw,12rem)] leading-[0.85] tracking-tight scroll-reveal text-white">
             RAYSSA
             <br />
             <span className="text-primary">MARTINS</span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-lg md:text-xl text-muted-foreground font-body max-w-lg scroll-reveal">
+          <p className="text-lg md:text-xl text-white/80 font-body max-w-lg scroll-reveal">
             UI/UX Designer & Web Designer criando experiências digitais que encantam e convertem.
           </p>
 
