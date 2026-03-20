@@ -52,14 +52,14 @@ const HeroSection = () => {
           </div>
 
           {/* Main name */}
-          <h1 className="font-display-bold text-[clamp(4rem,15vw,12rem)] leading-[0.85] tracking-tight scroll-reveal">
+          <h1 className="font-display-bold text-[clamp(4rem,15vw,12rem)] leading-[0.85] tracking-tight scroll-reveal text-white">
             RAYSSA
             <br />
             <span className="text-primary">MARTINS</span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-lg md:text-xl text-muted-foreground font-body max-w-lg scroll-reveal">
+          <p className="text-lg md:text-xl text-white/80 font-body max-w-lg scroll-reveal">
             UI/UX Designer & Web Designer criando experiências digitais que encantam e convertem.
           </p>
 
