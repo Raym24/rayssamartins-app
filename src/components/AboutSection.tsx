@@ -21,7 +21,7 @@ const AboutSection = () => {
           <div className="scroll-reveal-left">
             <div className="aspect-[3/4] border-2 border-border flex items-center justify-center relative overflow-hidden group">
               <img
-                src={raysaPhoto}
+                src={raysaAboutPhoto}
                 alt="Rayssa Martins"
                 className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
               />
