@@ -28,17 +28,20 @@ const SkillsSection = () => {
           <div className="hidden md:block flex-1 h-[2px] bg-foreground/10" />
           <span className="text-3xl animate-sparkle text-primary">★</span>
         </div>
+      </div>
 
-        {/* Single skills marquee */}
-        <div className="mb-16 scroll-reveal marquee-band-black py-4">
-          <Marquee speed={20}>
-            {marqueeSkills.map((skill, i) => (
-              <span key={i} className="mx-6 text-lg md:text-xl font-display-bold tracking-[0.15em]">
-                {skill}
-              </span>
-            ))}
-          </Marquee>
-        </div>
+      {/* Single skills marquee - full width */}
+      <div className="mb-16 scroll-reveal marquee-band-black py-4 w-full">
+        <Marquee speed={20}>
+          {marqueeSkills.map((skill, i) => (
+            <span key={i} className="mx-6 text-lg md:text-xl font-display-bold tracking-[0.15em]">
+              {skill}
+            </span>
+          ))}
+        </Marquee>
+      </div>
+
+      <div className="container mx-auto px-6">
 
         <div className="grid md:grid-cols-2 gap-16">
           <div className="scroll-reveal-left">
