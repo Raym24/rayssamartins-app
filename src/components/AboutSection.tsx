@@ -1,6 +1,6 @@
 import { MapPin, Briefcase, Mail, ExternalLink } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import raysaPhoto from "@/assets/rayssa-photo.png";
+import raysaAboutPhoto from "@/assets/rayssa-about.png";
 
 const AboutSection = () => {
   const ref = useScrollReveal();
