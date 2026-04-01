@@ -1,6 +1,6 @@
 import { MapPin, Briefcase, Mail, ExternalLink } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import raysaPhoto from "@/assets/rayssa-photo.png";
+import raysaAboutPhoto from "@/assets/rayssa-about.png";
 
 const AboutSection = () => {
   const ref = useScrollReveal();
@@ -21,7 +21,7 @@ const AboutSection = () => {
           <div className="scroll-reveal-left">
             <div className="aspect-[3/4] border-2 border-border flex items-center justify-center relative overflow-hidden group">
               <img
-                src={raysaPhoto}
+                src={raysaAboutPhoto}
                 alt="Rayssa Martins"
                 className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
               />
@@ -35,13 +35,7 @@ const AboutSection = () => {
           <div className="space-y-8 scroll-reveal-right">
             <div className="space-y-4">
               <p className="text-muted-foreground leading-relaxed text-lg">
-                Sou Rayssa Martins, designer apaixonada por criar experiências digitais que unem beleza e funcionalidade.
-                Com experiência em UI/UX Design e Web Design, transformo ideias em interfaces intuitivas que conectam
-                marcas aos seus usuários.
-              </p>
-              <p className="text-muted-foreground leading-relaxed">
-                Minha abordagem combina pesquisa de usuário, princípios de design centrado no humano e uma execução visual
-                refinada. Cada projeto é uma oportunidade de resolver problemas reais de forma criativa e impactante.
+                Com mais de 10 anos de experiência no mercado, construí uma trajetória marcada pela atuação em projetos para empresas nacionais e internacionais de grande porte. A comunicação visual, mais do que uma área de atuação, é parte essencial da minha forma de pensar, criar e resolver desafios. Meu trabalho transita por diferentes segmentos do design, incluindo direção criativa, fotografia, web, app e desenvolvimento de soluções visuais, sempre com olhar estratégico, sensibilidade estética e foco em resultado.
               </p>
             </div>
 
@@ -51,7 +45,7 @@ const AboutSection = () => {
                 <MapPin size={20} className="text-primary shrink-0" />
                 <div>
                   <span className="text-xs uppercase tracking-wider text-muted-foreground">Localização</span>
-                  <p className="font-semibold">Brasil</p>
+                  <p className="font-semibold">Fortaleza, CE (Brasil)</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 p-4 border border-border hover:border-primary transition-colors">
