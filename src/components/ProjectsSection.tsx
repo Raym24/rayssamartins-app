@@ -29,8 +29,10 @@ const ProjectsSection = () => {
                 <img
                   src={project.thumbnailUrl}
                   alt={project.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   loading="lazy"
+                  decoding="async"
+                  style={{ imageRendering: "auto" }}
                 />
                 {/* Overlay on hover */}
                 <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/60 transition-all duration-300 flex items-center justify-center">
