@@ -35,13 +35,7 @@ const AboutSection = () => {
           <div className="space-y-8 scroll-reveal-right">
             <div className="space-y-4">
               <p className="text-muted-foreground leading-relaxed text-lg">
-                Sou Rayssa Martins, designer apaixonada por criar experiências digitais que unem beleza e funcionalidade.
-                Com experiência em UI/UX Design e Web Design, transformo ideias em interfaces intuitivas que conectam
-                marcas aos seus usuários.
-              </p>
-              <p className="text-muted-foreground leading-relaxed">
-                Minha abordagem combina pesquisa de usuário, princípios de design centrado no humano e uma execução visual
-                refinada. Cada projeto é uma oportunidade de resolver problemas reais de forma criativa e impactante.
+                Com mais de 10 anos de experiência no mercado, construí uma trajetória marcada pela atuação em projetos para empresas nacionais e internacionais de grande porte. A comunicação visual, mais do que uma área de atuação, é parte essencial da minha forma de pensar, criar e resolver desafios. Meu trabalho transita por diferentes segmentos do design, incluindo direção criativa, fotografia, web, app e desenvolvimento de soluções visuais, sempre com olhar estratégico, sensibilidade estética e foco em resultado.
               </p>
             </div>
 
