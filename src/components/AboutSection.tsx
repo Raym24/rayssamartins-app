@@ -45,7 +45,7 @@ const AboutSection = () => {
                 <MapPin size={20} className="text-primary shrink-0" />
                 <div>
                   <span className="text-xs uppercase tracking-wider text-muted-foreground">Localização</span>
-                  <p className="font-semibold">Brasil</p>
+                  <p className="font-semibold">Fortaleza, CE (Brasil)</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 p-4 border border-border hover:border-primary transition-colors">
