@@ -1,3 +1,7 @@
+import x1deruaImg from "@/assets/x1derua.png";
+import soutingImg from "@/assets/soutingmarketing.png";
+import bliveImg from "@/assets/bliveensino.png";
+
 export interface Project {
   id: string;
   title: string;
