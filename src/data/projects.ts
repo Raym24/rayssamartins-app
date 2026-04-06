@@ -22,9 +22,9 @@ export const projects: Project[] = [
     description: "Projeto completo de identidade visual para o evento X1 de Rua em Crateús, incluindo criação de logo, materiais gráficos para redes sociais e peças promocionais. O objetivo foi criar uma identidade vibrante e urbana que capturasse a energia competitiva do evento.",
     role: "UI/UX Designer & Graphic Designer",
     tools: ["Photoshop", "Illustrator", "Figma"],
-    thumbnailUrl: "https://mir-s3-cdn-cf.behance.net/projects/max_1200/a4c871245701311.Y3JvcCwxMDgwLDg0NCwwLDI1MQ.png",
+    thumbnailUrl: x1deruaImg,
     behanceUrl: "https://www.behance.net/gallery/245701311/X1-de-Rua-Crateus",
-    images: ["https://mir-s3-cdn-cf.behance.net/projects/max_1200/a4c871245701311.Y3JvcCwxMDgwLDg0NCwwLDI1MQ.png"],
+    images: [x1deruaImg],
   },
   {
     id: "souting-marketing",
