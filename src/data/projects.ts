@@ -44,9 +44,9 @@ export const projects: Project[] = [
     description: "Criação de revista digital e peças para redes sociais da Blive Ensino Criativo. O projeto envolveu design editorial, diagramação e criação de templates para social media, mantendo uma linguagem visual moderna e educativa.",
     role: "Graphic Designer & Social Media Designer",
     tools: ["InDesign", "Photoshop", "Illustrator"],
-    thumbnailUrl: "https://mir-s3-cdn-cf.behance.net/projects/max_1200/ca29e9126086165.Y3JvcCw3MjQsNTY2LDY3Miw4Ng.jpg",
+    thumbnailUrl: bliveImg,
     behanceUrl: "https://www.behance.net/gallery/126086165/Blive-Ensino-Criativo-Revista-e-Social-Media",
-    images: ["https://mir-s3-cdn-cf.behance.net/projects/max_1200/ca29e9126086165.Y3JvcCw3MjQsNTY2LDY3Miw4Ng.jpg"],
+    images: [bliveImg],
   },
   {
     id: "portfolio-fotografias",
