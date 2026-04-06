@@ -33,9 +33,9 @@ export const projects: Project[] = [
     description: "Desenvolvimento da identidade visual completa para a Souting Marketing & Estratégia, incluindo logotipo, paleta de cores, tipografia e aplicações em materiais digitais e impressos. O projeto focou em transmitir profissionalismo e inovação.",
     role: "Web Designer & Brand Designer",
     tools: ["Figma", "Illustrator", "Photoshop"],
-    thumbnailUrl: "https://mir-s3-cdn-cf.behance.net/projects/max_1200/7d30fa224104303.Y3JvcCw5ODEsNzY4LDAsMA.png",
+    thumbnailUrl: soutingImg,
     behanceUrl: "https://www.behance.net/gallery/224104303/Souting-Marketing-Estratgia",
-    images: ["https://mir-s3-cdn-cf.behance.net/projects/max_1200/7d30fa224104303.Y3JvcCw5ODEsNzY4LDAsMA.png"],
+    images: [soutingImg],
   },
   {
     id: "blive-ensino",
