@@ -1,3 +1,7 @@
+import x1deruaImg from "@/assets/x1derua.png";
+import soutingImg from "@/assets/soutingmarketing.png";
+import bliveImg from "@/assets/bliveensino.png";
+
 export interface Project {
   id: string;
   title: string;
@@ -18,9 +22,9 @@ export const projects: Project[] = [
     description: "Projeto completo de identidade visual para o evento X1 de Rua em Crateús, incluindo criação de logo, materiais gráficos para redes sociais e peças promocionais. O objetivo foi criar uma identidade vibrante e urbana que capturasse a energia competitiva do evento.",
     role: "UI/UX Designer & Graphic Designer",
     tools: ["Photoshop", "Illustrator", "Figma"],
-    thumbnailUrl: "https://mir-s3-cdn-cf.behance.net/projects/max_1200/a4c871245701311.Y3JvcCwxMDgwLDg0NCwwLDI1MQ.png",
+    thumbnailUrl: x1deruaImg,
     behanceUrl: "https://www.behance.net/gallery/245701311/X1-de-Rua-Crateus",
-    images: ["https://mir-s3-cdn-cf.behance.net/projects/max_1200/a4c871245701311.Y3JvcCwxMDgwLDg0NCwwLDI1MQ.png"],
+    images: [x1deruaImg],
   },
   {
     id: "souting-marketing",
@@ -29,9 +33,9 @@ export const projects: Project[] = [
     description: "Desenvolvimento da identidade visual completa para a Souting Marketing & Estratégia, incluindo logotipo, paleta de cores, tipografia e aplicações em materiais digitais e impressos. O projeto focou em transmitir profissionalismo e inovação.",
     role: "Web Designer & Brand Designer",
     tools: ["Figma", "Illustrator", "Photoshop"],
-    thumbnailUrl: "https://mir-s3-cdn-cf.behance.net/projects/max_1200/7d30fa224104303.Y3JvcCw5ODEsNzY4LDAsMA.png",
+    thumbnailUrl: soutingImg,
     behanceUrl: "https://www.behance.net/gallery/224104303/Souting-Marketing-Estratgia",
-    images: ["https://mir-s3-cdn-cf.behance.net/projects/max_1200/7d30fa224104303.Y3JvcCw5ODEsNzY4LDAsMA.png"],
+    images: [soutingImg],
   },
   {
     id: "blive-ensino",
@@ -40,9 +44,9 @@ export const projects: Project[] = [
     description: "Criação de revista digital e peças para redes sociais da Blive Ensino Criativo. O projeto envolveu design editorial, diagramação e criação de templates para social media, mantendo uma linguagem visual moderna e educativa.",
     role: "Graphic Designer & Social Media Designer",
     tools: ["InDesign", "Photoshop", "Illustrator"],
-    thumbnailUrl: "https://mir-s3-cdn-cf.behance.net/projects/max_1200/ca29e9126086165.Y3JvcCw3MjQsNTY2LDY3Miw4Ng.jpg",
+    thumbnailUrl: bliveImg,
     behanceUrl: "https://www.behance.net/gallery/126086165/Blive-Ensino-Criativo-Revista-e-Social-Media",
-    images: ["https://mir-s3-cdn-cf.behance.net/projects/max_1200/ca29e9126086165.Y3JvcCw3MjQsNTY2LDY3Miw4Ng.jpg"],
+    images: [bliveImg],
   },
   {
     id: "portfolio-fotografias",
