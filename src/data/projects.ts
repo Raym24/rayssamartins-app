@@ -55,9 +55,10 @@ export const projects: Project[] = [
     description: "Seleção e apresentação de trabalhos fotográficos autorais, com foco em composição, iluminação e narrativa visual. O portfólio demonstra versatilidade em diferentes estilos e técnicas fotográficas.",
     role: "Photographer & Visual Designer",
     tools: ["Lightroom", "Photoshop"],
-    thumbnailUrl: "https://mir-s3-cdn-cf.behance.net/projects/max_1200/a5d4ea231003603.Y3JvcCwxMzgwLDEwODAsMjgzLDA.png",
     behanceUrl: "https://www.behance.net/gallery/231003603/Portifolio-de-Fotografias",
-    images: ["https://mir-s3-cdn-cf.behance.net/projects/max_1200/a5d4ea231003603.Y3JvcCwxMzgwLDEwODAsMjgzLDA.png"],
+    thumbnailUrl: "https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/8a6aed231003603.69b30d9c4b7c4.png",
+    behanceUrl: "https://www.behance.net/gallery/231003603/Portifolio-de-Fotografias",
+    images: ["https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/8a6aed231003603.69b30d9c4b7c4.png"],
   },
   {
     id: "warrior-woman",
