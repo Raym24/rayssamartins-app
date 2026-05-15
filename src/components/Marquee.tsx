@@ -6,7 +6,7 @@ interface MarqueeProps {
   className?: string;
 }
 
-const Marquee = ({ children, speed = 8, className = "" }: MarqueeProps) => {
+const Marquee = ({ children, speed = 12, className = "" }: MarqueeProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [duration, setDuration] = useState(120);
 
@@ -17,7 +17,7 @@ const Marquee = ({ children, speed = 8, className = "" }: MarqueeProps) => {
 
     const updateDuration = () => {
       const contentWidth = content.scrollWidth;
-      setDuration(Math.max(80, contentWidth / speed));
+      setDuration(Math.max(50, contentWidth / speed));
     };
 
     updateDuration();
