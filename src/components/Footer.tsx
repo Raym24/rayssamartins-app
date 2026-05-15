@@ -7,7 +7,7 @@ const Footer = () => {
     <footer className="border-t border-border">
       {/* Red marquee band */}
       <div className="marquee-band">
-        <Marquee speed={18}>
+        <Marquee speed={10}>
           {footerMarquee.map((item, i) => (
             <span key={i} className="mx-6 text-sm font-display-bold tracking-[0.2em]">
               {item}
