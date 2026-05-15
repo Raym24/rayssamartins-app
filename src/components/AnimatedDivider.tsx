@@ -11,7 +11,7 @@ const AnimatedDivider = ({ text = "RAYSSA MARTINS", variant = "red" }: AnimatedD
 
   return (
     <div className={isRed ? "marquee-band" : "marquee-band-black"}>
-      <Marquee speed={10}>
+      <Marquee>
         {items.map((_, i) => (
           <span
             key={i}

@@ -32,7 +32,7 @@ const SkillsSection = () => {
 
       {/* Single skills marquee - full width */}
       <div className="mb-16 scroll-reveal marquee-band-black py-4 w-full">
-        <Marquee speed={10}>
+        <Marquee>
           {marqueeSkills.map((skill, i) => (
             <span key={i} className="mx-6 text-lg md:text-xl font-display-bold tracking-[0.15em]">
               {skill}
