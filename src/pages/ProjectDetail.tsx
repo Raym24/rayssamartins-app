@@ -3,6 +3,7 @@ import { ArrowLeft, ExternalLink } from "lucide-react";
 import { projects } from "@/data/projects";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Helmet } from "react-helmet-async";
 
 const ProjectDetail = () => {
   const { id } = useParams();
@@ -23,6 +24,17 @@ const ProjectDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>{`${project.title} — Rayssa Martins`}</title>
+        <meta name="description" content={project.shortDescription} />
+        <link rel="canonical" href={`https://rayssamartins.app/projeto/${project.id}`} />
+        <meta property="og:title" content={`${project.title} — Rayssa Martins`} />
+        <meta property="og:description" content={project.shortDescription} />
+        <meta property="og:url" content={`https://rayssamartins.app/projeto/${project.id}`} />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:title" content={`${project.title} — Rayssa Martins`} />
+        <meta name="twitter:description" content={project.shortDescription} />
+      </Helmet>
       <Navbar />
       <div className="pt-24 pb-16">
         <div className="container mx-auto px-6">
