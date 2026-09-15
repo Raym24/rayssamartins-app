@@ -1,5 +1,6 @@
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import Marquee from "./Marquee";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const hardSkills = [
   "UI/UX Design", "Web Design", "Figma", "Adobe XD",
@@ -17,13 +18,22 @@ const marqueeSkills = ["FIGMA", "✦", "PHOTOSHOP", "✦", "UI/UX", "✦", "WEB 
 
 const SkillsSection = () => {
   const ref = useScrollReveal();
+  const { isEnglish } = useLanguage();
+  const localizedHardSkills = hardSkills.map((skill) => ({
+    "Especialista em IA": "AI Specialist", "Automações": "Automations",
+    "Apps e Sites com IA": "AI-powered Apps & Websites", "Agentes de IA": "AI Agents",
+    "Fotografia": "Photography",
+  }[skill] ?? skill));
+  const localizedSoftSkills = isEnglish
+    ? ["Problem Solving", "Communication", "Creativity", "Teamwork", "Time Management", "Critical Thinking"]
+    : softSkills;
 
   return (
     <section id="skills" className="py-24 relative" ref={ref}>
       <div className="container mx-auto px-6">
         <div className="flex items-center gap-4 mb-12 scroll-reveal">
           <h2 className="font-display-bold text-5xl md:text-7xl tracking-tight uppercase">
-            HABILI<span className="text-primary">DADES</span>
+             {isEnglish ? <>SKI<span className="text-primary">LLS</span></> : <>HABILI<span className="text-primary">DADES</span></>}
           </h2>
           <div className="hidden md:block flex-1 h-[2px] bg-foreground/10" />
           <span className="text-3xl animate-sparkle text-primary">★</span>
@@ -33,9 +43,9 @@ const SkillsSection = () => {
       {/* Single skills marquee - full width */}
       <div className="mb-16 scroll-reveal marquee-band-black py-4 w-full">
         <Marquee>
-          {marqueeSkills.map((skill, i) => (
+           {marqueeSkills.map((skill, i) => (
             <span key={i} className="mx-6 text-lg md:text-xl font-display-bold tracking-[0.15em]">
-              {skill}
+               {isEnglish ? skill.replace("IA & AUTOMAÇÕES", "AI & AUTOMATIONS").replace("FOTOGRAFIA", "PHOTOGRAPHY") : skill}
             </span>
           ))}
         </Marquee>
@@ -49,7 +59,7 @@ const SkillsSection = () => {
               Hard Skills
             </h3>
             <div className="flex flex-wrap gap-3">
-              {hardSkills.map((skill, i) => (
+               {(isEnglish ? localizedHardSkills : hardSkills).map((skill, i) => (
                 <span
                   key={skill}
                   className={`px-5 py-2.5 border-2 border-foreground text-sm font-semibold uppercase tracking-wider hover:bg-foreground hover:text-background transition-all duration-300 cursor-default scroll-reveal-pop stagger-${Math.min(i + 1, 8)}`}
@@ -64,7 +74,7 @@ const SkillsSection = () => {
               Soft Skills
             </h3>
             <div className="flex flex-wrap gap-3">
-              {softSkills.map((skill, i) => (
+               {localizedSoftSkills.map((skill, i) => (
                 <span
                   key={skill}
                   className={`px-5 py-2.5 border-2 border-primary/30 text-sm font-semibold uppercase tracking-wider hover:bg-primary hover:text-primary-foreground transition-all duration-300 cursor-default scroll-reveal-pop stagger-${Math.min(i + 1, 8)}`}

@@ -1,16 +1,18 @@
 import { MapPin, Briefcase, Mail, ExternalLink } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import raysaAboutPhoto from "@/assets/rayssa-about.png";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const AboutSection = () => {
   const ref = useScrollReveal();
+  const { isEnglish } = useLanguage();
 
   return (
     <section id="about" className="py-24 relative" ref={ref}>
       <div className="container mx-auto px-6">
         <div className="flex items-center gap-4 mb-12 scroll-reveal">
           <h2 className="font-display-bold text-5xl md:text-7xl tracking-tight uppercase">
-            SOBRE <span className="text-primary">MIM</span>
+            {isEnglish ? <>ABOUT <span className="text-primary">ME</span></> : <>SOBRE <span className="text-primary">MIM</span></>}
           </h2>
           <div className="hidden md:block flex-1 h-[2px] bg-foreground/10" />
           <span className="text-3xl animate-float">★</span>
@@ -35,13 +37,13 @@ const AboutSection = () => {
           <div className="space-y-8 scroll-reveal-right">
             <div className="space-y-4">
               <p className="text-muted-foreground leading-relaxed text-lg">
-                Sou Diretora de Arte Sênior e designer multidisciplinar, com mais de 10 anos de experiência criando identidades, campanhas e experiências digitais para marcas do Brasil, Estados Unidos e Portugal.
+                 {isEnglish ? "I am a Senior Art Director and multidisciplinary designer with over 10 years of experience creating identities, campaigns and digital experiences for brands in Brazil, the United States and Portugal." : "Sou Diretora de Arte Sênior e designer multidisciplinar, com mais de 10 anos de experiência criando identidades, campanhas e experiências digitais para marcas do Brasil, Estados Unidos e Portugal."}
               </p>
               <p className="text-muted-foreground leading-relaxed text-lg">
-                Minha atuação conecta direção de arte, branding, design digital, UI/UX, fotografia e web, transformando objetivos de negócio em soluções visuais consistentes, funcionais e com personalidade.
+                 {isEnglish ? "My work connects art direction, branding, digital design, UI/UX, photography and web, transforming business goals into consistent, functional visual solutions with personality." : "Minha atuação conecta direção de arte, branding, design digital, UI/UX, fotografia e web, transformando objetivos de negócio em soluções visuais consistentes, funcionais e com personalidade."}
               </p>
               <p className="text-muted-foreground leading-relaxed text-lg">
-                Nos últimos anos, também ampliei meu trabalho para a interseção entre design e tecnologia, utilizando IA generativa, automações e soluções digitais como parte do processo criativo — sempre com olhar estratégico, repertório visual e foco em resultado.
+                 {isEnglish ? "In recent years, I have also expanded my work into the intersection of design and technology, using generative AI, automations and digital solutions as part of the creative process — always with a strategic eye, visual repertoire and a focus on results." : "Nos últimos anos, também ampliei meu trabalho para a interseção entre design e tecnologia, utilizando IA generativa, automações e soluções digitais como parte do processo criativo — sempre com olhar estratégico, repertório visual e foco em resultado."}
               </p>
             </div>
 
@@ -50,15 +52,15 @@ const AboutSection = () => {
               <div className="flex items-center gap-4 p-4 border border-border hover:border-primary transition-colors">
                 <MapPin size={20} className="text-primary shrink-0" />
                 <div>
-                  <span className="text-xs uppercase tracking-wider text-muted-foreground">Localização</span>
-                  <p className="font-semibold">Fortaleza, CE (Brasil)</p>
+                   <span className="text-xs uppercase tracking-wider text-muted-foreground">{isEnglish ? "Location" : "Localização"}</span>
+                   <p className="font-semibold">Fortaleza, CE ({isEnglish ? "Brazil" : "Brasil"})</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 p-4 border border-border hover:border-primary transition-colors">
                 <Briefcase size={20} className="text-primary shrink-0" />
                 <div>
-                  <span className="text-xs uppercase tracking-wider text-muted-foreground">Disponibilidade</span>
-                  <p className="font-semibold">Freelance & Fulltime</p>
+                   <span className="text-xs uppercase tracking-wider text-muted-foreground">{isEnglish ? "Availability" : "Disponibilidade"}</span>
+                   <p className="font-semibold">{isEnglish ? "Freelance & Full-time" : "Freelance & Fulltime"}</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 p-4 border border-border hover:border-primary transition-colors">

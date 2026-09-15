@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import raysaPhoto from "@/assets/rayssa-photo.png";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const decorativeElements = [
   { content: "★", x: 80, y: 15, anim: "animate-float", size: "text-5xl", color: "text-primary" },
@@ -12,6 +13,7 @@ const decorativeElements = [
 
 const HeroSection = () => {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const { isEnglish } = useLanguage();
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -43,23 +45,22 @@ const HeroSection = () => {
           {/* Year badge */}
           <div className="flex items-center gap-3 scroll-reveal">
             <span className="sticker-red text-xs tracking-widest uppercase font-semibold">
-              Portfólio 2025
+              {isEnglish ? "Portfolio 2025" : "Portfólio 2025"}
             </span>
             <span className="sticker-outline text-xs tracking-widest uppercase font-semibold">
-              🇧🇷 Brasil
+               🇧🇷 {isEnglish ? "Brazil" : "Brasil"}
             </span>
           </div>
 
           {/* Main name */}
-          <h1 className="max-w-full font-display-bold text-[clamp(3rem,15vw,12rem)] leading-[0.85] tracking-normal scroll-reveal text-white">
-            <span className="block whitespace-nowrap">RAYSSA</span>
-            <span className="block whitespace-nowrap text-primary">MARTINS</span>
+          <h1 className="w-full max-w-full box-border font-display-bold text-[clamp(2.1rem,11.5vw,5rem)] md:text-[clamp(3rem,15vw,12rem)] leading-[0.85] tracking-normal scroll-reveal text-white">
+            <span className="block whitespace-nowrap">RAYSSA <span className="text-primary">MARTINS</span></span>
             <span className="sr-only"> — UI/UX Designer &amp; Web Designer</span>
           </h1>
 
           {/* Subtitle */}
           <p className="text-lg md:text-xl text-white/80 font-body max-w-lg scroll-reveal">
-            UI/UX Designer & Web Designer criando experiências digitais que encantam e convertem.
+             {isEnglish ? "UI/UX Designer & Web Designer creating digital experiences that delight and convert." : "UI/UX Designer & Web Designer criando experiências digitais que encantam e convertem."}
           </p>
 
           {/* CTA buttons */}
@@ -69,14 +70,14 @@ const HeroSection = () => {
               onClick={(e) => { e.preventDefault(); document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" }); }}
               className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 text-sm font-semibold uppercase tracking-wider hover:scale-105 hover:shadow-lg transition-all duration-300"
             >
-              Ver Projetos →
+               {isEnglish ? "View Projects →" : "Ver Projetos →"}
             </a>
             <a
               href="#contact"
               onClick={(e) => { e.preventDefault(); document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" }); }}
               className="inline-flex items-center gap-2 border-2 border-foreground px-8 py-3 text-sm font-semibold uppercase tracking-wider hover:bg-foreground hover:text-background transition-all duration-300"
             >
-              Contato
+               {isEnglish ? "Contact" : "Contato"}
             </a>
           </div>
 
