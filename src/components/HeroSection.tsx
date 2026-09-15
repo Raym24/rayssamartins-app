@@ -51,10 +51,9 @@ const HeroSection = () => {
           </div>
 
           {/* Main name */}
-          <h1 className="font-display-bold text-[clamp(4rem,15vw,12rem)] leading-[0.85] tracking-tight scroll-reveal text-white">
-            RAYSSA
-            <br />
-            <span className="text-primary">MARTINS</span>
+          <h1 className="max-w-full font-display-bold text-[clamp(3rem,15vw,12rem)] leading-[0.85] tracking-normal scroll-reveal text-white">
+            <span className="block whitespace-nowrap">RAYSSA</span>
+            <span className="block whitespace-nowrap text-primary">MARTINS</span>
             <span className="sr-only"> — UI/UX Designer &amp; Web Designer</span>
           </h1>
 
