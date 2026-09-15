@@ -1,6 +1,8 @@
 import x1deruaImg from "@/assets/x1derua.png";
 import soutingImg from "@/assets/soutingmarketing.png";
 import bliveImg from "@/assets/bliveensino.png";
+import diagramacaoAsset from "@/assets/diagramacao.webp.asset.json";
+import medgestProAsset from "@/assets/medgestpro.webp.asset.json";
 
 export interface Project {
   id: string;
@@ -110,9 +112,9 @@ export const projects: Project[] = [
     description: "Projeto de diagramação editorial criado no Adobe InDesign, com atenção à hierarquia visual, legibilidade e composição das páginas. O trabalho demonstra domínio das ferramentas de layout e organização de conteúdo para publicações.",
     role: "Designer Editorial",
     tools: ["InDesign", "Photoshop", "Illustrator"],
-    thumbnailUrl: "/placeholder.svg",
+    thumbnailUrl: diagramacaoAsset.url,
     behanceUrl: "https://www.behance.net/gallery/255597967/DIAGRAMACAO-ADOBE-INDESING",
-    images: ["/placeholder.svg"],
+    images: [diagramacaoAsset.url],
   },
   {
     id: "design-social-media-medgestpro",
@@ -121,8 +123,8 @@ export const projects: Project[] = [
     description: "Desenvolvimento de conteúdo visual para social media da Medgest Pro, incluindo posts, stories e artes para campanhas digitais. O projeto focou em criar uma comunicação consistente e alinhada à identidade da marca no ambiente digital.",
     role: "Social Media Designer",
     tools: ["Photoshop", "Illustrator", "Figma"],
-    thumbnailUrl: "/placeholder.svg",
+    thumbnailUrl: medgestProAsset.url,
     behanceUrl: "https://www.behance.net/gallery/254175869/DESIGN-SOCIAL-MEDIA-MEDGESTPRO",
-    images: ["/placeholder.svg"],
+    images: [medgestProAsset.url],
   },
 ];
