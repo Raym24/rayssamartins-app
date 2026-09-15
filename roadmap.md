@@ -1,4 +1,5 @@
-- [ ] Disponibilizar perfil, projetos e contatos públicos para agentes de IA via MCP.
+- [x] Configurar perfil, projetos e contatos públicos para agentes de IA via MCP.
+- [ ] Publicar o MCP — aguardando a próxima publicação do site.
 # SEO
 
 - [x] Corrigir título, descrição e prévia social da página inicial.
