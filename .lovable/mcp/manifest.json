@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "sdk_version": "2.0.4",
+  "path": "/functions/v1/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "meu-portfolio",
+      "version": "0.1.0",
+      "title": "MEU PORTFOLIO"
+    },
+    "tools": [
+      {
+        "name": "get_profile",
+        "title": "Consultar perfil profissional",
+        "description": "Retorna o resumo profissional, a localização, a experiência e as competências públicas de Rayssa Martins.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_projects",
+        "title": "Listar projetos do portfólio",
+        "description": "Lista os projetos públicos de Rayssa Martins e permite filtrar por título, função ou ferramenta.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "search": {
+              "description": "Termo opcional para filtrar projetos por título, função ou ferramenta.",
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_project",
+        "title": "Consultar projeto",
+        "description": "Retorna a descrição completa, a função, as ferramentas e os links públicos de um projeto do portfólio.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "projectId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Identificador do projeto retornado por list_projects."
+            }
+          },
+          "required": [
+            "projectId"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_contact",
+        "title": "Consultar contatos profissionais",
+        "description": "Retorna os canais públicos para entrar em contato com Rayssa Martins e consultar seu trabalho.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
