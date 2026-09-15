@@ -1,3 +1,4 @@
+- [ ] Disponibilizar perfil, projetos e contatos públicos para agentes de IA via MCP.
 # SEO
 
 - [x] Corrigir título, descrição e prévia social da página inicial.
