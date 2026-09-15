@@ -55,6 +55,7 @@ const HeroSection = () => {
             RAYSSA
             <br />
             <span className="text-primary">MARTINS</span>
+            <span className="sr-only"> — UI/UX Designer &amp; Web Designer</span>
           </h1>
 
           {/* Subtitle */}

@@ -53,13 +53,21 @@ const Navbar = () => {
         </ul>
 
         {/* Mobile toggle */}
-        <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
+        <button
+          className="md:hidden min-h-11 min-w-11 inline-flex items-center justify-center"
+          type="button"
+          aria-label={isOpen ? "Fechar menu" : "Abrir menu"}
+          aria-expanded={isOpen}
+          aria-controls="mobile-navigation"
+          onClick={() => setIsOpen(!isOpen)}
+        >
           {isOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
       {/* Mobile menu */}
       <div
+        id="mobile-navigation"
         className={`md:hidden bg-background border-b border-border px-6 overflow-hidden transition-all duration-300 ease-out ${
           isOpen ? "max-h-64 pb-4 opacity-100" : "max-h-0 pb-0 opacity-0"
         }`}
