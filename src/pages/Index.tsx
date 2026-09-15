@@ -7,10 +7,17 @@ import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import FloatingElements from "@/components/FloatingElements";
 import AnimatedDivider from "@/components/AnimatedDivider";
+import { Helmet } from "react-helmet-async";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background relative">
+      <Helmet>
+        <title>Rayssa Martins — Diretora de Arte e Designer</title>
+        <meta name="description" content="Portfólio de Rayssa Martins, diretora de arte e designer multidisciplinar com mais de 10 anos de experiência em branding, UI/UX, fotografia e web." />
+        <link rel="canonical" href="https://rayssamartins.app/" />
+        <meta property="og:url" content="https://rayssamartins.app/" />
+      </Helmet>
       <FloatingElements />
       <Navbar />
       <HeroSection />
