@@ -1,4 +1,14 @@
-export const portfolioProjects = [
+export interface PortfolioProject {
+  id: string;
+  title: string;
+  shortDescription: string;
+  description: string;
+  role: string;
+  tools: string[];
+  behanceUrl: string;
+}
+
+export const portfolioProjects: PortfolioProject[] = [
   {
     id: "x1-de-rua",
     title: "X1 de Rua - Crateús",
@@ -89,4 +99,4 @@ export const portfolioProjects = [
     tools: ["Photoshop", "Illustrator", "Figma"],
     behanceUrl: "https://www.behance.net/gallery/254175869/DESIGN-SOCIAL-MEDIA-MEDGESTPRO",
   },
-] as const;
+];
