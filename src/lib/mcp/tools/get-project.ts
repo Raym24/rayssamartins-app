@@ -1,6 +1,6 @@
 import { defineTool, ToolError } from "@lovable.dev/mcp-js";
 import { z } from "zod";
-import { projects } from "@/data/projects";
+import { portfolioProjects } from "../portfolio-projects";
 
 export default defineTool({
   name: "get_project",
@@ -15,7 +15,7 @@ export default defineTool({
     openWorldHint: false,
   },
   handler: ({ projectId }) => {
-    const project = projects.find(({ id }) => id === projectId);
+    const project = portfolioProjects.find(({ id }) => id === projectId);
     if (!project) throw new ToolError(`Projeto não encontrado: ${projectId}`);
 
     const result = {

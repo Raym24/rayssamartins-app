@@ -1,6 +1,6 @@
 import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
-import { projects } from "@/data/projects";
+import { portfolioProjects } from "../portfolio-projects";
 
 export default defineTool({
   name: "list_projects",
@@ -16,7 +16,7 @@ export default defineTool({
   },
   handler: ({ search }) => {
     const normalizedSearch = search?.toLocaleLowerCase("pt-BR");
-    const matches = projects
+    const matches = portfolioProjects
       .filter((project) => {
         if (!normalizedSearch) return true;
         return [project.title, project.role, ...project.tools]
