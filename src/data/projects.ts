@@ -1,8 +1,8 @@
 import x1deruaImg from "@/assets/x1derua.png";
 import soutingImg from "@/assets/soutingmarketing.png";
 import bliveImg from "@/assets/bliveensino.png";
-import diagramacaoAsset from "@/assets/diagramacao.webp.asset.json";
-import medgestProAsset from "@/assets/medgestpro.webp.asset.json";
+import diagramacaoAsset from "@/assets/opoderdaacao.png.asset.json";
+import medgestProAsset from "@/assets/medgest.png.asset.json";
 
 export interface Project {
   id: string;
