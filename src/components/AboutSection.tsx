@@ -35,13 +35,13 @@ const AboutSection = () => {
           <div className="space-y-8 scroll-reveal-right">
             <div className="space-y-4">
               <p className="text-muted-foreground leading-relaxed text-lg">
-                Com mais de 10 anos de experiência no mercado, construí uma trajetória marcada pela atuação em projetos para empresas nacionais e internacionais de grande porte.
+                Sou Diretora de Arte Sênior e designer multidisciplinar, com mais de 10 anos de experiência criando identidades, campanhas e experiências digitais para marcas do Brasil, Estados Unidos e Portugal.
               </p>
               <p className="text-muted-foreground leading-relaxed text-lg">
-                A comunicação visual, mais do que uma área de atuação, é parte essencial da minha forma de pensar, criar e resolver desafios.
+                Minha atuação conecta direção de arte, branding, design digital, UI/UX, fotografia e web, transformando objetivos de negócio em soluções visuais consistentes, funcionais e com personalidade.
               </p>
               <p className="text-muted-foreground leading-relaxed text-lg">
-                Meu trabalho transita por diferentes segmentos do design, incluindo direção criativa, fotografia, web, app e desenvolvimento de soluções visuais, sempre com olhar estratégico, sensibilidade estética e foco em resultado.
+                Nos últimos anos, também ampliei meu trabalho para a interseção entre design e tecnologia, utilizando IA generativa, automações e soluções digitais como parte do processo criativo — sempre com olhar estratégico, repertório visual e foco em resultado.
               </p>
             </div>
 
