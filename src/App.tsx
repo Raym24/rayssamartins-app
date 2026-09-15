@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index.tsx";
 import ProjectDetail from "./pages/ProjectDetail.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
 const queryClient = new QueryClient();
 
@@ -15,11 +16,15 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/projeto/:id" element={<ProjectDetail />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <LanguageProvider>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/en" element={<Index />} />
+            <Route path="/projeto/:id" element={<ProjectDetail />} />
+            <Route path="/en/projeto/:id" element={<ProjectDetail />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </LanguageProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
