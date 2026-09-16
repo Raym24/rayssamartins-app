@@ -1,8 +1,10 @@
 import { Mail, ExternalLink, Phone } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const ContactSection = () => {
   const ref = useScrollReveal();
+  const { isEnglish } = useLanguage();
 
   return (
     <section id="contact" className="py-24 relative overflow-hidden" ref={ref}>
@@ -14,11 +16,10 @@ const ContactSection = () => {
       <div className="container mx-auto px-6 text-center max-w-3xl relative z-10">
         <div className="scroll-reveal">
           <h2 className="font-display-bold text-5xl md:text-8xl tracking-tight uppercase mb-4">
-            VAMOS <span className="text-primary">CONVERSAR?</span>
+             {isEnglish ? <>LET'S <span className="text-primary">TALK?</span></> : <>VAMOS <span className="text-primary">CONVERSAR?</span></>}
           </h2>
           <p className="text-muted-foreground mb-10 text-lg">
-            Estou disponível para projetos freelance e oportunidades fulltime.
-            Entre em contato e vamos criar algo incrível juntos.
+             {isEnglish ? "I am available for freelance projects and full-time opportunities. Get in touch and let's create something amazing together." : "Estou disponível para projetos freelance e oportunidades fulltime. Entre em contato e vamos criar algo incrível juntos."}
           </p>
         </div>
 
@@ -27,7 +28,7 @@ const ContactSection = () => {
             href="mailto:rayssamartins33@gmail.com"
             className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 text-sm font-semibold uppercase tracking-wider hover:scale-105 hover:shadow-lg transition-all duration-300 animate-glow-pulse"
           >
-            <Mail size={18} /> Enviar E-mail
+             <Mail size={18} /> {isEnglish ? "Send Email" : "Enviar E-mail"}
           </a>
           <a
             href="https://www.behance.net/rayssamartins3"

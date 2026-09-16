@@ -1,8 +1,9 @@
 import Marquee from "./Marquee";
-
-const footerMarquee = ["RAYSSA MARTINS", "✦", "UI/UX DESIGNER", "✦", "WEB DESIGNER", "✦", "DISPONÍVEL PARA PROJETOS", "✦"];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Footer = () => {
+  const { isEnglish } = useLanguage();
+  const footerMarquee = ["RAYSSA MARTINS", "✦", "UI/UX DESIGNER", "✦", "WEB DESIGNER", "✦", isEnglish ? "AVAILABLE FOR PROJECTS" : "DISPONÍVEL PARA PROJETOS", "✦"];
   return (
     <footer className="border-t border-border">
       {/* Red marquee band */}
@@ -21,7 +22,7 @@ const Footer = () => {
           RAYSSA<span className="text-primary">.</span>
         </p>
         <p className="text-xs text-muted-foreground uppercase tracking-wider">
-          © {new Date().getFullYear()} Rayssa Martins. Todos os direitos reservados.
+           © {new Date().getFullYear()} Rayssa Martins. {isEnglish ? "All rights reserved." : "Todos os direitos reservados."}
         </p>
       </div>
     </footer>

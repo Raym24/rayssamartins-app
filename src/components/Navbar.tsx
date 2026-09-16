@@ -109,12 +109,22 @@ const Navbar = () => {
               style={{ transitionDelay: isOpen ? `${i * 50}ms` : "0ms" }}
               className={`transition-all duration-300 ${isOpen ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"}`}
             >
-              <button
-                onClick={() => handleClick(link.href)}
-                className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {link.label}
-              </button>
+              {isHome ? (
+                <button
+                  onClick={() => handleClick(link.href)}
+                  className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {link.label}
+                </button>
+              ) : (
+                <Link
+                  to={`${homePath}${link.href}`}
+                  onClick={() => setIsOpen(false)}
+                  className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {link.label}
+                </Link>
+              )}
             </li>
           ))}
           <li><LanguageSelector mobile /></li>

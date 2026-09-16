@@ -4,6 +4,7 @@ import { resolve } from "node:path";
 const baseUrl = "https://rayssamartins.app";
 const paths = [
   "/",
+  "/en",
   "/projeto/x1-de-rua",
   "/projeto/souting-marketing",
   "/projeto/blive-ensino",
@@ -14,6 +15,16 @@ const paths = [
   "/projeto/newdawn-chatngift",
   "/projeto/diagramacao-adobe-indesign",
   "/projeto/design-social-media-medgestpro",
+  "/en/projeto/x1-de-rua",
+  "/en/projeto/souting-marketing",
+  "/en/projeto/blive-ensino",
+  "/en/projeto/portfolio-fotografias",
+  "/en/projeto/warrior-woman",
+  "/en/projeto/lancamento-web-design",
+  "/en/projeto/ellev-saude",
+  "/en/projeto/newdawn-chatngift",
+  "/en/projeto/diagramacao-adobe-indesign",
+  "/en/projeto/design-social-media-medgestpro",
 ];
 
 const sitemap = [
