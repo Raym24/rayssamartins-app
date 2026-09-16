@@ -4,18 +4,22 @@ import { projects } from "@/data/projects";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Helmet } from "react-helmet-async";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { projectTranslations } from "@/data/project-translations";
 
 const ProjectDetail = () => {
   const { id } = useParams();
+  const { isEnglish } = useLanguage();
   const project = projects.find((p) => p.id === id);
+  const translation = id ? projectTranslations[id] : undefined;
 
   if (!project) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center space-y-4">
-          <h1 className="font-display text-2xl font-bold">Projeto não encontrado</h1>
-          <Link to="/" className="text-sm text-muted-foreground hover:text-foreground underline">
-            Voltar ao início
+           <h1 className="font-display text-2xl font-bold">{isEnglish ? "Project not found" : "Projeto não encontrado"}</h1>
+           <Link to={isEnglish ? "/en" : "/"} className="text-sm text-muted-foreground hover:text-foreground underline">
+             {isEnglish ? "Back to home" : "Voltar ao início"}
           </Link>
         </div>
       </div>
@@ -26,23 +30,27 @@ const ProjectDetail = () => {
     <div className="min-h-screen bg-background">
       <Helmet>
         <title>{`${project.title} — Rayssa Martins`}</title>
-        <meta name="description" content={project.shortDescription} />
-        <link rel="canonical" href={`https://rayssamartins.app/projeto/${project.id}`} />
+         <html lang={isEnglish ? "en" : "pt-BR"} />
+         <meta name="description" content={isEnglish ? translation?.shortDescription ?? project.shortDescription : project.shortDescription} />
+         <link rel="canonical" href={`https://rayssamartins.app${isEnglish ? "/en" : ""}/projeto/${project.id}`} />
+         <link rel="alternate" hrefLang="pt-BR" href={`https://rayssamartins.app/projeto/${project.id}`} />
+         <link rel="alternate" hrefLang="en" href={`https://rayssamartins.app/en/projeto/${project.id}`} />
+         <link rel="alternate" hrefLang="x-default" href={`https://rayssamartins.app/projeto/${project.id}`} />
         <meta property="og:title" content={`${project.title} — Rayssa Martins`} />
-        <meta property="og:description" content={project.shortDescription} />
-        <meta property="og:url" content={`https://rayssamartins.app/projeto/${project.id}`} />
+         <meta property="og:description" content={isEnglish ? translation?.shortDescription ?? project.shortDescription : project.shortDescription} />
+         <meta property="og:url" content={`https://rayssamartins.app${isEnglish ? "/en" : ""}/projeto/${project.id}`} />
         <meta property="og:type" content="website" />
         <meta name="twitter:title" content={`${project.title} — Rayssa Martins`} />
-        <meta name="twitter:description" content={project.shortDescription} />
+         <meta name="twitter:description" content={isEnglish ? translation?.shortDescription ?? project.shortDescription : project.shortDescription} />
       </Helmet>
       <Navbar />
       <div className="pt-24 pb-16">
         <div className="container mx-auto px-6">
           <Link
-            to="/"
+             to={isEnglish ? "/en" : "/"}
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
           >
-            <ArrowLeft size={16} /> Voltar aos projetos
+             <ArrowLeft size={16} /> {isEnglish ? "Back to projects" : "Voltar aos projetos"}
           </Link>
 
           <div className="max-w-4xl">
@@ -51,7 +59,7 @@ const ProjectDetail = () => {
             </h1>
 
             <div className="flex flex-wrap gap-2 mb-8">
-              <span className="sticker-pink">{project.role}</span>
+               <span className="sticker-pink">{isEnglish ? translation?.role ?? project.role : project.role}</span>
               {project.tools.map((tool) => (
                 <span key={tool} className="sticker-blue">{tool}</span>
               ))}
@@ -68,7 +76,7 @@ const ProjectDetail = () => {
 
             <div className="prose max-w-none mb-8">
               <p className="text-muted-foreground leading-relaxed text-base">
-                {project.description}
+                 {isEnglish ? translation?.description ?? project.description : project.description}
               </p>
             </div>
 
@@ -78,7 +86,7 @@ const ProjectDetail = () => {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 text-sm font-medium hover:opacity-90 transition-opacity"
             >
-              <ExternalLink size={16} /> Ver no Behance
+               <ExternalLink size={16} /> {isEnglish ? "View on Behance" : "Ver no Behance"}
             </a>
           </div>
         </div>
