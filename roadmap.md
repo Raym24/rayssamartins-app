@@ -1,6 +1,7 @@
 - [x] Configurar perfil, projetos e contatos públicos para agentes de IA via MCP.
 - [ ] Publicar o MCP — aguardando a próxima publicação do site.
 - [x] Exibir “Rayssa Martins” completo na abertura em telas de celular.
+- [x] Criar versões em português e inglês, com preferência salva e SEO internacional.
 # SEO
 
 - [x] Corrigir título, descrição e prévia social da página inicial.
