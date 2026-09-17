@@ -276,6 +276,18 @@
     transform: translateX(0);
   }
 
+  @media (max-width: 1279px) {
+    .scroll-reveal-left,
+    .scroll-reveal-right {
+      transform: translateY(30px);
+    }
+
+    .scroll-reveal-left.is-visible,
+    .scroll-reveal-right.is-visible {
+      transform: translateY(0);
+    }
+  }
+
   .scroll-reveal-pop {
     opacity: 0;
     transform: scale(0.6) rotate(-5deg);
