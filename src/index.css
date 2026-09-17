@@ -97,6 +97,18 @@
     background-size: 30px 30px;
   }
 
+  @media (max-width: 767px) {
+    .scroll-reveal-left,
+    .scroll-reveal-right {
+      transform: translateY(30px);
+    }
+
+    .scroll-reveal-left.is-visible,
+    .scroll-reveal-right.is-visible {
+      transform: translateY(0);
+    }
+  }
+
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
   }
