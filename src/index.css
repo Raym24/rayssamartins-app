@@ -276,7 +276,7 @@
     transform: translateX(0);
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: 1023px) {
     .scroll-reveal-left,
     .scroll-reveal-right {
       transform: translateY(30px);
