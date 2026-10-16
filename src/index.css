@@ -399,5 +399,5 @@
           mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent), linear-gradient(to bottom, transparent, #000 9%, #000 91%, transparent); mask-composite: intersect;
   transition: transform 0.9s cubic-bezier(.2,.7,.2,1), filter 0.9s ease; }
 @media (hover: hover) { .editorial-theme .ed-book:hover img { transform: translateY(-4px); filter: brightness(1.02); } }
-@media (max-width: 639px) { .editorial-theme .ed-book-main { width: 74%; left: 0; } .editorial-theme .ed-book-front { width: 100%; } .editorial-theme .ed-book-side { display: none; } }
+@media (max-width: 639px) { .editorial-theme .ed-scene { aspect-ratio: 6 / 7; } .editorial-theme .ed-book-main { width: 74%; left: 0; } .editorial-theme .ed-book-front { width: 100%; } .editorial-theme .ed-book-side { display: none; } }
 @media (prefers-reduced-motion: reduce) { .editorial-theme .ed-book { opacity: 1; animation: none; transform: none; } .editorial-theme .ed-book img { transition: none; } }
