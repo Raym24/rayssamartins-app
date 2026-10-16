@@ -288,22 +288,22 @@ const EditorialLanding = () => {
 
             {/* Vitrine editorial */}
             <div style={{ animationDelay: "480ms" }} className="ed-rise lg:col-span-5">
-              <div className="ed-scene relative mx-auto aspect-[5/6] w-full max-w-[560px] lg:-mr-6 lg:max-w-none xl:-mr-12">
+              <div className="ed-scene relative mx-auto aspect-[1/1] w-full max-w-[560px] lg:-mr-6 lg:max-w-none xl:-mr-12">
                 <span aria-hidden="true" className="absolute left-[2%] top-[2%] z-30 h-6 w-6 border-l-2 border-t-2 border-accent" />
                 {/* Livro aberto superior — plano de fundo */}
-                <figure className="ed-book ed-book-back absolute right-0 top-[3%] z-0 hidden w-[52%] sm:block" style={{ "--d": "620ms", "--p": "0.4" } as CSSProperties}>
+                <figure className="ed-book ed-book-back absolute right-0 top-[4%] z-0 hidden w-[60%] sm:block" style={{ "--d": "620ms", "--p": "0.4" } as CSSProperties}>
                   <img src={heroAberto1.url} alt="Livro aberto — abertura de capítulo" width={576} height={256} loading="eager" decoding="async" className="w-full" />
                 </figure>
                 {/* Livro principal */}
-                <figure className="ed-book ed-book-main absolute left-[4%] top-[6%] z-10 w-[66%]" style={{ "--d": "480ms", "--p": "1" } as CSSProperties}>
+                <figure className="ed-book ed-book-main absolute left-0 top-[2%] z-10 w-[58%]" style={{ "--d": "480ms", "--p": "1" } as CSSProperties}>
                   <img src={heroCapa.url} alt="Capa do livro Agroamigo diagramado" width={862} height={1035} loading="eager" decoding="async" fetchPriority="high" className="w-full" />
                 </figure>
                 {/* Livro aberto horizontal — primeiro plano */}
-                <figure className="ed-book ed-book-front absolute bottom-[2%] right-0 z-20 w-[78%]" style={{ "--d": "760ms", "--p": "1.6" } as CSSProperties}>
+                <figure className="ed-book ed-book-front absolute bottom-0 right-0 z-20 w-[86%]" style={{ "--d": "760ms", "--p": "1.6" } as CSSProperties}>
                   <img src={heroAberto3.url} alt="Página dupla do miolo de livro diagramado" width={1441} height={361} loading="eager" decoding="async" className="w-full" />
                 </figure>
                 {/* Livro aberto inferior — lateral */}
-                <figure className="ed-book ed-book-side absolute right-[2%] top-[38%] z-[15] w-[40%]" style={{ "--d": "880ms", "--p": "0.8" } as CSSProperties}>
+                <figure className="ed-book ed-book-side absolute right-0 top-[36%] z-[5] w-[52%]" style={{ "--d": "880ms", "--p": "0.8" } as CSSProperties}>
                   <img src={heroAberto2.url} alt="Livro aberto — páginas internas" width={576} height={256} loading="eager" decoding="async" className="w-full" />
                 </figure>
               </div>
