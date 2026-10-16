@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { ArrowRight, ImageIcon } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import medgestAsset from "@/assets/medgest.png.asset.json";
 import poderAsset from "@/assets/opoderdaacao.png.asset.json";
 
@@ -9,6 +9,7 @@ const CONTACT_EMAIL = "rayssamartins33@gmail.com";
 
 type Project = {
   title: string;
+  subtitle?: string;
   category: string;
   scope: string;
   description: string;
@@ -19,14 +20,16 @@ type Project = {
 // Substitua os campos vazios pelas imagens reais quando forem enviadas.
 const projects: Project[] = [
   {
-    title: "Agroamigo — Impactos Socioeconômicos na Agricultura Familiar",
+    title: "Agroamigo",
+    subtitle: "Impactos Socioeconômicos na Agricultura Familiar",
     category: "Publicação institucional",
     scope: "Diagramação",
     description: "Publicação institucional com conteúdo extenso, organizada para leitura clara entre capítulos e seções.",
     pages: [],
   },
   {
-    title: "Medgest PRO — Material educacional",
+    title: "Medgest PRO",
+    subtitle: "Material educacional",
     category: "Material didático",
     scope: "Diagramação",
     description: "Material educacional estruturado com hierarquia visual consistente para facilitar o estudo.",
@@ -34,7 +37,8 @@ const projects: Project[] = [
     pages: [],
   },
   {
-    title: "Programa de Gestão e Vendas para Clínicas e Consultórios",
+    title: "Programa de Gestão e Vendas",
+    subtitle: "para Clínicas e Consultórios",
     category: "Apostila",
     scope: "Diagramação",
     description: "Conteúdo de programa de capacitação organizado em módulos, com padrão gráfico aplicado a todas as páginas.",
@@ -51,35 +55,49 @@ const projects: Project[] = [
 ];
 
 const services = [
-  ["Livros impressos", "Miolo diagramado com padrão tipográfico consistente e arquivo preparado para a gráfica."],
-  ["Apostilas e materiais didáticos", "Conteúdos organizados em módulos, com hierarquia que facilita o estudo."],
+  ["Diagramação de livros impressos", "Miolo com padrão tipográfico consistente e arquivo preparado para a gráfica."],
+  ["Diagramação de apostilas e materiais didáticos", "Conteúdos organizados em módulos, com hierarquia que favorece o estudo."],
   ["E-books em PDF", "Publicações digitais pensadas para leitura confortável em tela."],
   ["Publicações institucionais e relatórios", "Documentos extensos apresentados com clareza e identidade."],
-  ["Ajustes em arquivos existentes", "Refinamentos e correções em arquivos editoriais já diagramados."],
+  ["Ajustes em arquivos editoriais existentes", "Refinamentos e correções em arquivos já diagramados."],
 ];
 
 const differentials = [
-  "Experiência em direção de arte e design",
   "Organização de conteúdos extensos",
   "Cuidado tipográfico",
   "Hierarquia visual e legibilidade",
   "Consistência entre capítulos e seções",
+  "Experiência em direção de arte e design editorial",
   "Preparação de arquivos conforme o destino da publicação",
 ];
 
 const steps = [
-  "Análise do material e levantamento do escopo.",
-  "Proposta comercial e definição dos prazos.",
-  "Definição do padrão gráfico e diagramação.",
-  "Revisões conforme escopo contratado.",
-  "Finalização e entrega dos arquivos acordados.",
+  ["Análise do material", "Leitura do conteúdo, formato e objetivo da publicação."],
+  ["Definição de escopo e prazos", "Proposta comercial clara, com etapas e entregas."],
+  ["Direção gráfica e diagramação", "Criação do padrão editorial e aplicação em todo o miolo."],
+  ["Revisões", "Ajustes conforme o escopo contratado."],
+  ["Finalização e entrega", "Arquivos preparados para impressão ou leitura digital."],
 ];
 
-const Placeholder = ({ label, className = "" }: { label: string; className?: string }) => (
-  <div className={`flex flex-col items-center justify-center gap-2 border border-dashed border-input bg-secondary text-muted-foreground ${className}`}>
-    <ImageIcon size={20} aria-hidden="true" />
-    <span className="text-xs uppercase tracking-[0.15em]">{label}</span>
+const roman = ["I", "II", "III", "IV", "V", "VI"];
+
+/** Placeholder editorial: marcas de corte nos cantos, sem ícones. */
+const Plate = ({ label, className = "", tone = "bg-secondary" }: { label?: string; className?: string; tone?: string }) => (
+  <div className={`relative ${tone} ${className}`}>
+    <span aria-hidden="true" className="absolute left-2 top-2 h-3 w-3 border-l border-t border-foreground/30" />
+    <span aria-hidden="true" className="absolute right-2 top-2 h-3 w-3 border-r border-t border-foreground/30" />
+    <span aria-hidden="true" className="absolute bottom-2 left-2 h-3 w-3 border-b border-l border-foreground/30" />
+    <span aria-hidden="true" className="absolute bottom-2 right-2 h-3 w-3 border-b border-r border-foreground/30" />
+    {label && <span className="absolute inset-x-0 bottom-5 text-center text-[10px] uppercase tracking-[0.25em] text-muted-foreground">{label}</span>}
   </div>
+);
+
+const Eyebrow = ({ n, children }: { n: string; children: string }) => (
+  <p className="flex items-center gap-4 text-[11px] uppercase tracking-[0.25em] text-muted-foreground">
+    <span className="font-serif-ed text-sm normal-case tracking-normal text-foreground">{n}</span>
+    <span className="h-px w-10 bg-foreground/40" aria-hidden="true" />
+    {children}
+  </p>
 );
 
 type FormState = { name: string; email: string; whatsapp: string; type: string; pages: string; deadline: string; description: string };
@@ -116,31 +134,34 @@ const ContactForm = () => {
     setOpened(true);
   };
 
-  const field = "w-full border-0 border-b border-input bg-transparent py-3 text-base focus:border-foreground focus:outline-none focus:ring-0";
-  const Err = ({ k }: { k: keyof FormState }) => errors[k] ? <p id={`${k}-err`} className="mt-1 text-sm text-destructive">{errors[k]}</p> : null;
+  const field = "w-full border-0 border-b border-input bg-transparent py-3 font-serif-ed text-xl font-light placeholder:text-muted-foreground/60 focus:border-foreground focus:outline-none focus:ring-0";
+  const lbl = "text-[11px] uppercase tracking-[0.22em] text-muted-foreground";
+  const Err = ({ k }: { k: keyof FormState }) => errors[k] ? <p id={`${k}-err`} className="mt-2 text-sm text-destructive">{errors[k]}</p> : null;
   const aria = (k: keyof FormState) => ({ "aria-invalid": !!errors[k], "aria-describedby": errors[k] ? `${k}-err` : undefined });
 
   return (
-    <form onSubmit={submit} noValidate className="grid gap-8 md:grid-cols-2">
-      <div><label htmlFor="name" className="text-xs uppercase tracking-[0.15em] text-muted-foreground">Nome *</label><input id="name" className={field} value={form.name} onChange={set("name")} autoComplete="name" {...aria("name")} /><Err k="name" /></div>
-      <div><label htmlFor="email" className="text-xs uppercase tracking-[0.15em] text-muted-foreground">E-mail *</label><input id="email" type="email" className={field} value={form.email} onChange={set("email")} autoComplete="email" {...aria("email")} /><Err k="email" /></div>
-      <div><label htmlFor="whatsapp" className="text-xs uppercase tracking-[0.15em] text-muted-foreground">WhatsApp</label><input id="whatsapp" type="tel" className={field} value={form.whatsapp} onChange={set("whatsapp")} autoComplete="tel" {...aria("whatsapp")} /><Err k="whatsapp" /></div>
+    <form onSubmit={submit} noValidate className="grid gap-x-12 gap-y-10 md:grid-cols-2">
+      <div><label htmlFor="name" className={lbl}>Nome *</label><input id="name" className={field} value={form.name} onChange={set("name")} autoComplete="name" {...aria("name")} /><Err k="name" /></div>
+      <div><label htmlFor="email" className={lbl}>E-mail *</label><input id="email" type="email" className={field} value={form.email} onChange={set("email")} autoComplete="email" {...aria("email")} /><Err k="email" /></div>
+      <div><label htmlFor="whatsapp" className={lbl}>WhatsApp</label><input id="whatsapp" type="tel" className={field} value={form.whatsapp} onChange={set("whatsapp")} autoComplete="tel" {...aria("whatsapp")} /><Err k="whatsapp" /></div>
       <div>
-        <label htmlFor="type" className="text-xs uppercase tracking-[0.15em] text-muted-foreground">Tipo de publicação *</label>
+        <label htmlFor="type" className={lbl}>Tipo de publicação *</label>
         <select id="type" className={field} value={form.type} onChange={set("type")} {...aria("type")}>
           <option value="">Selecione</option>
           <option>Livro impresso</option><option>Apostila / material didático</option><option>E-book em PDF</option>
           <option>Publicação institucional / relatório</option><option>Ajustes em arquivo existente</option><option>Outro</option>
         </select><Err k="type" />
       </div>
-      <div><label htmlFor="pages" className="text-xs uppercase tracking-[0.15em] text-muted-foreground">Quantidade aproximada de páginas</label><input id="pages" inputMode="numeric" className={field} value={form.pages} onChange={set("pages")} /></div>
-      <div><label htmlFor="deadline" className="text-xs uppercase tracking-[0.15em] text-muted-foreground">Prazo desejado</label><input id="deadline" className={field} placeholder="Ex.: 30 dias" value={form.deadline} onChange={set("deadline")} /></div>
-      <div className="md:col-span-2"><label htmlFor="description" className="text-xs uppercase tracking-[0.15em] text-muted-foreground">Descrição do projeto *</label><textarea id="description" rows={4} className={`${field} resize-none`} value={form.description} onChange={set("description")} {...aria("description")} /><Err k="description" /></div>
-      <div className="md:col-span-2 flex flex-col gap-4 sm:flex-row sm:items-center">
-        <button type="submit" className="inline-flex min-h-12 items-center justify-center gap-2 bg-primary px-8 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-85">Solicitar proposta <ArrowRight size={16} /></button>
-        <p className="text-sm text-muted-foreground" role="status">
+      <div><label htmlFor="pages" className={lbl}>Quantidade aproximada de páginas</label><input id="pages" inputMode="numeric" className={field} value={form.pages} onChange={set("pages")} /></div>
+      <div><label htmlFor="deadline" className={lbl}>Prazo desejado</label><input id="deadline" className={field} placeholder="Ex.: 30 dias" value={form.deadline} onChange={set("deadline")} /></div>
+      <div className="md:col-span-2"><label htmlFor="description" className={lbl}>Descrição do projeto *</label><textarea id="description" rows={3} className={`${field} resize-none`} value={form.description} onChange={set("description")} {...aria("description")} /><Err k="description" /></div>
+      <div className="flex flex-col gap-5 md:col-span-2 sm:flex-row sm:items-center sm:justify-between">
+        <p className="max-w-sm text-sm text-muted-foreground" role="status">
           {opened ? "Seu aplicativo de e-mail foi aberto com a mensagem pronta. Basta enviá-la para concluir." : "Ao enviar, seu aplicativo de e-mail abrirá com a mensagem preenchida."}
         </p>
+        <button type="submit" className="group inline-flex min-h-12 items-center justify-center gap-3 bg-primary px-8 text-sm tracking-wide text-primary-foreground transition-opacity hover:opacity-85">
+          Enviar solicitação <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+        </button>
       </div>
     </form>
   );
@@ -153,7 +174,7 @@ const EditorialLanding = () => {
   const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
   return (
-    <div className="editorial-theme min-h-screen">
+    <div className="editorial-theme min-h-screen overflow-x-hidden">
       <Helmet>
         <html lang="pt-BR" />
         <title>{title}</title>
@@ -165,67 +186,133 @@ const EditorialLanding = () => {
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&display=swap" />
       </Helmet>
 
-      <header className="border-b border-border">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-          <Link to="/" className="text-sm tracking-[0.1em]"><span className="font-serif-ed text-lg">Rayssa Martins</span> <span className="text-muted-foreground">— Design Editorial</span></Link>
-          <button onClick={() => go("orcamento")} className="hidden text-sm underline-offset-4 hover:underline sm:block">Solicitar orçamento</button>
-        </div>
+      {/* Topo */}
+      <header className="mx-auto flex max-w-7xl items-end justify-between px-6 pb-5 pt-8 md:px-10">
+        <Link to="/" className="leading-tight">
+          <span className="block font-serif-ed text-lg">Rayssa Martins</span>
+          <span className="block text-[11px] uppercase tracking-[0.25em] text-muted-foreground">Design Editorial</span>
+        </Link>
+        <button onClick={() => go("orcamento")} className="text-sm underline decoration-foreground/30 underline-offset-[6px] transition-colors hover:decoration-foreground">
+          Solicitar orçamento
+        </button>
       </header>
+      <div className="mx-auto max-w-7xl px-6 md:px-10"><div className="h-px bg-foreground/80" /></div>
 
       <main>
         {/* Hero */}
-        <section className="mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-12 md:py-28">
-          <div className="md:col-span-7 flex flex-col justify-center">
-            <p className="mb-6 text-xs uppercase tracking-[0.2em] text-muted-foreground">Rayssa Martins — Design Editorial</p>
-            <h1 className="font-serif-ed text-4xl font-light leading-[1.08] sm:text-5xl lg:text-6xl">Seu conteúdo merece uma apresentação à altura.</h1>
-            <p className="mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground">Diagramação profissional de livros, apostilas e publicações. Design editorial que valoriza seu conteúdo, organiza a leitura e cuida de cada detalhe.</p>
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-              <button onClick={() => go("orcamento")} className="inline-flex min-h-12 items-center justify-center gap-2 bg-primary px-8 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-85">Solicitar orçamento <ArrowRight size={16} /></button>
-              <button onClick={() => go("projetos")} className="inline-flex min-h-12 items-center justify-center border border-foreground px-8 text-sm font-medium transition-colors hover:bg-secondary">Conhecer projetos</button>
-            </div>
+        <section className="mx-auto max-w-7xl px-6 pb-20 pt-12 md:px-10 md:pb-28 md:pt-16">
+          <div className="flex justify-between text-[11px] uppercase tracking-[0.25em] text-muted-foreground">
+            <span>Livros · Apostilas · Publicações</span>
+            <span className="hidden sm:inline">Fortaleza — Brasil</span>
           </div>
-          <div className="md:col-span-5">
-            <img src={medgestAsset.url} alt="Medgest PRO — material educacional diagramado por Rayssa Martins" className="aspect-[4/5] w-full object-cover" decoding="async" />
+
+          <div className="mt-12 grid gap-12 lg:grid-cols-12 lg:gap-10">
+            <div className="lg:col-span-7">
+              <h1 className="font-serif-ed text-[2.75rem] font-light leading-[1.02] tracking-[-0.02em] sm:text-6xl lg:text-[5.25rem]">
+                Seu livro começa <em className="italic">muito antes</em> da primeira página.
+              </h1>
+              <div className="mt-10 grid gap-8 sm:grid-cols-[auto_1fr] sm:gap-10">
+                <span className="hidden font-serif-ed text-sm text-muted-foreground sm:block">§</span>
+                <div>
+                  <p className="max-w-lg text-lg leading-relaxed text-muted-foreground">
+                    Diagramação profissional de livros, apostilas e publicações. Projetos editoriais pensados para valorizar o conteúdo, organizar a leitura e transformar informação em experiência.
+                  </p>
+                  <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-8">
+                    <button onClick={() => go("orcamento")} className="group inline-flex min-h-12 items-center justify-center gap-3 bg-primary px-7 text-sm tracking-wide text-primary-foreground transition-opacity hover:opacity-85">
+                      Solicitar orçamento editorial <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+                    </button>
+                    <button onClick={() => go("projetos")} className="inline-flex min-h-12 items-center justify-center text-sm underline decoration-foreground/30 underline-offset-[6px] hover:decoration-foreground">
+                      Ver projetos
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Vitrine editorial */}
+            <div className="lg:col-span-5">
+              <div className="relative grid grid-cols-6 gap-3">
+                <Plate label="Capa" className="col-span-4 aspect-[3/4]" tone="bg-secondary" />
+                <div className="col-span-2 flex flex-col gap-3 pt-16">
+                  <Plate className="aspect-[3/4]" tone="bg-card" />
+                  <Plate className="aspect-[3/4]" tone="bg-card" />
+                </div>
+                <Plate label="Página dupla · miolo" className="col-span-6 aspect-[2/1]" tone="bg-card" />
+              </div>
+              <p className="mt-4 flex justify-between text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+                <span>Fig. 01 — Acervo editorial</span><span>Em breve</span>
+              </p>
+            </div>
           </div>
         </section>
 
-        {/* Portfólio */}
-        <section id="projetos" className="border-t border-border py-20 md:py-28">
-          <div className="mx-auto max-w-6xl px-6">
-            <h2 className="font-serif-ed max-w-2xl text-3xl font-light leading-tight md:text-5xl">Projetos que ganham forma em cada página.</h2>
-            <div className="mt-16 grid gap-x-10 gap-y-20 md:grid-cols-2">
-              {projects.map((p, i) => (
-                <article key={p.title} className={i % 2 === 1 ? "md:mt-24" : ""}>
-                  {p.cover
-                    ? <img src={p.cover} alt={`${p.title} — capa`} loading="lazy" decoding="async" className="aspect-[4/3] w-full object-cover" />
-                    : <Placeholder label="Imagem de capa em breve" className="aspect-[4/3] w-full" />}
-                  <div className="mt-3 grid grid-cols-3 gap-3">
-                    {(p.pages.length ? p.pages : [null, null, null]).slice(0, 3).map((src, j) =>
-                      src ? <img key={j} src={src} alt={`${p.title} — página interna ${j + 1}`} loading="lazy" className="aspect-[3/4] w-full object-cover" />
-                          : <Placeholder key={j} label="Página" className="aspect-[3/4] w-full" />)}
-                  </div>
-                  <p className="mt-6 text-xs uppercase tracking-[0.15em] text-muted-foreground">{p.category}</p>
-                  <h3 className="font-serif-ed mt-2 text-2xl font-normal leading-snug">{p.title}</h3>
-                  <p className="mt-3 leading-relaxed text-muted-foreground">{p.description}</p>
-                  <p className="mt-4 text-sm"><span className="text-muted-foreground">Atuação: </span>{p.scope}</p>
-                </article>
-              ))}
+        {/* Projetos */}
+        <section id="projetos" className="border-t border-border py-20 md:py-32">
+          <div className="mx-auto max-w-7xl px-6 md:px-10">
+            <div className="grid gap-8 md:grid-cols-12">
+              <div className="md:col-span-7">
+                <Eyebrow n="01">Portfólio</Eyebrow>
+                <h2 className="mt-6 font-serif-ed text-4xl font-light leading-[1.05] tracking-[-0.01em] md:text-6xl">Projetos selecionados</h2>
+              </div>
+              <p className="self-end text-lg leading-relaxed text-muted-foreground md:col-span-4 md:col-start-9">
+                Publicações desenvolvidas com atenção à leitura, à hierarquia visual e à consistência editorial.
+              </p>
+            </div>
+
+            <div className="mt-20 space-y-24 md:space-y-32">
+              {projects.map((p, i) => {
+                const flip = i % 2 === 1;
+                return (
+                  <article key={p.title} className="grid gap-8 border-t border-foreground/80 pt-6 md:grid-cols-12 md:gap-10">
+                    <div className={`flex items-start justify-between md:col-span-12 text-[11px] uppercase tracking-[0.25em] text-muted-foreground`}>
+                      <span>{String(i + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}</span>
+                      <span>{p.category}</span>
+                    </div>
+
+                    <div className={`md:col-span-7 ${flip ? "md:order-2" : ""}`}>
+                      {p.cover
+                        ? <img src={p.cover} alt={`${p.title} — capa`} loading="lazy" decoding="async" className="aspect-[4/3] w-full bg-secondary object-cover" />
+                        : <Plate label="Capa em breve" className="aspect-[4/3] w-full" />}
+                      <div className="mt-3 grid grid-cols-3 gap-3">
+                        {(p.pages.length ? p.pages : [null, null, null]).slice(0, 3).map((src, j) =>
+                          src ? <img key={j} src={src} alt={`${p.title} — página interna ${j + 1}`} loading="lazy" className="aspect-[3/4] w-full object-cover" />
+                              : <Plate key={j} label={`p. ${j + 1}`} className="aspect-[3/4] w-full" tone="bg-card" />)}
+                      </div>
+                    </div>
+
+                    <div className={`flex flex-col md:col-span-4 ${flip ? "md:order-1 md:col-start-1" : "md:col-start-9"}`}>
+                      <h3 className="font-serif-ed text-3xl font-light leading-tight md:text-4xl">{p.title}</h3>
+                      {p.subtitle && <p className="mt-2 font-serif-ed text-lg italic text-muted-foreground">{p.subtitle}</p>}
+                      <p className="mt-6 leading-relaxed text-muted-foreground">{p.description}</p>
+                      <dl className="mt-8 border-t border-border pt-4 text-sm">
+                        <dt className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">Atuação</dt>
+                        <dd className="mt-1">{p.scope}</dd>
+                      </dl>
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           </div>
         </section>
 
         {/* Serviços */}
-        <section className="border-t border-border bg-card py-20 md:py-28">
-          <div className="mx-auto grid max-w-6xl gap-12 px-6 md:grid-cols-12">
-            <h2 className="font-serif-ed text-3xl font-light leading-tight md:col-span-5 md:text-5xl">Soluções editoriais para diferentes projetos.</h2>
-            <ul className="md:col-span-7 divide-y divide-border border-y border-border">
+        <section className="border-t border-border bg-card py-20 md:py-32">
+          <div className="mx-auto grid max-w-7xl gap-12 px-6 md:grid-cols-12 md:px-10">
+            <div className="md:col-span-4">
+              <Eyebrow n="02">Serviços</Eyebrow>
+              <h2 className="mt-6 font-serif-ed text-4xl font-light leading-[1.05] md:text-5xl">Serviços editoriais</h2>
+              <p className="mt-6 leading-relaxed text-muted-foreground">Soluções para livros, apostilas, materiais didáticos e publicações profissionais.</p>
+            </div>
+            <ul className="md:col-span-7 md:col-start-6">
               {services.map(([t, d], i) => (
-                <li key={t} className="grid grid-cols-[3rem_1fr] gap-4 py-6">
-                  <span className="font-serif-ed text-muted-foreground">0{i + 1}</span>
-                  <div><h3 className="text-lg font-medium">{t}</h3><p className="mt-1 text-muted-foreground">{d}</p></div>
+                <li key={t} className="group grid grid-cols-[2.5rem_1fr] gap-4 border-t border-border py-7 last:border-b md:grid-cols-[3.5rem_1fr_1fr] md:gap-8">
+                  <span className="font-serif-ed text-sm italic text-muted-foreground">{roman[i]}.</span>
+                  <h3 className="font-serif-ed text-2xl font-light leading-snug">{t}</h3>
+                  <p className="col-start-2 leading-relaxed text-muted-foreground md:col-start-3">{d}</p>
                 </li>
               ))}
             </ul>
@@ -233,24 +320,32 @@ const EditorialLanding = () => {
         </section>
 
         {/* Diferenciais */}
-        <section className="border-t border-border py-20 md:py-28">
-          <div className="mx-auto max-w-6xl px-6">
-            <h2 className="font-serif-ed max-w-3xl text-3xl font-light leading-tight md:text-5xl">Design editorial é mais do que organizar páginas.</h2>
-            <ul className="mt-14 grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-3">
-              {differentials.map((d) => <li key={d} className="bg-background p-8 text-lg leading-snug">{d}</li>)}
+        <section className="border-t border-border py-20 md:py-32">
+          <div className="mx-auto max-w-7xl px-6 md:px-10">
+            <Eyebrow n="03">Diferenciais</Eyebrow>
+            <h2 className="mt-6 max-w-3xl font-serif-ed text-4xl font-light leading-[1.05] md:text-6xl">O que sustenta cada projeto</h2>
+            <ul className="mt-16 grid gap-x-12 sm:grid-cols-2 lg:grid-cols-3">
+              {differentials.map((d, i) => (
+                <li key={d} className="border-t border-border py-8">
+                  <span className="text-[11px] tracking-[0.2em] text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
+                  <p className="mt-4 font-serif-ed text-2xl font-light leading-snug">{d}</p>
+                </li>
+              ))}
             </ul>
           </div>
         </section>
 
         {/* Processo */}
-        <section className="border-t border-border bg-card py-20 md:py-28">
-          <div className="mx-auto max-w-6xl px-6">
-            <h2 className="font-serif-ed text-3xl font-light leading-tight md:text-5xl">Do original ao arquivo final.</h2>
-            <ol className="mt-14 grid gap-10 md:grid-cols-5">
-              {steps.map((s, i) => (
-                <li key={s} className="border-t border-foreground pt-6">
-                  <span className="font-serif-ed text-3xl font-light">{i + 1}</span>
-                  <p className="mt-4 leading-relaxed text-muted-foreground">{s}</p>
+        <section className="border-t border-border bg-primary py-20 text-primary-foreground md:py-32">
+          <div className="mx-auto max-w-7xl px-6 md:px-10">
+            <p className="text-[11px] uppercase tracking-[0.25em] text-primary-foreground/60">04 — Processo</p>
+            <h2 className="mt-6 font-serif-ed text-4xl font-light leading-[1.05] md:text-6xl">Como o projeto acontece</h2>
+            <ol className="mt-16 grid gap-10 md:grid-cols-5 md:gap-6">
+              {steps.map(([t, d], i) => (
+                <li key={t} className="border-t border-primary-foreground/30 pt-6">
+                  <span className="font-serif-ed text-5xl font-light italic">{i + 1}</span>
+                  <h3 className="mt-6 text-base font-medium">{t}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-primary-foreground/65">{d}</p>
                 </li>
               ))}
             </ol>
@@ -258,31 +353,46 @@ const EditorialLanding = () => {
         </section>
 
         {/* Sobre */}
-        <section className="border-t border-border py-20 md:py-28">
-          <div className="mx-auto grid max-w-6xl gap-12 px-6 md:grid-cols-12 md:items-center">
-            <Placeholder label="Fotografia profissional" className="aspect-[4/5] w-full md:col-span-5" />
-            <div className="md:col-span-6 md:col-start-7">
-              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Sobre a profissional</p>
-              <h2 className="font-serif-ed mt-4 text-3xl font-light md:text-5xl">Rayssa Martins</h2>
-              <p className="mt-6 text-lg leading-relaxed text-muted-foreground">Diretora de Arte Sênior, com atuação em design editorial, comunicação visual e projetos digitais. Mais de 10 anos de experiência criando projetos para marcas do Brasil, Estados Unidos e Portugal, com atenção à tipografia, à hierarquia e à consistência de cada publicação.</p>
-              <Link to="/" className="mt-8 inline-flex items-center gap-2 text-sm underline underline-offset-4">Ver portfólio completo <ArrowRight size={14} /></Link>
+        <section className="py-20 md:py-32">
+          <div className="mx-auto grid max-w-7xl gap-12 px-6 md:grid-cols-12 md:px-10">
+            <div className="md:col-span-4">
+              <Plate label="Fotografia profissional" className="aspect-[4/5] w-full" />
+            </div>
+            <div className="md:col-span-7 md:col-start-6 md:pt-10">
+              <Eyebrow n="05">Sobre</Eyebrow>
+              <h2 className="mt-6 font-serif-ed text-4xl font-light leading-[1.05] md:text-6xl">Sobre Rayssa Martins</h2>
+              <p className="mt-10 font-serif-ed text-xl font-light leading-relaxed md:text-2xl">
+                Diretora de Arte Sênior, com atuação em design editorial, comunicação visual e projetos digitais. Mais de 10 anos de experiência criando projetos para marcas do Brasil, Estados Unidos e Portugal, com atenção à tipografia, à hierarquia e à consistência de cada publicação.
+              </p>
+              <Link to="/" className="mt-10 inline-flex items-center gap-2 text-sm underline decoration-foreground/30 underline-offset-[6px] hover:decoration-foreground">
+                Ver portfólio completo <ArrowUpRight size={14} />
+              </Link>
             </div>
           </div>
         </section>
 
         {/* Formulário */}
-        <section id="orcamento" className="border-t border-border bg-card py-20 md:py-28">
-          <div className="mx-auto max-w-4xl px-6">
-            <h2 className="font-serif-ed mb-14 text-3xl font-light leading-tight md:text-5xl">Vamos dar forma ao seu próximo projeto?</h2>
-            <ContactForm />
+        <section id="orcamento" className="border-t border-border bg-card py-20 md:py-32">
+          <div className="mx-auto grid max-w-7xl gap-14 px-6 md:grid-cols-12 md:px-10">
+            <div className="md:col-span-4">
+              <Eyebrow n="06">Orçamento</Eyebrow>
+              <h2 className="mt-6 font-serif-ed text-4xl font-light leading-[1.05] md:text-5xl">Vamos conversar sobre o seu projeto?</h2>
+            </div>
+            <div className="md:col-span-7 md:col-start-6">
+              <ContactForm />
+            </div>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-border">
-        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-10 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
-          <p><span className="font-serif-ed text-base text-foreground">Rayssa Martins</span> — Design Editorial</p>
-          <nav aria-label="Contatos e redes" className="flex flex-wrap gap-6">
+      <footer className="mx-auto max-w-7xl px-6 pb-10 pt-16 md:px-10">
+        <div className="h-px bg-foreground/80" />
+        <div className="mt-8 flex flex-col gap-6 text-sm text-muted-foreground md:flex-row md:items-end md:justify-between">
+          <p className="leading-tight">
+            <span className="block font-serif-ed text-2xl text-foreground">Rayssa Martins</span>
+            <span className="text-[11px] uppercase tracking-[0.25em]">Design Editorial</span>
+          </p>
+          <nav aria-label="Contatos e redes" className="flex flex-wrap gap-x-8 gap-y-3">
             <Link to="/" className="hover:text-foreground">Portfólio principal</Link>
             <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-foreground">E-mail</a>
             <a href="https://wa.me/5585991706850" target="_blank" rel="noopener noreferrer" className="hover:text-foreground">WhatsApp</a>
