@@ -1,13 +1,13 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import medgestAsset from "@/assets/medgest.png.asset.json";
 import poderAsset from "@/assets/opoderdaacao.png.asset.json";
-import mockupCapa from "@/assets/mockup-capa.jpg.asset.json";
-import mockupAbertoSuperior from "@/assets/mockup-aberto-superior.jpg.asset.json";
-import mockupAbertoInferior from "@/assets/mockup-aberto-inferior.jpg.asset.json";
-import mockupPaginaDupla from "@/assets/mockup-pagina-dupla.jpg.asset.json";
+import heroCapa from "@/assets/hero-01.webp.asset.json";
+import heroAberto1 from "@/assets/hero-02.webp.asset.json";
+import heroAberto2 from "@/assets/hero-03.webp.asset.json";
+import heroAberto3 from "@/assets/hero-04.webp.asset.json";
 
 const CONTACT_EMAIL = "rayssamartins33@gmail.com";
 
@@ -95,6 +95,22 @@ const useReveal = () => {
     }), { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
     els.forEach((e) => io.observe(e));
     return () => io.disconnect();
+  }, []);
+};
+
+const useBookParallax = () => {
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const els = Array.from(document.querySelectorAll<HTMLElement>(".ed-book"));
+    let raf = 0;
+    const tick = () => {
+      raf = 0;
+      const y = Math.min(window.scrollY, 900);
+      els.forEach((el) => el.style.setProperty("--py", `${(-y * 0.04 * Number(el.style.getPropertyValue("--p") || 1)).toFixed(1)}px`));
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(tick); };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => { window.removeEventListener("scroll", onScroll); cancelAnimationFrame(raf); };
   }, []);
 };
 
@@ -207,6 +223,7 @@ const EditorialLanding = () => {
   const description = "Diagramação profissional de livros, apostilas, e-books e publicações institucionais. Conheça projetos editoriais de Rayssa Martins.";
   const canonical = "https://rayssamartins.app/diagramacao-de-livros";
   useReveal();
+  useBookParallax();
   const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
   return (
@@ -271,14 +288,24 @@ const EditorialLanding = () => {
 
             {/* Vitrine editorial */}
             <div style={{ animationDelay: "480ms" }} className="ed-rise lg:col-span-5">
-              <div className="relative grid grid-cols-6 gap-3">
-                <span aria-hidden="true" className="absolute -left-3 -top-3 z-10 h-6 w-6 border-l-2 border-t-2 border-accent" />
-                <img src={mockupCapa.url} alt="Capa vertical de livro diagramado" width={900} height={1200} loading="eager" decoding="async" className="col-span-4 aspect-[3/4] w-full object-cover" />
-                <div className="col-span-2 flex flex-col gap-3 pt-16">
-                  <img src={mockupAbertoSuperior.url} alt="Livro aberto — visão superior das páginas" width={600} height={800} loading="eager" decoding="async" className="aspect-[3/4] w-full object-cover" />
-                  <img src={mockupAbertoInferior.url} alt="Livro aberto — visão inferior das páginas" width={600} height={800} loading="eager" decoding="async" className="aspect-[3/4] w-full object-cover" />
-                </div>
-                <img src={mockupPaginaDupla.url} alt="Página dupla do miolo de livro diagramado" width={1500} height={720} loading="eager" decoding="async" className="col-span-6 aspect-[2/1] w-full object-cover" />
+              <div className="ed-scene relative mx-auto aspect-[10/9] w-full max-w-[560px] lg:-mr-6 lg:max-w-none xl:-mr-12">
+                <span aria-hidden="true" className="absolute left-[2%] top-[2%] z-30 h-6 w-6 border-l-2 border-t-2 border-accent" />
+                {/* Livro aberto superior — plano de fundo */}
+                <figure className="ed-book ed-book-back absolute right-0 top-[4%] z-0 hidden w-[46%] sm:block" style={{ "--d": "620ms", "--p": "0.4" } as CSSProperties}>
+                  <img src={heroAberto1.url} alt="Livro aberto — abertura de capítulo" width={576} height={256} loading="eager" decoding="async" className="w-full" />
+                </figure>
+                {/* Livro principal */}
+                <figure className="ed-book ed-book-main absolute left-0 top-0 z-10 w-[56%]" style={{ "--d": "480ms", "--p": "1" } as CSSProperties}>
+                  <img src={heroCapa.url} alt="Capa do livro Agroamigo diagramado" width={862} height={1035} loading="eager" decoding="async" fetchPriority="high" className="w-full" />
+                </figure>
+                {/* Livro aberto horizontal — primeiro plano */}
+                <figure className="ed-book ed-book-front absolute bottom-0 right-0 z-20 w-[88%]" style={{ "--d": "760ms", "--p": "1.6" } as CSSProperties}>
+                  <img src={heroAberto3.url} alt="Página dupla do miolo de livro diagramado" width={1441} height={361} loading="eager" decoding="async" className="w-full" />
+                </figure>
+                {/* Livro aberto inferior — lateral */}
+                <figure className="ed-book ed-book-side absolute right-0 top-[36%] z-[5] w-[46%]" style={{ "--d": "880ms", "--p": "0.8" } as CSSProperties}>
+                  <img src={heroAberto2.url} alt="Livro aberto — páginas internas" width={576} height={256} loading="eager" decoding="async" className="w-full" />
+                </figure>
               </div>
               <p className="mt-4 flex flex-wrap justify-between gap-x-4 text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
                 <span><span className="text-accent">Fig. 01</span> — Acervo editorial</span><span>Projetos reais</span>
