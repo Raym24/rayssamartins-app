@@ -280,7 +280,7 @@ const EditorialLanding = () => {
                 </div>
                 <img src={mockupPaginaDupla.url} alt="Página dupla do miolo de livro diagramado" width={1500} height={720} loading="eager" decoding="async" className="col-span-6 aspect-[2/1] w-full object-cover" />
               </div>
-              <p className="mt-4 flex justify-between text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+              <p className="mt-4 flex flex-wrap justify-between gap-x-4 text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
                 <span><span className="text-accent">Fig. 01</span> — Acervo editorial</span><span>Projetos reais</span>
               </p>
             </div>
