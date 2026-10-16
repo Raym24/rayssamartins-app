@@ -437,7 +437,7 @@
 .editorial-theme .ed-flip-base-l { left: 0; border-radius: 3px 0 0 3px; background: linear-gradient(90deg, hsl(40 30% 95%) 80%, hsl(35 20% 86%)); box-shadow: inset 0 0 0 1px hsl(35 15% 85%); }
 .editorial-theme .ed-flip-base-r { left: 50%; border-radius: 0 3px 3px 0; background: linear-gradient(270deg, hsl(40 38% 97%) 80%, hsl(35 20% 87%)); box-shadow: inset 0 0 0 1px hsl(35 15% 86%); }
 .editorial-theme .ed-flip-text { position: absolute; left: 14%; right: 14%; top: 22%; bottom: 14%;
-  background: repeating-linear-gradient(180deg, hsl(0 0% 9% / 0.16) 0 1px, transparent 1px 9px); -webkit-mask-image: linear-gradient(90deg,#000 70%, transparent 71%, transparent 74%, #000 75%); }
+  background: repeating-linear-gradient(180deg, hsl(0 0% 9% / 0.16) 0 1px, transparent 1px 9px); }
 .editorial-theme .ed-flip-mark { position: absolute; left: 14%; top: 11%; width: 10%; height: 2px; background: hsl(var(--accent)); }
 .editorial-theme .ed-face-chapter .ed-flip-text { top: 48%; }
 .editorial-theme .ed-leaf { position: absolute; left: 50%; top: 0; width: 50%; height: 100%; transform-origin: left center; transform-style: preserve-3d; animation: ed-leaf 14s cubic-bezier(.45,.05,.25,1) infinite; }
