@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
@@ -95,6 +95,22 @@ const useReveal = () => {
     }), { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
     els.forEach((e) => io.observe(e));
     return () => io.disconnect();
+  }, []);
+};
+
+const useBookParallax = () => {
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const els = Array.from(document.querySelectorAll<HTMLElement>(".ed-book"));
+    let raf = 0;
+    const tick = () => {
+      raf = 0;
+      const y = Math.min(window.scrollY, 900);
+      els.forEach((el) => el.style.setProperty("--py", `${(-y * 0.04 * Number(el.style.getPropertyValue("--p") || 1)).toFixed(1)}px`));
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(tick); };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => { window.removeEventListener("scroll", onScroll); cancelAnimationFrame(raf); };
   }, []);
 };
 
@@ -207,6 +223,7 @@ const EditorialLanding = () => {
   const description = "Diagramação profissional de livros, apostilas, e-books e publicações institucionais. Conheça projetos editoriais de Rayssa Martins.";
   const canonical = "https://rayssamartins.app/diagramacao-de-livros";
   useReveal();
+  useBookParallax();
   const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
   return (
@@ -274,19 +291,19 @@ const EditorialLanding = () => {
               <div className="ed-scene relative mx-auto aspect-[5/6] w-full max-w-[560px] lg:-mr-6 lg:max-w-none xl:-mr-12">
                 <span aria-hidden="true" className="absolute left-[2%] top-[2%] z-30 h-6 w-6 border-l-2 border-t-2 border-accent" />
                 {/* Livro aberto superior — plano de fundo */}
-                <figure className="ed-book ed-book-back absolute right-0 top-[3%] z-0 hidden w-[52%] sm:block" style={{ "--d": "620ms", "--p": "0.4" } as React.CSSProperties}>
+                <figure className="ed-book ed-book-back absolute right-0 top-[3%] z-0 hidden w-[52%] sm:block" style={{ "--d": "620ms", "--p": "0.4" } as CSSProperties}>
                   <img src={heroAberto1.url} alt="Livro aberto — abertura de capítulo" width={576} height={256} loading="eager" decoding="async" className="w-full" />
                 </figure>
                 {/* Livro principal */}
-                <figure className="ed-book ed-book-main absolute left-[4%] top-[6%] z-10 w-[66%]" style={{ "--d": "480ms", "--p": "1" } as React.CSSProperties}>
+                <figure className="ed-book ed-book-main absolute left-[4%] top-[6%] z-10 w-[66%]" style={{ "--d": "480ms", "--p": "1" } as CSSProperties}>
                   <img src={heroCapa.url} alt="Capa do livro Agroamigo diagramado" width={862} height={1035} loading="eager" decoding="async" fetchPriority="high" className="w-full" />
                 </figure>
                 {/* Livro aberto horizontal — primeiro plano */}
-                <figure className="ed-book ed-book-front absolute bottom-[2%] right-0 z-20 w-[78%]" style={{ "--d": "760ms", "--p": "1.6" } as React.CSSProperties}>
+                <figure className="ed-book ed-book-front absolute bottom-[2%] right-0 z-20 w-[78%]" style={{ "--d": "760ms", "--p": "1.6" } as CSSProperties}>
                   <img src={heroAberto3.url} alt="Página dupla do miolo de livro diagramado" width={1441} height={361} loading="eager" decoding="async" className="w-full" />
                 </figure>
                 {/* Livro aberto inferior — lateral */}
-                <figure className="ed-book ed-book-side absolute right-[2%] top-[38%] z-[15] w-[40%]" style={{ "--d": "880ms", "--p": "0.8" } as React.CSSProperties}>
+                <figure className="ed-book ed-book-side absolute right-[2%] top-[38%] z-[15] w-[40%]" style={{ "--d": "880ms", "--p": "0.8" } as CSSProperties}>
                   <img src={heroAberto2.url} alt="Livro aberto — páginas internas" width={576} height={256} loading="eager" decoding="async" className="w-full" />
                 </figure>
               </div>
