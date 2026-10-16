@@ -336,3 +336,27 @@
     transform: scale(1.02) rotate(0.5deg);
   }
 }
+
+/* Editorial landing (/diagramacao-de-livros) — isolated theme */
+.editorial-theme {
+  --background: 40 20% 98%;
+  --foreground: 30 6% 10%;
+  --card: 40 18% 95%;
+  --card-foreground: 30 6% 10%;
+  --primary: 30 6% 10%;
+  --primary-foreground: 40 20% 98%;
+  --secondary: 35 12% 91%;
+  --secondary-foreground: 30 6% 10%;
+  --muted: 35 12% 91%;
+  --muted-foreground: 30 5% 36%;
+  --accent: 30 8% 22%;
+  --accent-foreground: 40 20% 98%;
+  --border: 35 10% 84%;
+  --input: 35 10% 78%;
+  --ring: 30 6% 10%;
+  --destructive: 0 65% 40%;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: 'Inter', sans-serif;
+}
+.editorial-theme .font-serif-ed { font-family: 'Fraunces', Georgia, serif; font-optical-sizing: auto; }

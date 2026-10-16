@@ -5,6 +5,7 @@ const baseUrl = "https://rayssamartins.app";
 const paths = [
   "/",
   "/en",
+  "/diagramacao-de-livros",
   "/projeto/x1-de-rua",
   "/projeto/souting-marketing",
   "/projeto/blive-ensino",
