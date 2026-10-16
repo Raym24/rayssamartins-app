@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index.tsx";
 import ProjectDetail from "./pages/ProjectDetail.tsx";
+import EditorialLanding from "./pages/EditorialLanding.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
@@ -22,6 +23,7 @@ const App = () => (
             <Route path="/en" element={<Index />} />
             <Route path="/projeto/:id" element={<ProjectDetail />} />
             <Route path="/en/projeto/:id" element={<ProjectDetail />} />
+            <Route path="/diagramacao-de-livros" element={<EditorialLanding />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </LanguageProvider>
