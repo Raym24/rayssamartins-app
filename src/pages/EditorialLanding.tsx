@@ -4,6 +4,10 @@ import { Helmet } from "react-helmet-async";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import medgestAsset from "@/assets/medgest.png.asset.json";
 import poderAsset from "@/assets/opoderdaacao.png.asset.json";
+import mockupCapa from "@/assets/mockup-capa.jpg.asset.json";
+import mockupAbertoSuperior from "@/assets/mockup-aberto-superior.jpg.asset.json";
+import mockupAbertoInferior from "@/assets/mockup-aberto-inferior.jpg.asset.json";
+import mockupPaginaDupla from "@/assets/mockup-pagina-dupla.jpg.asset.json";
 
 const CONTACT_EMAIL = "rayssamartins33@gmail.com";
 
@@ -269,15 +273,15 @@ const EditorialLanding = () => {
             <div style={{ animationDelay: "480ms" }} className="ed-rise lg:col-span-5">
               <div className="relative grid grid-cols-6 gap-3">
                 <span aria-hidden="true" className="absolute -left-3 -top-3 z-10 h-6 w-6 border-l-2 border-t-2 border-accent" />
-                <Plate label="Capa" className="col-span-4 aspect-[3/4]" tone="bg-card" />
+                <img src={mockupCapa.url} alt="Capa vertical de livro diagramado" width={900} height={1200} loading="eager" decoding="async" className="col-span-4 aspect-[3/4] w-full object-cover" />
                 <div className="col-span-2 flex flex-col gap-3 pt-16">
-                  <Plate className="aspect-[3/4]" tone="bg-card" />
-                  <Plate className="aspect-[3/4]" tone="bg-card" />
+                  <img src={mockupAbertoSuperior.url} alt="Livro aberto — visão superior das páginas" width={600} height={800} loading="eager" decoding="async" className="aspect-[3/4] w-full object-cover" />
+                  <img src={mockupAbertoInferior.url} alt="Livro aberto — visão inferior das páginas" width={600} height={800} loading="eager" decoding="async" className="aspect-[3/4] w-full object-cover" />
                 </div>
-                <Plate label="Página dupla · miolo" className="col-span-6 aspect-[2/1]" tone="bg-primary/[0.06]" />
+                <img src={mockupPaginaDupla.url} alt="Página dupla do miolo de livro diagramado" width={1500} height={720} loading="eager" decoding="async" className="col-span-6 aspect-[2/1] w-full object-cover" />
               </div>
-              <p className="mt-4 flex justify-between text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-                <span><span className="text-accent">Fig. 01</span> — Acervo editorial</span><span>Em breve</span>
+              <p className="mt-4 flex flex-wrap justify-between gap-x-4 text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+                <span><span className="text-accent">Fig. 01</span> — Acervo editorial</span><span>Projetos reais</span>
               </p>
             </div>
           </div>
