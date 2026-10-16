@@ -339,24 +339,54 @@
 
 /* Editorial landing (/diagramacao-de-livros) — isolated theme */
 .editorial-theme {
-  --background: 40 20% 98%;
-  --foreground: 30 6% 10%;
-  --card: 40 18% 95%;
-  --card-foreground: 30 6% 10%;
-  --primary: 30 6% 10%;
-  --primary-foreground: 40 20% 98%;
-  --secondary: 35 12% 91%;
-  --secondary-foreground: 30 6% 10%;
-  --muted: 35 12% 91%;
-  --muted-foreground: 30 5% 36%;
-  --accent: 30 8% 22%;
-  --accent-foreground: 40 20% 98%;
-  --border: 35 10% 84%;
-  --input: 35 10% 78%;
-  --ring: 30 6% 10%;
-  --destructive: 0 65% 40%;
+  --background: 40 33% 94%;      /* #F5F2EC */
+  --foreground: 0 0% 9%;         /* #171717 */
+  --card: 0 0% 100%;             /* #FFFFFF */
+  --card-foreground: 0 0% 9%;
+  --primary: 0 0% 9%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 38 22% 89%;
+  --secondary-foreground: 0 0% 9%;
+  --muted: 38 22% 89%;
+  --muted-foreground: 0 0% 30%;
+  --accent: 357 94% 49%;         /* #F20713 */
+  --accent-foreground: 0 0% 100%;
+  --border: 0 0% 9% / 0.14;
+  --input: 0 0% 9% / 0.3;
+  --ring: 357 94% 49%;
+  --destructive: 357 94% 42%;
   background: hsl(var(--background));
   color: hsl(var(--foreground));
   font-family: 'Inter', sans-serif;
 }
 .editorial-theme .font-serif-ed { font-family: 'Fraunces', Georgia, serif; font-optical-sizing: auto; }
+
+/* Writing-paper texture: faint ruled lines + red margin rule */
+.editorial-theme .ed-paper {
+  background-color: hsl(var(--card));
+  background-image:
+    linear-gradient(to right, transparent calc(2.5rem - 1px), hsl(var(--accent) / 0.28) calc(2.5rem - 1px), hsl(var(--accent) / 0.28) 2.5rem, transparent 2.5rem),
+    repeating-linear-gradient(to bottom, transparent 0, transparent 31px, hsl(210 40% 45% / 0.10) 31px, hsl(210 40% 45% / 0.10) 32px);
+}
+@media (min-width: 768px) {
+  .editorial-theme .ed-paper {
+    background-image:
+      linear-gradient(to right, transparent calc(5rem - 1px), hsl(var(--accent) / 0.28) calc(5rem - 1px), hsl(var(--accent) / 0.28) 5rem, transparent 5rem),
+      repeating-linear-gradient(to bottom, transparent 0, transparent 35px, hsl(210 40% 45% / 0.10) 35px, hsl(210 40% 45% / 0.10) 36px);
+  }
+}
+
+/* Entrance + reveal animations */
+@keyframes ed-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+.editorial-theme .ed-rise { opacity: 0; animation: ed-rise 0.9s cubic-bezier(.2,.7,.2,1) forwards; }
+.editorial-theme .ed-reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.9s cubic-bezier(.2,.7,.2,1), transform 0.9s cubic-bezier(.2,.7,.2,1); }
+.editorial-theme .ed-reveal.is-visible { opacity: 1; transform: none; }
+.editorial-theme .ed-img-reveal { clip-path: inset(0 0 100% 0); transition: clip-path 1.1s cubic-bezier(.7,0,.2,1); }
+.editorial-theme .is-visible .ed-img-reveal, .editorial-theme .ed-img-reveal.is-visible { clip-path: inset(0 0 0 0); }
+.editorial-theme .ed-link { background-image: linear-gradient(hsl(var(--accent)), hsl(var(--accent))); background-size: 0 1px; background-repeat: no-repeat; background-position: 0 100%; transition: background-size .4s ease, color .3s ease; }
+.editorial-theme .ed-link:hover { background-size: 100% 1px; color: hsl(var(--accent)); }
+.editorial-theme .ed-progress { transform-origin: 0 50%; transform: scaleX(0); }
+@media (prefers-reduced-motion: reduce) {
+  .editorial-theme .ed-rise, .editorial-theme .ed-reveal { opacity: 1; transform: none; animation: none; transition: none; }
+  .editorial-theme .ed-img-reveal { clip-path: none; transition: none; }
+}
