@@ -4,6 +4,10 @@ import { Helmet } from "react-helmet-async";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import medgestAsset from "@/assets/medgest.png.asset.json";
 import poderAsset from "@/assets/opoderdaacao.png.asset.json";
+import mockupCapa from "@/assets/mockup-capa.jpg.asset.json";
+import mockupAbertoSuperior from "@/assets/mockup-aberto-superior.jpg.asset.json";
+import mockupAbertoInferior from "@/assets/mockup-aberto-inferior.jpg.asset.json";
+import mockupPaginaDupla from "@/assets/mockup-pagina-dupla.jpg.asset.json";
 
 const CONTACT_EMAIL = "rayssamartins33@gmail.com";
 
