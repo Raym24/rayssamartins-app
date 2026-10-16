@@ -4,10 +4,7 @@ import { Helmet } from "react-helmet-async";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import medgestAsset from "@/assets/medgest.png.asset.json";
 import poderAsset from "@/assets/opoderdaacao.png.asset.json";
-import heroCapa from "@/assets/hero-01.webp.asset.json";
-import heroAberto1 from "@/assets/hero-02.webp.asset.json";
-import heroAberto2 from "@/assets/hero-03.webp.asset.json";
-import heroAberto3 from "@/assets/hero-04.webp.asset.json";
+import heroCapaFace from "@/assets/hero-capa-face.webp.asset.json";
 
 const CONTACT_EMAIL = "rayssamartins33@gmail.com";
 
@@ -288,24 +285,18 @@ const EditorialLanding = () => {
 
             {/* Vitrine editorial */}
             <div style={{ animationDelay: "480ms" }} className="ed-rise lg:col-span-5">
-              <div className="ed-scene relative mx-auto aspect-[10/9] w-full max-w-[560px] lg:-mr-6 lg:max-w-none xl:-mr-12">
+              <div className="ed-scene relative mx-auto flex aspect-[10/9] w-full max-w-[560px] items-center justify-center lg:-mr-6 lg:max-w-none xl:-mr-12">
                 <span aria-hidden="true" className="absolute left-[2%] top-[2%] z-30 h-6 w-6 border-l-2 border-t-2 border-accent" />
-                {/* Livro aberto superior — plano de fundo */}
-                <figure className="ed-book ed-book-back absolute right-0 top-[4%] z-0 hidden w-[46%] sm:block" style={{ "--d": "620ms", "--p": "0.4" } as CSSProperties}>
-                  <img src={heroAberto1.url} alt="Livro aberto — abertura de capítulo" width={576} height={256} loading="eager" decoding="async" className="w-full" />
-                </figure>
-                {/* Livro principal */}
-                <figure className="ed-book ed-book-main absolute left-0 top-0 z-10 w-[56%]" style={{ "--d": "480ms", "--p": "1" } as CSSProperties}>
-                  <img src={heroCapa.url} alt="Capa do livro Agroamigo diagramado" width={862} height={1035} loading="eager" decoding="async" fetchPriority="high" className="w-full" />
-                </figure>
-                {/* Livro aberto horizontal — primeiro plano */}
-                <figure className="ed-book ed-book-front absolute bottom-0 right-0 z-20 w-[88%]" style={{ "--d": "760ms", "--p": "1.6" } as CSSProperties}>
-                  <img src={heroAberto3.url} alt="Página dupla do miolo de livro diagramado" width={1441} height={361} loading="eager" decoding="async" className="w-full" />
-                </figure>
-                {/* Livro aberto inferior — lateral */}
-                <figure className="ed-book ed-book-side absolute right-0 top-[36%] z-[5] w-[46%]" style={{ "--d": "880ms", "--p": "0.8" } as CSSProperties}>
-                  <img src={heroAberto2.url} alt="Livro aberto — páginas internas" width={576} height={256} loading="eager" decoding="async" className="w-full" />
-                </figure>
+                <div className="ed-flip" role="img" aria-label="Livro Agroamigo abrindo e passando páginas">
+                  <div className="ed-flip-book">
+                    <div className="ed-flip-base ed-flip-base-l"><div className="ed-flip-text" /></div>
+                    <div className="ed-flip-base ed-flip-base-r"><span className="ed-flip-mark" /><div className="ed-flip-text" /></div>
+                    <div className="ed-leaf ed-leaf-3"><div className="ed-face ed-face-front"><div className="ed-flip-text" /></div><div className="ed-face ed-face-back"><div className="ed-flip-text" /></div></div>
+                    <div className="ed-leaf ed-leaf-2"><div className="ed-face ed-face-front ed-face-chapter"><span className="ed-flip-mark" /><div className="ed-flip-text" /></div><div className="ed-face ed-face-back"><div className="ed-flip-text" /></div></div>
+                    <div className="ed-leaf ed-leaf-1"><div className="ed-face ed-face-front ed-face-cover"><img src={heroCapaFace.url} alt="" width={600} height={800} loading="eager" decoding="async" fetchPriority="high" /></div><div className="ed-face ed-face-back ed-face-inside" /></div>
+                  </div>
+                  <div className="ed-flip-shadow" aria-hidden="true" />
+                </div>
               </div>
               <p className="mt-4 flex flex-wrap justify-between gap-x-4 text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
                 <span><span className="text-accent">Fig. 01</span> — Acervo editorial</span><span>Projetos reais</span>
