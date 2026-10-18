@@ -20,7 +20,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const configured = String($env.PROSPECTING_QUERIES || '').split(',').map((value) => value.trim()).filter(Boolean);\nconst queries = configured.length ? configured : [\n  '\"diagramação editorial\" orçamento',\n  '\"projeto editorial\" livro editora',\n  '\"relatório anual\" diagramação',\n  '\"catálogo\" diagramação design editorial',\n  '\"publicação\" \"projeto gráfico\"',\n  '\"livro\" \"projeto gráfico\" contratar'\n];\nreturn queries.slice(0, 10).map((query) => ({ json: { query } }));"
+        "jsCode": "const queries = [\n  '\"diagramação editorial\" orçamento',\n  '\"projeto editorial\" livro editora',\n  '\"relatório anual\" diagramação',\n  '\"catálogo\" diagramação design editorial',\n  '\"publicação\" \"projeto gráfico\'',\n  '\"livro\" \"projeto gráfico\" contratar'\n];\nreturn queries.map((query) => ({ json: { query } }));"
       },
       "id": "build-editorial-queries",
       "name": "Definir buscas editoriais",
@@ -30,21 +30,34 @@
     },
     {
       "parameters": {
-        "method": "GET",
-        "url": "={{'https://www.googleapis.com/customsearch/v1?key=' + $env.GOOGLE_CUSTOM_SEARCH_API_KEY + '&cx=' + $env.GOOGLE_CUSTOM_SEARCH_ENGINE_ID + '&num=10&q=' + encodeURIComponent($json.query)}}",
+        "method": "POST",
+        "url": "https://api.tavily.com/search",
+        "sendHeaders": true,
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ query: $json.query, search_depth: 'advanced', topic: 'general', max_results: 10, include_answer: false, include_raw_content: false }) }}",
         "options": {
           "timeout": 30000
         }
       },
       "id": "search-editorial-opportunities",
-      "name": "Pesquisar fontes públicas",
+      "name": "Pesquisar fontes públicas com Tavily",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [440, 0]
+      "position": [440, 0],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "TAVILY_HEADER_AUTH_CREDENTIAL_ID",
+          "name": "Tavily Header Auth"
+        }
+      }
     },
     {
       "parameters": {
-        "jsCode": "const emailPattern = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}/gi;\nconst blockedHosts = new Set(['google.com', 'facebook.com', 'instagram.com', 'linkedin.com', 'youtube.com', 'tiktok.com']);\nconst terms = ['diagramação', 'diagramacao', 'editorial', 'livro', 'catálogo', 'catalogo', 'relatório anual', 'relatorio anual', 'revista', 'publicação', 'publicacao', 'editora', 'projeto gráfico', 'projeto grafico', 'orçamento', 'orcamento', 'contratar'];\nconst opportunities = [];\n\nfor (const item of $input.all()) {\n  const results = Array.isArray(item.json.items) ? item.json.items : [];\n  for (const result of results) {\n    const link = String(result.link || '').trim();\n    let parsed;\n    try { parsed = new URL(link); } catch { continue; }\n    if (!['http:', 'https:'].includes(parsed.protocol) || parsed.username || parsed.password) continue;\n    const host = parsed.hostname.replace(/^www\\./, '').toLowerCase();\n    if (!host || blockedHosts.has(host) || [...blockedHosts].some((blocked) => host.endsWith('.' + blocked))) continue;\n    const title = String(result.title || '').replace(/\\s+/g, ' ').trim();\n    const snippet = String(result.snippet || result.htmlSnippet || '').replace(/<[^>]+>/g, ' ').replace(/\\s+/g, ' ').trim();\n    const evidence = [title, snippet].filter(Boolean).join(' — ').slice(0, 700);\n    const searchable = evidence.toLocaleLowerCase('pt-BR');\n    const matchedTerms = terms.filter((term) => searchable.includes(term));\n    const emails = [...new Set((evidence.match(emailPattern) || []).map((email) => email.toLowerCase()))];\n    const score = Math.min(100, matchedTerms.length * 15 + (emails.length ? 10 : 0) + (/(contratar|orçamento|orcamento|proposta|briefing|serviço|servico)/i.test(searchable) ? 20 : 0));\n    if (matchedTerms.length < 2 || score < 30) continue;\n    const normalizedUrl = parsed.origin + parsed.pathname.replace(/\\/$/, '');\n    opportunities.push({\n      json: {\n        prospect_key: (emails[0] || host).toLowerCase(),\n        prospect_name: title || host,\n        prospect_email: emails[0] || '',\n        prospect_url: normalizedUrl,\n        source_url: normalizedUrl,\n        evidence: evidence,\n        matched_terms: matchedTerms,\n        relevance_score: score\n      }\n    });\n  }\n}\nconst unique = new Map();\nfor (const item of opportunities) {\n  const previous = unique.get(item.json.prospect_key);\n  if (!previous || item.json.relevance_score > previous.json.relevance_score) unique.set(item.json.prospect_key, item);\n}\nreturn [...unique.values()].sort((a, b) => b.json.relevance_score - a.json.relevance_score);"
+        "jsCode": "const emailPattern = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}/gi;\nconst blockedHosts = new Set(['google.com', 'facebook.com', 'instagram.com', 'linkedin.com', 'youtube.com', 'tiktok.com', 'x.com']);\nconst terms = ['diagramação', 'diagramacao', 'editorial', 'livro', 'catálogo', 'catalogo', 'relatório anual', 'relatorio anual', 'revista', 'publicação', 'publicacao', 'editora', 'projeto gráfico', 'projeto grafico', 'orçamento', 'orcamento', 'contratar', 'briefing'];\nconst results = [];\nfor (const item of $input.all()) {\n  const source = item.json || {};\n  const tavilyResults = Array.isArray(source.results) ? source.results : [];\n  for (const result of tavilyResults) {\n    const link = String(result.url || '').trim();\n    let parsed;\n    try { parsed = new URL(link); } catch { continue; }\n    if (!['http:', 'https:'].includes(parsed.protocol) || parsed.username || parsed.password) continue;\n    const host = parsed.hostname.replace(/^www\\./, '').toLowerCase();\n    if (!host || blockedHosts.has(host) || [...blockedHosts].some((blocked) => host.endsWith('.' + blocked))) continue;\n    const title = String(result.title || '').replace(/\\s+/g, ' ').trim();\n    const snippet = String(result.content || '').replace(/<[^>]+>/g, ' ').replace(/\\s+/g, ' ').trim();\n    const evidence = [title, snippet].filter(Boolean).join(' — ').slice(0, 1000);\n    const searchable = evidence.toLocaleLowerCase('pt-BR');\n    const matchedTerms = terms.filter((term) => searchable.includes(term));\n    const emails = [...new Set((evidence.match(emailPattern) || []).map((email) => email.toLowerCase()))];\n    const commercialSignal = /(contratar|orçamento|orcamento|proposta|briefing|serviço|servico|prazo|escopo)/i.test(searchable);\n    const score = Math.min(100, matchedTerms.length * 12 + (emails.length ? 20 : 0) + (commercialSignal ? 25 : 0));\n    if (matchedTerms.length < 2 || !commercialSignal || score < 45) continue;\n    const normalizedUrl = parsed.origin + parsed.pathname.replace(/\\/$/, '');\n    results.push({\n      json: {\n        prospect_key: (emails[0] || host).toLowerCase(),\n        prospect_name: title || host,\n        prospect_email: emails[0] || '',\n        prospect_url: normalizedUrl,\n        source_url: normalizedUrl,\n        evidence,\n        matched_terms: matchedTerms,\n        relevance_score: score\n      }\n    });\n  }\n}\nconst unique = new Map();\nfor (const item of results) {\n  const key = item.json.prospect_email || item.json.prospect_url || item.json.prospect_key;\n  const previous = unique.get(key);\n  if (!previous || item.json.relevance_score > previous.json.relevance_score) unique.set(key, item);\n}\nreturn [...unique.values()].sort((a, b) => b.json.relevance_score - a.json.relevance_score);"
       },
       "id": "qualify-editorial-opportunities",
       "name": "Validar e qualificar oportunidades",
@@ -77,10 +90,10 @@
     },
     {
       "parameters": {
-        "jsCode": "const candidates = $items('Validar e qualificar oportunidades').map((item) => item.json);\nconst processed = $items('Buscar contatos processados hoje').map((item) => item.json);\nconst processedText = processed.map((item) => JSON.stringify(item).toLowerCase()).join('\\n');\nconst suppression = new Set(String($env.SUPPRESSION_EMAILS || '').split(',').map((value) => value.trim().toLowerCase()).filter(Boolean));\nconst configuredLimit = Number($env.PROSPECTING_DAILY_LIMIT || 10);\nconst dailyCount = processed.length;\nconst remaining = Math.max(0, Math.min(configuredLimit, configuredLimit - dailyCount));\nconst portfolioUrl = String($env.PORTFOLIO_URL || '').trim();\nconst landingUrl = String($env.LANDING_PAGE_URL || '').trim();\nconst validReference = (value) => { try { const url = new URL(value); return ['http:', 'https:'].includes(url.protocol) && !url.username && !url.password; } catch { return false; } };\nconst validPortfolio = validReference(portfolioUrl) ? portfolioUrl : '';\nconst validLanding = validReference(landingUrl) ? landingUrl : '';\n\nreturn candidates.map((candidate) => {\n  const email = String(candidate.prospect_email || '').trim().toLowerCase();\n  const key = String(candidate.prospect_key || '').toLowerCase();\n  const alreadyProcessed = Boolean((email && processedText.includes(email)) || (key && processedText.includes(key)) || processedText.includes(String(candidate.source_url || '').toLowerCase()));\n  const suppressed = Boolean(email && suppression.has(email));\n  const recipient = candidate.prospect_name || 'equipe';\n  const marker = `[PROSPECCAO-EDITORIAL:${key}]`;\n  const subject = `${marker} Uma ideia para o projeto editorial de ${recipient}`;\n  const body = [`Olá, ${recipient}!`, '', 'Encontrei uma referência pública que indica um possível projeto editorial e achei que meu trabalho poderia contribuir na próxima etapa.', '', `Evidência encontrada: ${candidate.evidence}`, `Fonte pública: ${candidate.source_url}`, '', 'Trabalho com direção de arte, projeto gráfico e diagramação editorial, com atenção à clareza, consistência visual e preparação dos arquivos finais.', validPortfolio ? `Portfólio: ${validPortfolio}` : '', validLanding ? `Landing page de diagramação editorial: ${validLanding}` : '', '', 'Se houver um briefing em andamento, posso avaliar o escopo e compartilhar uma proposta adequada. Caso não seja relevante, basta responder solicitando não contato.', '', 'Abraços,', 'Rayssa Martins'].filter(Boolean).join('\\n');\n  const eligible = Boolean(email && !alreadyProcessed && !suppressed && validPortfolio && validLanding);\n  return { json: { ...candidate, prospect_email: email, prospect_subject: subject, prospect_body: body, evidence_url: candidate.source_url, already_processed: alreadyProcessed, suppressed, references_valid: Boolean(validPortfolio && validLanding), action: eligible ? 'draft' : 'skip', skip_reason: !email ? 'sem_email_publico' : alreadyProcessed ? 'duplicado' : suppressed ? 'suprimido' : !validPortfolio || !validLanding ? 'urls_de_referencia_invalidas_ou_ausentes' : '' } };\n}).filter(({ json }) => json.action === 'draft').slice(0, remaining);"
+        "jsCode": "const TEST_MODE = true;\nconst MAX_DAILY_DRAFTS = 3;\nconst PORTFOLIO_URL = 'https://SEU-DOMINIO.example/portfolio';\nconst LANDING_PAGE_URL = 'https://SEU-DOMINIO.example/diagramacao-de-livros';\nconst SUPPRESSION_EMAILS = [];\nconst candidates = $items('Validar e qualificar oportunidades').map((item) => item.json);\nconst processed = $items('Buscar contatos processados hoje').map((item) => item.json);\nconst processedText = processed.map((item) => JSON.stringify(item).toLowerCase()).join('\\n');\nconst suppression = new Set(SUPPRESSION_EMAILS.map((value) => String(value).trim().toLowerCase()).filter(Boolean));\nconst validReference = (value) => { try { const url = new URL(value); return ['http:', 'https:'].includes(url.protocol) && !url.username && !url.password && !url.hostname.includes('SEU-DOMINIO'); } catch { return false; } };\nconst validEmail = (value) => /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value);\nconst validPortfolio = validReference(PORTFOLIO_URL) ? PORTFOLIO_URL : '';\nconst validLanding = validReference(LANDING_PAGE_URL) ? LANDING_PAGE_URL : '';\nlet remaining = Math.max(0, MAX_DAILY_DRAFTS - processed.length);\nconst output = [];\nfor (const candidate of candidates) {\n  if (remaining <= 0) break;\n  const email = String(candidate.prospect_email || '').trim().toLowerCase();\n  const key = String(candidate.prospect_key || '').trim().toLowerCase();\n  const sourceUrl = String(candidate.source_url || '').trim().toLowerCase();\n  const alreadyProcessed = Boolean((email && processedText.includes(email)) || (key && processedText.includes(key)) || (sourceUrl && processedText.includes(sourceUrl)));\n  const suppressed = Boolean(email && suppression.has(email));\n  const referencesValid = Boolean(validPortfolio && validLanding);\n  if (!validEmail(email) || alreadyProcessed || suppressed || !referencesValid) continue;\n  const recipient = String(candidate.prospect_name || 'equipe').replace(/[\\r\\n]+/g, ' ').slice(0, 120);\n  const marker = `[PROSPECCAO-EDITORIAL:${email || key}]`;\n  const subject = `${marker} Uma ideia para o projeto editorial de ${recipient}`;\n  const body = [`Olá, ${recipient}!`, '', 'Encontrei uma referência pública que indica um possível projeto editorial e achei que meu trabalho poderia contribuir na próxima etapa.', '', `Evidência encontrada: ${candidate.evidence}`, `Fonte pública: ${candidate.source_url}`, '', 'Trabalho com direção de arte, projeto gráfico e diagramação editorial, com atenção à clareza, consistência visual e preparação dos arquivos finais.', `Portfólio: ${validPortfolio}`, `Landing page de diagramação editorial: ${validLanding}`, '', 'Se houver um briefing em andamento, posso avaliar o escopo e compartilhar uma proposta adequada. Caso não seja relevante, basta responder solicitando não contato.', '', 'Abraços,', 'Rayssa Martins'].join('\\n');\n  output.push({ json: { ...candidate, prospect_email: email, prospect_subject: subject, prospect_body: body, evidence_url: candidate.source_url, test_mode: TEST_MODE, action: 'draft' } });\n  remaining -= 1;\n}\nreturn output;"
       },
       "id": "prepare-editorial-drafts",
-      "name": "Aplicar deduplicação e conformidade",
+      "name": "Aplicar deduplicação, supressão e limite de 3",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [1100, 0]
@@ -108,32 +121,16 @@
     }
   ],
   "connections": {
-    "A cada 6 horas": {
-      "main": [[{"node": "Definir buscas editoriais", "type": "main", "index": 0}]]
-    },
-    "Definir buscas editoriais": {
-      "main": [[{"node": "Pesquisar fontes públicas", "type": "main", "index": 0}]]
-    },
-    "Pesquisar fontes públicas": {
-      "main": [[{"node": "Validar e qualificar oportunidades", "type": "main", "index": 0}]]
-    },
-    "Validar e qualificar oportunidades": {
-      "main": [[{"node": "Buscar contatos processados hoje", "type": "main", "index": 0}]]
-    },
-    "Buscar contatos processados hoje": {
-      "main": [[{"node": "Aplicar deduplicação e conformidade", "type": "main", "index": 0}]]
-    },
-    "Aplicar deduplicação e conformidade": {
-      "main": [[{"node": "Criar rascunho para revisão", "type": "main", "index": 0}]]
-    }
+    "A cada 6 horas": { "main": [[{ "node": "Definir buscas editoriais", "type": "main", "index": 0 }]] },
+    "Definir buscas editoriais": { "main": [[{ "node": "Pesquisar fontes públicas com Tavily", "type": "main", "index": 0 }]] },
+    "Pesquisar fontes públicas com Tavily": { "main": [[{ "node": "Validar e qualificar oportunidades", "type": "main", "index": 0 }]] },
+    "Validar e qualificar oportunidades": { "main": [[{ "node": "Buscar contatos processados hoje", "type": "main", "index": 0 }]] },
+    "Buscar contatos processados hoje": { "main": [[{ "node": "Aplicar deduplicação, supressão e limite de 3", "type": "main", "index": 0 }]] },
+    "Aplicar deduplicação, supressão e limite de 3": { "main": [[{ "node": "Criar rascunho para revisão", "type": "main", "index": 0 }]] }
   },
   "active": false,
-  "settings": {
-    "executionOrder": "v1"
-  },
-  "versionId": "editorial-prospecting-drafts-v3",
-  "meta": {
-    "templateCredsSetupCompleted": false
-  },
+  "settings": { "executionOrder": "v1" },
+  "versionId": "editorial-prospecting-drafts-v4",
+  "meta": { "templateCredsSetupCompleted": false },
   "tags": []
 }
