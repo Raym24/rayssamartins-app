@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { ArrowUpRight, BookOpen, Building2, Check, GraduationCap, MessageCircle, Pause, PenLine, Play, Plus, type LucideIcon } from "lucide-react";
+import { enviarSolicitacao } from "@/lib/solicitacoes";
 
 const CONTACT_EMAIL = "rayssamartins33@gmail.com";
 const WHATSAPP_NUMBER = "5585991706850";
@@ -262,13 +263,15 @@ const NewTab = () => <span className="sr-only"> (abre em nova aba)</span>;
 const btnPrimary = "ed-btn-primary group inline-flex min-h-12 items-center justify-center gap-3 bg-accent px-7 text-sm font-medium tracking-wide text-accent-foreground transition-colors duration-300 hover:bg-primary";
 const btnText = "inline-flex min-h-12 items-center justify-center text-sm underline decoration-accent underline-offset-[6px] transition-colors hover:text-accent";
 
-type FormState = { name: string; type: string; pages: string; deadline: string; description: string };
-const empty: FormState = { name: "", type: "", pages: "", deadline: "", description: "" };
+type FormState = { name: string; email: string; type: string; pages: string; deadline: string; description: string; captcha: string; website: string };
+const empty: FormState = { name: "", email: "", type: "", pages: "", deadline: "", description: "", captcha: "", website: "" };
 
 const validate = (f: FormState) => {
   const e: Partial<Record<keyof FormState, string>> = {};
   if (f.name.trim().length < 2) e.name = "Informe seu nome.";
+  if (!f.email.includes("@")) e.email = "Informe um e-mail válido.";
   if (!f.type) e.type = "Selecione o tipo de publicação.";
+  if (f.captcha.trim() !== "7") e.captcha = "Resolva o CAPTCHA.";
   return e;
 };
 
@@ -289,6 +292,15 @@ const ContactForm = () => {
     setErrors(e);
     const first = (Object.keys(empty) as (keyof FormState)[]).find((k) => e[k]);
     if (first) { ev.currentTarget.querySelector<HTMLElement>(`#${first}`)?.focus(); return; }
+
+    void enviarSolicitacao({
+      nome: form.name,
+      email: form.email,
+      origem: CANONICAL,
+      descricao: [form.type, form.pages && `Páginas: ${form.pages}`, form.deadline && `Prazo: ${form.deadline}`, form.description].filter(Boolean).join("\n"),
+      captchaToken: `dev-${form.captcha.trim()}`,
+      website: form.website,
+    }).catch(() => setSent(""));
 
     const channel = (ev.nativeEvent as SubmitEvent).submitter?.getAttribute("value") === "email" ? "email" : "whatsapp";
     const lines = [
@@ -314,6 +326,7 @@ const ContactForm = () => {
     <form onSubmit={submit} noValidate aria-label="Solicitação de orçamento editorial" className="grid gap-x-12 gap-y-10 md:grid-cols-2">
       <p className="text-sm text-muted-foreground md:col-span-2">Leva menos de um minuto. Campos com * são obrigatórios.</p>
       <div><label htmlFor="name" className={lbl}>Nome *</label><input id="name" className={field} value={form.name} onChange={set("name")} autoComplete="name" {...req} {...aria("name")} /><Err k="name" /></div>
+      <div><label htmlFor="email" className={lbl}>E-mail *</label><input id="email" type="email" className={field} value={form.email} onChange={set("email")} autoComplete="email" {...req} {...aria("email")} /><Err k="email" /></div>
       <div>
         <label htmlFor="type" className={lbl}>Tipo de publicação *</label>
         <select id="type" className={field} value={form.type} onChange={set("type")} {...req} {...aria("type")}>
@@ -326,6 +339,8 @@ const ContactForm = () => {
       <div><label htmlFor="pages" className={lbl}>Quantidade aproximada de páginas</label><input id="pages" inputMode="numeric" className={field} value={form.pages} onChange={set("pages")} /></div>
       <div><label htmlFor="deadline" className={lbl}>Prazo desejado</label><input id="deadline" className={field} placeholder="Ex.: 30 dias" value={form.deadline} onChange={set("deadline")} /></div>
       <div className="md:col-span-2"><label htmlFor="description" className={lbl}>Conte um pouco sobre o projeto</label><textarea id="description" rows={3} className={`${field} resize-none`} placeholder="Opcional" value={form.description} onChange={set("description")} /></div>
+      <div><label htmlFor="captcha" className={lbl}>Verificação: quanto é 3 + 4? *</label><input id="captcha" inputMode="numeric" className={field} value={form.captcha} onChange={set("captcha")} {...req} {...aria("captcha")} /><Err k="captcha" /></div>
+      <input aria-hidden="true" tabIndex={-1} autoComplete="off" className="absolute -left-[10000px] h-px w-px opacity-0" value={form.website} onChange={set("website")} name="website" />
       <div className="flex flex-col gap-5 md:col-span-2">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-8">
           <button type="submit" value="whatsapp" className={`${btnPrimary} whitespace-nowrap`}>
