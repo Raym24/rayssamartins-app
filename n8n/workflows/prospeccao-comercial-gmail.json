@@ -1,5 +1,5 @@
 {
-  "name": "Agente de prospecção comercial - Gmail e solicitações",
+  "name": "Agente de prospecção ativa - canais públicos e Gmail",
   "nodes": [
     {
       "parameters": {
@@ -7,13 +7,13 @@
           "interval": [
             {
               "field": "hours",
-              "hoursInterval": 4
+              "hoursInterval": 6
             }
           ]
         }
       },
-      "id": "schedule-prospecting",
-      "name": "A cada 4 horas",
+      "id": "schedule-active-prospecting",
+      "name": "A cada 6 horas",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
       "position": [
@@ -23,48 +23,12 @@
     },
     {
       "parameters": {
-        "method": "GET",
-        "url": "={{$env.SUPABASE_URL + '/rest/v1/solicitacoes_orcamento'}}",
-        "sendQuery": true,
-        "queryParameters": {
-          "parameters": [
-            {
-              "name": "select",
-              "value": "id,nome,email,telefone,empresa,origem,descricao,status,observacoes,consentimento_marketing,criado_em,atualizado_em"
-            },
-            {
-              "name": "status",
-              "value": "eq.novo"
-            },
-            {
-              "name": "order",
-              "value": "criado_em.asc"
-            },
-            {
-              "name": "limit",
-              "value": "50"
-            }
-          ]
-        },
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "apikey",
-              "value": "={{$env.SUPABASE_SERVICE_ROLE_KEY}}"
-            },
-            {
-              "name": "Authorization",
-              "value": "={{'Bearer ' + $env.SUPABASE_SERVICE_ROLE_KEY}}"
-            }
-          ]
-        },
-        "options": {}
+        "jsCode": "const configuredQueries = String($env.PROSPECTING_QUERIES || '').split(',').map((query) => query.trim()).filter(Boolean);\nconst queries = configuredQueries.length ? configuredQueries : [\n  'site:linkedin.com/company \"design\" \"Brasil\"',\n  'site:instagram.com \"lançamento\" \"empresa\" \"Brasil\"',\n  'site:*.com.br \"fale conosco\" \"marca\"',\n  'site:*.com.br \"novo projeto\" \"empresa\"'\n];\n\nreturn queries.slice(0, 10).map((query) => ({ json: { query } }));"
       },
-      "id": "get-new-requests",
-      "name": "Ler solicitações novas",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
+      "id": "build-search-queries",
+      "name": "Definir buscas de oportunidades",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
         220,
         0
@@ -72,12 +36,16 @@
     },
     {
       "parameters": {
-        "jsCode": "const requests = $input.all();\n\nreturn requests.map(({ json }) => {\n  const name = String(json.nome || '').trim();\n  const company = String(json.empresa || '').trim();\n  const description = String(json.descricao || '').trim();\n  const origin = String(json.origem || '').trim();\n  const recipient = name || company || 'Olá';\n  const context = [company, description].filter(Boolean).join(' — ');\n  const subject = company\n    ? `Uma ideia para a comunicação da ${company}`\n    : 'Podemos conversar sobre seu projeto?';\n  const body = [\n    `Olá, ${recipient}!`,\n    '',\n    'Recebi sua solicitação e analisei o contexto do projeto.',\n    context ? `Pelo que entendi, você busca: ${context}` : 'Gostaria de entender melhor o momento e os objetivos do projeto.',\n    '',\n    'Posso ajudar com direção de arte, identidade visual, design digital, UI/UX e automações para transformar essa necessidade em uma solução clara e consistente.',\n    '',\n    'Se fizer sentido, podemos marcar uma conversa breve para alinhar escopo, prazo e próximos passos.',\n    '',\n    'Abraços,',\n    'Rayssa Martins',\n    'Diretora de Arte Sênior e Designer Multidisciplinar'\n  ].join('\\n');\n\n  return {\n    json: {\n      ...json,\n      prospect_subject: subject,\n      prospect_body: body,\n      prospect_origin: origin,\n      can_send: json.consentimento_marketing === true,\n      relevance_score: description.length >= 40 ? 80 : 60\n    }\n  };\n});"
+        "method": "GET",
+        "url": "={{'https://www.googleapis.com/customsearch/v1?key=' + $env.GOOGLE_CUSTOM_SEARCH_API_KEY + '&cx=' + $env.GOOGLE_CUSTOM_SEARCH_ENGINE_ID + '&num=10&q=' + encodeURIComponent($json.query)}}",
+        "options": {
+          "timeout": 30000
+        }
       },
-      "id": "personalize-messages",
-      "name": "Avaliar e personalizar",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
+      "id": "search-public-channels",
+      "name": "Pesquisar canais públicos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
         440,
         0
@@ -85,19 +53,12 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={{$json.can_send}}",
-              "operation": "true"
-            }
-          ]
-        }
+        "jsCode": "const emailPattern = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}/gi;\nconst blockedDomains = ['google.com', 'facebook.com', 'instagram.com', 'linkedin.com', 'youtube.com'];\nconst sourceItems = $input.all();\nconst opportunities = [];\n\nfor (const item of sourceItems) {\n  const results = Array.isArray(item.json.items) ? item.json.items : [];\n  for (const result of results) {\n    const text = [result.title, result.snippet, result.htmlSnippet, result.link].filter(Boolean).join(' ');\n    const emails = [...new Set((text.match(emailPattern) || []).map((email) => email.toLowerCase()))];\n    const link = String(result.link || '').trim();\n    let hostname = '';\n    try { hostname = new URL(link).hostname.replace(/^www\\./, '').toLowerCase(); } catch {}\n    if (!link || !hostname || blockedDomains.some((domain) => hostname === domain || hostname.endsWith('.' + domain))) continue;\n    const normalizedKey = (emails[0] || hostname).toLowerCase();\n    const relevanceTerms = ['empresa', 'marca', 'lançamento', 'lancamento', 'projeto', 'design', 'marketing', 'comunicação', 'comunicacao', 'produto'];\n    const score = relevanceTerms.reduce((total, term) => total + text.toLocaleLowerCase('pt-BR').includes(term) * 10, 0);\n    opportunities.push({\n      json: {\n        prospect_key: normalizedKey,\n        prospect_name: String(result.title || hostname).replace(/\\s+/g, ' ').trim().slice(0, 120),\n        prospect_email: emails[0] || '',\n        prospect_url: link,\n        prospect_snippet: String(result.snippet || '').replace(/\\s+/g, ' ').trim().slice(0, 500),\n        relevance_score: Math.min(score, 100)\n      }\n    });\n  }\n}\n\nconst unique = new Map();\nfor (const opportunity of opportunities) {\n  const current = unique.get(opportunity.json.prospect_key);\n  if (!current || opportunity.json.relevance_score > current.json.relevance_score) unique.set(opportunity.json.prospect_key, opportunity);\n}\nreturn [...unique.values()].filter(({ json }) => json.relevance_score >= 20).slice(0, Number($env.PROSPECTING_DAILY_LIMIT || 10));"
       },
-      "id": "check-consent",
-      "name": "Marketing autorizado?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
+      "id": "qualify-opportunities",
+      "name": "Qualificar oportunidades",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
         660,
         0
@@ -106,18 +67,92 @@
     {
       "parameters": {
         "resource": "message",
+        "operation": "getAll",
+        "returnAll": false,
+        "limit": 100,
+        "filters": {
+          "q": "in:sent newer_than:180d"
+        },
+        "options": {}
+      },
+      "id": "read-recent-sends",
+      "name": "Buscar envios recentes",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        880,
+        0
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "GMAIL_CREDENTIAL_ID",
+          "name": "Gmail prospecção"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const candidates = $items('Qualificar oportunidades').map((item) => item.json);\nconst sentItems = $items('Buscar envios recentes').map((item) => item.json);\nconst sentText = sentItems.map((item) => JSON.stringify(item).toLowerCase()).join('\\n');\nconst suppression = new Set(String($env.SUPPRESSION_EMAILS || '').split(',').map((email) => email.trim().toLowerCase()).filter(Boolean));\nconst autoSend = String($env.PROSPECTING_AUTOSEND || '').toLowerCase() === 'true';\n\nreturn candidates.map((candidate) => {\n  const email = String(candidate.prospect_email || '').trim().toLowerCase();\n  const alreadyContacted = Boolean(email && sentText.includes(email)) || sentText.includes(String(candidate.prospect_url || '').toLowerCase());\n  const suppressed = Boolean(email && suppression.has(email));\n  const recipient = candidate.prospect_name || 'Olá';\n  const subject = `Uma ideia para ${candidate.prospect_name}`;\n  const body = [\n    `Olá, ${recipient}!`,\n    '',\n    'Encontrei o trabalho de vocês em um canal público e achei que poderia contribuir com uma perspectiva de design e comunicação.',\n    candidate.prospect_snippet ? `Contexto que chamou minha atenção: ${candidate.prospect_snippet}` : '',\n    '',\n    'Atuo com direção de arte, identidade visual, design digital e UI/UX. Se houver um projeto em andamento, posso compartilhar algumas ideias objetivas para o próximo passo.',\n    '',\n    `Referência pública: ${candidate.prospect_url}`,\n    '',\n    'Se não for relevante, basta responder “não entrar em contato” e não enviarei novas mensagens.',\n    '',\n    'Abraços,',\n    'Rayssa Martins',\n    'Diretora de Arte Sênior e Designer Multidisciplinar'\n  ].filter(Boolean).join('\\n');\n  const action = suppressed || alreadyContacted ? 'skip' : (!email ? 'skip' : (autoSend ? 'send' : 'draft'));\n  return { json: { ...candidate, prospect_email: email, prospect_subject: subject, prospect_body: body, already_contacted: alreadyContacted, suppressed, action } };\n});"
+      },
+      "id": "prepare-outreach",
+      "name": "Aplicar proteção e personalizar",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.action}}",
+              "operation": "equals",
+              "value2": "send"
+            }
+          ]
+        }
+      },
+      "id": "check-send-action",
+      "name": "Envio automático habilitado?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1320,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 25,
+        "unit": "seconds"
+      },
+      "id": "rate-limit-send",
+      "name": "Aguardar limite do Gmail",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1540,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
         "operation": "send",
-        "sendTo": "={{$json.email}}",
+        "sendTo": "={{$json.prospect_email}}",
         "subject": "={{$json.prospect_subject}}",
         "message": "={{$json.prospect_body}}",
         "options": {}
       },
-      "id": "send-authorized-email",
+      "id": "send-outreach",
       "name": "Enviar pelo Gmail",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        900,
+        1760,
         -120
       ],
       "credentials": {
@@ -129,19 +164,40 @@
     },
     {
       "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.action}}",
+              "operation": "equals",
+              "value2": "draft"
+            }
+          ]
+        }
+      },
+      "id": "check-draft-action",
+      "name": "Criar rascunho para revisão?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1540,
+        120
+      ]
+    },
+    {
+      "parameters": {
         "resource": "draft",
         "operation": "create",
-        "sendTo": "={{$json.email}}",
+        "sendTo": "={{$json.prospect_email}}",
         "subject": "={{$json.prospect_subject}}",
         "message": "={{$json.prospect_body}}",
         "options": {}
       },
-      "id": "create-review-draft",
-      "name": "Criar rascunho para revisão",
+      "id": "create-outreach-draft",
+      "name": "Criar rascunho no Gmail",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        900,
+        1760,
         120
       ],
       "credentials": {
@@ -150,127 +206,45 @@
           "name": "Gmail prospecção"
         }
       }
-    },
-    {
-      "parameters": {
-        "method": "PATCH",
-        "url": "={{$env.SUPABASE_URL + '/rest/v1/solicitacoes_orcamento?id=eq.' + $json.id}}",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "apikey",
-              "value": "={{$env.SUPABASE_SERVICE_ROLE_KEY}}"
-            },
-            {
-              "name": "Authorization",
-              "value": "={{'Bearer ' + $env.SUPABASE_SERVICE_ROLE_KEY}}"
-            },
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            },
-            {
-              "name": "Prefer",
-              "value": "return=minimal"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{JSON.stringify({status: $json.can_send ? 'contatado' : 'rascunho_para_revisao', observacoes: ($json.observacoes || '') + '\\nAgente n8n: ' + ($json.can_send ? 'mensagem enviada pelo Gmail' : 'rascunho criado para revisão manual') + '. Relevância: ' + $json.relevance_score + '.', atualizado_em: new Date().toISOString()})}}",
-        "options": {}
-      },
-      "id": "update-request-status",
-      "name": "Atualizar solicitação",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        1160,
-        0
-      ]
     }
   ],
   "connections": {
-    "A cada 4 horas": {
+    "A cada 6 horas": {
+      "main": [[{"node": "Definir buscas de oportunidades", "type": "main", "index": 0}]]
+    },
+    "Definir buscas de oportunidades": {
+      "main": [[{"node": "Pesquisar canais públicos", "type": "main", "index": 0}]]
+    },
+    "Pesquisar canais públicos": {
+      "main": [[{"node": "Qualificar oportunidades", "type": "main", "index": 0}]]
+    },
+    "Qualificar oportunidades": {
+      "main": [[{"node": "Buscar envios recentes", "type": "main", "index": 0}]]
+    },
+    "Buscar envios recentes": {
+      "main": [[{"node": "Aplicar proteção e personalizar", "type": "main", "index": 0}]]
+    },
+    "Aplicar proteção e personalizar": {
+      "main": [[{"node": "Envio automático habilitado?", "type": "main", "index": 0}]]
+    },
+    "Envio automático habilitado?": {
       "main": [
-        [
-          {
-            "node": "Ler solicitações novas",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        [{"node": "Aguardar limite do Gmail", "type": "main", "index": 0}],
+        [{"node": "Criar rascunho para revisão?", "type": "main", "index": 0}]
       ]
     },
-    "Ler solicitações novas": {
-      "main": [
-        [
-          {
-            "node": "Avaliar e personalizar",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
+    "Aguardar limite do Gmail": {
+      "main": [[{"node": "Enviar pelo Gmail", "type": "main", "index": 0}]]
     },
-    "Avaliar e personalizar": {
-      "main": [
-        [
-          {
-            "node": "Marketing autorizado?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Marketing autorizado?": {
-      "main": [
-        [
-          {
-            "node": "Enviar pelo Gmail",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Criar rascunho para revisão",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Enviar pelo Gmail": {
-      "main": [
-        [
-          {
-            "node": "Atualizar solicitação",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Criar rascunho para revisão": {
-      "main": [
-        [
-          {
-            "node": "Atualizar solicitação",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
+    "Criar rascunho para revisão?": {
+      "main": [[{"node": "Criar rascunho no Gmail", "type": "main", "index": 0}], []]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "prospecting-gmail-v1",
+  "versionId": "active-prospecting-gmail-v2",
   "meta": {
     "templateCredsSetupCompleted": false
   },

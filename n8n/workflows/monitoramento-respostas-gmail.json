@@ -1,5 +1,5 @@
 {
-  "name": "Agente de prospecção - monitorar respostas e negociação",
+  "name": "Monitorar respostas, negociação e não contato",
   "nodes": [
     {
       "parameters": {
@@ -16,10 +16,7 @@
       "name": "A cada hora",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
-      "position": [
-        0,
-        0
-      ]
+      "position": [0, 0]
     },
     {
       "parameters": {
@@ -36,10 +33,7 @@
       "name": "Ler respostas recentes",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
-      "position": [
-        220,
-        0
-      ],
+      "position": [220, 0],
       "credentials": {
         "gmailOAuth2": {
           "id": "GMAIL_CREDENTIAL_ID",
@@ -49,16 +43,13 @@
     },
     {
       "parameters": {
-        "jsCode": "const negotiationTerms = ['orçamento', 'orcamento', 'preço', 'preco', 'prazo', 'contrato', 'proposta', 'reunião', 'reuniao', 'fechar', 'escopo', 'valor', 'disponibilidade', 'interesse'];\n\nreturn $input.all().map(({ json }) => {\n  const text = [json.subject, json.snippet, json.textPlain, json.text].filter(Boolean).join(' ').toLocaleLowerCase('pt-BR');\n  const matchedTerms = negotiationTerms.filter((term) => text.includes(term));\n  return {\n    json: {\n      ...json,\n      negotiation_signal: matchedTerms.length > 0,\n      matched_terms: matchedTerms,\n      alert_subject: `Oportunidade de negociação: ${json.subject || 'nova resposta por e-mail'}`\n    }\n  };\n}).filter(({ json }) => json.negotiation_signal);"
+        "jsCode": "const negotiationTerms = ['orçamento', 'orcamento', 'preço', 'preco', 'prazo', 'contrato', 'proposta', 'reunião', 'reuniao', 'fechar', 'escopo', 'valor', 'disponibilidade', 'interesse'];\nconst optOutTerms = ['não entrar em contato', 'nao entrar em contato', 'remover', 'remova', 'não quero receber', 'nao quero receber', 'unsubscribe', 'stop', 'pare de enviar'];\n\nreturn $input.all().map(({ json }) => {\n  const text = [json.subject, json.snippet, json.textPlain, json.text].filter(Boolean).join(' ').toLocaleLowerCase('pt-BR');\n  const matchedTerms = negotiationTerms.filter((term) => text.includes(term));\n  const optOut = optOutTerms.some((term) => text.includes(term));\n  return { json: { ...json, negotiation_signal: matchedTerms.length > 0, opt_out_signal: optOut, matched_terms: matchedTerms, alert_subject: optOut ? 'Pedido de não contato recebido' : `Oportunidade de negociação: ${json.subject || 'nova resposta por e-mail'}` };\n}).filter(({ json }) => json.negotiation_signal || json.opt_out_signal);"
       },
-      "id": "classify-negotiation",
-      "name": "Identificar oportunidade",
+      "id": "classify-replies",
+      "name": "Identificar negociação ou não contato",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        440,
-        0
-      ]
+      "position": [440, 0]
     },
     {
       "parameters": {
@@ -66,17 +57,14 @@
         "operation": "send",
         "sendTo": "={{$env.ALERT_EMAIL}}",
         "subject": "={{$json.alert_subject}}",
-        "message": "={{'Uma resposta com potencial de negociação foi identificada no Gmail.\\n\\nRemetente: ' + ($json.from || 'não identificado') + '\\nAssunto: ' + ($json.subject || 'sem assunto') + '\\nSinais encontrados: ' + $json.matched_terms.join(', ') + '\\n\\nTrecho: ' + ($json.snippet || $json.textPlain || 'sem conteúdo disponível')}}",
+        "message": "={{$json.opt_out_signal ? 'Registrar o remetente em SUPPRESSION_EMAILS antes de executar novas prospecções.\\n\\n' : 'Uma resposta com potencial comercial foi identificada.\\n\\n'} + 'Remetente: ' + ($json.from || 'não identificado') + '\\nAssunto: ' + ($json.subject || 'sem assunto') + '\\nSinais encontrados: ' + ($json.matched_terms || []).join(', ') + '\\n\\nTrecho: ' + ($json.snippet || $json.textPlain || 'sem conteúdo disponível')}}",
         "options": {}
       },
-      "id": "send-negotiation-alert",
-      "name": "Alertar sobre negociação",
+      "id": "send-reply-alert",
+      "name": "Alertar responsável",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
-      "position": [
-        680,
-        0
-      ],
+      "position": [680, 0],
       "credentials": {
         "gmailOAuth2": {
           "id": "GMAIL_CREDENTIAL_ID",
@@ -87,44 +75,20 @@
   ],
   "connections": {
     "A cada hora": {
-      "main": [
-        [
-          {
-            "node": "Ler respostas recentes",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
+      "main": [[{"node": "Ler respostas recentes", "type": "main", "index": 0}]]
     },
     "Ler respostas recentes": {
-      "main": [
-        [
-          {
-            "node": "Identificar oportunidade",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
+      "main": [[{"node": "Identificar negociação ou não contato", "type": "main", "index": 0}]]
     },
-    "Identificar oportunidade": {
-      "main": [
-        [
-          {
-            "node": "Alertar sobre negociação",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
+    "Identificar negociação ou não contato": {
+      "main": [[{"node": "Alertar responsável", "type": "main", "index": 0}]]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "reply-monitoring-gmail-v1",
+  "versionId": "reply-monitoring-gmail-v2",
   "meta": {
     "templateCredsSetupCompleted": false
   },
