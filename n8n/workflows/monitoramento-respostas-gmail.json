@@ -1,5 +1,5 @@
 {
-  "name": "Monitorar respostas, negociação e não contato",
+  "name": "Monitorar respostas de conversas iniciadas pelo agente",
   "nodes": [
     {
       "parameters": {
@@ -12,7 +12,7 @@
           ]
         }
       },
-      "id": "schedule-replies",
+      "id": "schedule-reply-monitoring",
       "name": "A cada hora",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -23,14 +23,14 @@
         "resource": "message",
         "operation": "getAll",
         "returnAll": false,
-        "limit": 50,
+        "limit": 100,
         "filters": {
-          "q": "in:anywhere newer_than:1d -from:me"
+          "q": "in:anywhere newer_than:7d"
         },
         "options": {}
       },
-      "id": "read-new-replies",
-      "name": "Ler respostas recentes",
+      "id": "read-recent-gmail-messages",
+      "name": "Ler mensagens recentes",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [220, 0],
@@ -43,52 +43,41 @@
     },
     {
       "parameters": {
-        "jsCode": "const negotiationTerms = ['orçamento', 'orcamento', 'preço', 'preco', 'prazo', 'contrato', 'proposta', 'reunião', 'reuniao', 'fechar', 'escopo', 'valor', 'disponibilidade', 'interesse'];\nconst optOutTerms = ['não entrar em contato', 'nao entrar em contato', 'remover', 'remova', 'não quero receber', 'nao quero receber', 'unsubscribe', 'stop', 'pare de enviar'];\n\nreturn $input.all().map(({ json }) => {\n  const text = [json.subject, json.snippet, json.textPlain, json.text].filter(Boolean).join(' ').toLocaleLowerCase('pt-BR');\n  const matchedTerms = negotiationTerms.filter((term) => text.includes(term));\n  const optOut = optOutTerms.some((term) => text.includes(term));\n  return { json: { ...json, negotiation_signal: matchedTerms.length > 0, opt_out_signal: optOut, matched_terms: matchedTerms, alert_subject: optOut ? 'Pedido de não contato recebido' : `Oportunidade de negociação: ${json.subject || 'nova resposta por e-mail'}` };\n}).filter(({ json }) => json.negotiation_signal || json.opt_out_signal);"
+        "jsCode": "const interestTerms = ['interesse', 'interessante', 'gostaria', 'vamos conversar', 'podemos conversar', 'tenho interesse'];\nconst budgetTerms = ['orçamento', 'orcamento', 'preço', 'preco', 'valor', 'verba', 'investimento', 'quanto custa'];\nconst meetingTerms = ['reunião', 'reuniao', 'call', 'conversa', 'agenda', 'agendar', 'disponibilidade', 'horário', 'horario'];\nconst negotiationTerms = ['proposta', 'prazo', 'escopo', 'contrato', 'condições', 'condicoes', 'ajuste', 'negociar', 'fechar'];\nconst refusalTerms = ['não tenho interesse', 'nao tenho interesse', 'não queremos', 'nao queremos', 'já resolvemos', 'ja resolvemos', 'recusar', 'recusado'];\nconst optOutTerms = ['não entrar em contato', 'nao entrar em contato', 'remover', 'remova', 'não quero receber', 'nao quero receber', 'unsubscribe', 'stop', 'pare de enviar'];\nconst getText = (item) => [item.subject, item.snippet, item.textPlain, item.text, item.body].filter(Boolean).join(' ').toLocaleLowerCase('pt-BR');\nconst hasLabel = (item, label) => Array.isArray(item.labelIds) && item.labelIds.some((value) => String(value).toUpperCase() === label);\nconst messages = $input.all().map((item) => item.json);\nconst sentThreads = new Set(messages.filter((item) => hasLabel(item, 'SENT') || String(item.from || '').toLowerCase().includes('me')).map((item) => String(item.threadId || item.thread_id || '')).filter(Boolean));\nconst incoming = messages.filter((item) => {\n  const threadId = String(item.threadId || item.thread_id || '');\n  return threadId && sentThreads.has(threadId) && !hasLabel(item, 'SENT') && !String(item.from || '').toLowerCase().includes('me');\n});\nreturn incoming.map((item) => {\n  const text = getText(item);\n  const matches = (terms) => terms.filter((term) => text.includes(term));\n  const interest = matches(interestTerms);\n  const budget = matches(budgetTerms);\n  const meeting = matches(meetingTerms);\n  const negotiation = matches(negotiationTerms);\n  const refusal = matches(refusalTerms);\n  const optOut = matches(optOutTerms);\n  const categories = [];\n  if (interest.length) categories.push('interesse');\n  if (budget.length) categories.push('orcamento');\n  if (meeting.length) categories.push('reuniao');\n  if (negotiation.length) categories.push('negociacao');\n  if (refusal.length) categories.push('recusa');\n  if (optOut.length) categories.push('nao_contato');\n  const priority = optOut.length || budget.length || meeting.length || negotiation.length ? 'alta' : categories.length ? 'media' : 'baixa';\n  return { json: { source: 'gmail', thread_id: String(item.threadId || item.thread_id), message_id: String(item.id || item.messageId || ''), sender: item.from || item.sender || 'não identificado', subject: item.subject || 'sem assunto', excerpt: String(item.snippet || item.textPlain || item.text || '').replace(/\\s+/g, ' ').trim().slice(0, 1000), categories, matched_terms: [...new Set([...interest, ...budget, ...meeting, ...negotiation, ...refusal, ...optOut])], priority, opt_out_signal: Boolean(optOut.length), alert_title: optOut.length ? 'AÇÃO IMEDIATA: pedido de não contato' : `Resposta comercial ${priority}: ${(item.subject || 'sem assunto').slice(0, 100)}` } };\n}).filter(({ json }) => json.categories.length > 0);"
       },
-      "id": "classify-replies",
-      "name": "Identificar negociação ou não contato",
+      "id": "classify-agent-conversations",
+      "name": "Validar conversa e classificar sinais",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [440, 0]
     },
     {
       "parameters": {
-        "resource": "message",
-        "operation": "send",
-        "sendTo": "={{$env.ALERT_EMAIL}}",
-        "subject": "={{$json.alert_subject}}",
-        "message": "={{$json.opt_out_signal ? 'Registrar o remetente em SUPPRESSION_EMAILS antes de executar novas prospecções.\\n\\n' : 'Uma resposta com potencial comercial foi identificada.\\n\\n'} + 'Remetente: ' + ($json.from || 'não identificado') + '\\nAssunto: ' + ($json.subject || 'sem assunto') + '\\nSinais encontrados: ' + ($json.matched_terms || []).join(', ') + '\\n\\nTrecho: ' + ($json.snippet || $json.textPlain || 'sem conteúdo disponível')}}",
-        "options": {}
+        "jsCode": "return $input.all().map(({ json }) => ({ json: { alert_type: json.opt_out_signal ? 'SUPRESSAO_URGENTE' : 'OPORTUNIDADE_COMERCIAL', alert_title: json.alert_title, priority: json.priority, categories: json.categories, sender: json.sender, subject: json.subject, thread_id: json.thread_id, message_id: json.message_id, matched_terms: json.matched_terms, excerpt: json.excerpt, action_required: json.opt_out_signal ? 'Adicionar o remetente à SUPPRESSION_EMAILS antes da próxima execução e não responder automaticamente.' : 'Revisar a conversa no Gmail e decidir manualmente sobre orçamento, reunião ou negociação.' } }));"
       },
-      "id": "send-reply-alert",
-      "name": "Alertar responsável",
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.1,
-      "position": [680, 0],
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "GMAIL_CREDENTIAL_ID",
-          "name": "Gmail prospecção"
-        }
-      }
+      "id": "format-review-alert",
+      "name": "Gerar alerta para revisão manual",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 0]
     }
   ],
   "connections": {
     "A cada hora": {
-      "main": [[{"node": "Ler respostas recentes", "type": "main", "index": 0}]]
+      "main": [[{"node": "Ler mensagens recentes", "type": "main", "index": 0}]]
     },
-    "Ler respostas recentes": {
-      "main": [[{"node": "Identificar negociação ou não contato", "type": "main", "index": 0}]]
+    "Ler mensagens recentes": {
+      "main": [[{"node": "Validar conversa e classificar sinais", "type": "main", "index": 0}]]
     },
-    "Identificar negociação ou não contato": {
-      "main": [[{"node": "Alertar responsável", "type": "main", "index": 0}]]
+    "Validar conversa e classificar sinais": {
+      "main": [[{"node": "Gerar alerta para revisão manual", "type": "main", "index": 0}]]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "reply-monitoring-gmail-v2",
+  "versionId": "agent-conversation-monitoring-v3",
   "meta": {
     "templateCredsSetupCompleted": false
   },
