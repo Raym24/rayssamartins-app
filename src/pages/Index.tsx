@@ -28,8 +28,8 @@ const Index = () => {
     name: "Rayssa Martins",
     url: "https://rayssamartins.app/",
     image: ogImage,
-    jobTitle: "Diretora de Arte Sênior e Designer Gráfico",
-    description: "Diretora de Arte Sênior em Fortaleza, especializada em design gráfico, branding, identidade visual e design digital.",
+    jobTitle: isEnglish ? "Senior Art Director & Multidisciplinary Designer" : "Diretora de Arte Sênior e Designer Gráfico",
+    description,
     email: "rayssamartins33@gmail.com",
     address: {
       "@type": "PostalAddress",
@@ -45,8 +45,10 @@ const Index = () => {
     "@type": "WebSite",
     name: "Rayssa Martins",
     url: "https://rayssamartins.app/",
-    description: "Portfólio de Rayssa Martins, Diretora de Arte Sênior e Designer Gráfico.",
-    inLanguage: "pt-BR",
+    description: isEnglish
+      ? "Portfolio of Rayssa Martins, Senior Art Director and Multidisciplinary Designer."
+      : "Portfólio de Rayssa Martins, Diretora de Arte Sênior e Designer Gráfico.",
+    inLanguage: isEnglish ? "en" : "pt-BR",
     publisher: {
       "@type": "Person",
       name: "Rayssa Martins",
@@ -71,6 +73,7 @@ const Index = () => {
         <meta property="og:description" content={description} />
         <meta property="og:url" content={canonical} />
         <meta property="og:locale" content={isEnglish ? "en_US" : "pt_BR"} />
+        <meta property="og:locale:alternate" content={isEnglish ? "pt_BR" : "en_US"} />
         <meta property="og:image" content={ogImage} />
         <meta property="og:image:alt" content="Rayssa Martins, Diretora de Arte Sênior e Designer Gráfico" />
         <meta name="twitter:card" content="summary_large_image" />
@@ -78,16 +81,12 @@ const Index = () => {
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImage} />
         <meta name="twitter:image:alt" content="Rayssa Martins, Diretora de Arte Sênior e Designer Gráfico" />
-        {!isEnglish && (
-          <>
-            <script type="application/ld+json">
-              {JSON.stringify(personSchema)}
-            </script>
-            <script type="application/ld+json">
-              {JSON.stringify(websiteSchema)}
-            </script>
-          </>
-        )}
+        <script type="application/ld+json">
+          {JSON.stringify(personSchema)}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify(websiteSchema)}
+        </script>
       </Helmet>
       <FloatingElements />
       <Navbar />
