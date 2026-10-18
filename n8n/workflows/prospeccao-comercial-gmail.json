@@ -1,0 +1,278 @@
+{
+  "name": "Agente de prospecção comercial - Gmail e solicitações",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 4
+            }
+          ]
+        }
+      },
+      "id": "schedule-prospecting",
+      "name": "A cada 4 horas",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$env.SUPABASE_URL + '/rest/v1/solicitacoes_orcamento'}}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "select",
+              "value": "id,nome,email,telefone,empresa,origem,descricao,status,observacoes,consentimento_marketing,criado_em,atualizado_em"
+            },
+            {
+              "name": "status",
+              "value": "eq.novo"
+            },
+            {
+              "name": "order",
+              "value": "criado_em.asc"
+            },
+            {
+              "name": "limit",
+              "value": "50"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.SUPABASE_SERVICE_ROLE_KEY}}"
+            },
+            {
+              "name": "Authorization",
+              "value": "={{'Bearer ' + $env.SUPABASE_SERVICE_ROLE_KEY}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "get-new-requests",
+      "name": "Ler solicitações novas",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const requests = $input.all();\n\nreturn requests.map(({ json }) => {\n  const name = String(json.nome || '').trim();\n  const company = String(json.empresa || '').trim();\n  const description = String(json.descricao || '').trim();\n  const origin = String(json.origem || '').trim();\n  const recipient = name || company || 'Olá';\n  const context = [company, description].filter(Boolean).join(' — ');\n  const subject = company\n    ? `Uma ideia para a comunicação da ${company}`\n    : 'Podemos conversar sobre seu projeto?';\n  const body = [\n    `Olá, ${recipient}!`,\n    '',\n    'Recebi sua solicitação e analisei o contexto do projeto.',\n    context ? `Pelo que entendi, você busca: ${context}` : 'Gostaria de entender melhor o momento e os objetivos do projeto.',\n    '',\n    'Posso ajudar com direção de arte, identidade visual, design digital, UI/UX e automações para transformar essa necessidade em uma solução clara e consistente.',\n    '',\n    'Se fizer sentido, podemos marcar uma conversa breve para alinhar escopo, prazo e próximos passos.',\n    '',\n    'Abraços,',\n    'Rayssa Martins',\n    'Diretora de Arte Sênior e Designer Multidisciplinar'\n  ].join('\\n');\n\n  return {\n    json: {\n      ...json,\n      prospect_subject: subject,\n      prospect_body: body,\n      prospect_origin: origin,\n      can_send: json.consentimento_marketing === true,\n      relevance_score: description.length >= 40 ? 80 : 60\n    }\n  };\n});"
+      },
+      "id": "personalize-messages",
+      "name": "Avaliar e personalizar",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.can_send}}",
+              "operation": "true"
+            }
+          ]
+        }
+      },
+      "id": "check-consent",
+      "name": "Marketing autorizado?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        660,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{$json.email}}",
+        "subject": "={{$json.prospect_subject}}",
+        "message": "={{$json.prospect_body}}",
+        "options": {}
+      },
+      "id": "send-authorized-email",
+      "name": "Enviar pelo Gmail",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        900,
+        -120
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "GMAIL_CREDENTIAL_ID",
+          "name": "Gmail prospecção"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "operation": "create",
+        "sendTo": "={{$json.email}}",
+        "subject": "={{$json.prospect_subject}}",
+        "message": "={{$json.prospect_body}}",
+        "options": {}
+      },
+      "id": "create-review-draft",
+      "name": "Criar rascunho para revisão",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        900,
+        120
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "GMAIL_CREDENTIAL_ID",
+          "name": "Gmail prospecção"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{$env.SUPABASE_URL + '/rest/v1/solicitacoes_orcamento?id=eq.' + $json.id}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.SUPABASE_SERVICE_ROLE_KEY}}"
+            },
+            {
+              "name": "Authorization",
+              "value": "={{'Bearer ' + $env.SUPABASE_SERVICE_ROLE_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{JSON.stringify({status: $json.can_send ? 'contatado' : 'rascunho_para_revisao', observacoes: ($json.observacoes || '') + '\\nAgente n8n: ' + ($json.can_send ? 'mensagem enviada pelo Gmail' : 'rascunho criado para revisão manual') + '. Relevância: ' + $json.relevance_score + '.', atualizado_em: new Date().toISOString()})}}",
+        "options": {}
+      },
+      "id": "update-request-status",
+      "name": "Atualizar solicitação",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1160,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "A cada 4 horas": {
+      "main": [
+        [
+          {
+            "node": "Ler solicitações novas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ler solicitações novas": {
+      "main": [
+        [
+          {
+            "node": "Avaliar e personalizar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Avaliar e personalizar": {
+      "main": [
+        [
+          {
+            "node": "Marketing autorizado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Marketing autorizado?": {
+      "main": [
+        [
+          {
+            "node": "Enviar pelo Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Criar rascunho para revisão",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar pelo Gmail": {
+      "main": [
+        [
+          {
+            "node": "Atualizar solicitação",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar rascunho para revisão": {
+      "main": [
+        [
+          {
+            "node": "Atualizar solicitação",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "prospecting-gmail-v1",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}
