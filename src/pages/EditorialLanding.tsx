@@ -377,7 +377,9 @@ const EditorialLanding = () => {
         <html lang="pt-BR" />
         <title>{title}</title>
         <meta name="description" content={description} />
+        <meta name="robots" content="index, follow" />
         <link rel="canonical" href={CANONICAL} />
+        <link rel="alternate" hrefLang="pt-BR" href={CANONICAL} />
         <meta property="og:type" content="website" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
@@ -563,7 +565,7 @@ const EditorialLanding = () => {
             <div className="grid gap-8 lg:grid-cols-12">
               <div className="max-w-xl lg:col-span-6 [&_p]:text-primary-foreground/70">
                 <Eyebrow n="03">Serviços</Eyebrow>
-                <h2 className="mt-6 font-serif-ed text-4xl font-light leading-[1.05] md:text-5xl">Escolha até onde o projeto vai<span className="text-accent">.</span></h2>
+                <h2 className="mt-6 font-serif-ed text-4xl font-light leading-[1.05] md:text-5xl">Escolha até onde o projeto de diagramação profissional vai<span className="text-accent">.</span></h2>
               </div>
               <p className="self-end leading-relaxed text-primary-foreground/70 lg:col-span-5 lg:col-start-8">
                 Da diagramação de um conteúdo já definido à publicação completa, com capa e projeto gráfico sob uma única direção de arte.
