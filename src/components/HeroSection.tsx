@@ -88,7 +88,7 @@ const HeroSection = () => {
             <div className="relative w-64 h-64 md:w-80 md:h-80 mx-auto">
               <img
                 src={raysaPhoto}
-                alt="Rayssa Martins"
+                alt="Rayssa Martins, Diretora de Arte Sênior e Designer Gráfico"
                 className="w-full h-full object-cover object-top rounded-full border-4 border-primary shadow-2xl"
               />
               <div className="absolute -top-2 -right-2 w-8 h-8 bg-primary rotate-12 animate-bounce-soft" />

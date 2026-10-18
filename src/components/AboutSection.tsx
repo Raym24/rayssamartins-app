@@ -24,7 +24,7 @@ const AboutSection = () => {
             <div className="aspect-[3/4] border-2 border-border flex items-center justify-center relative overflow-hidden group">
               <img
                 src={raysaAboutPhoto}
-                alt="Rayssa Martins"
+                alt="Rayssa Martins, Diretora de Arte Sênior e Designer Gráfico em Fortaleza"
                 className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
               />
               {/* Red corner accent */}
