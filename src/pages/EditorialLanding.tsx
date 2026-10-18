@@ -1,10 +1,15 @@
-import { useEffect, useRef, useState, type FormEvent, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
-import medgestAsset from "@/assets/medgest.png.asset.json";
-import poderAsset from "@/assets/opoderdaacao.png.asset.json";
-import heroCapaFace from "@/assets/hero-capa-face.webp.asset.json";
+
+import agroamigoAsset from "@/assets/editorial/01_agroamigo.png.asset.json";
+import medgestAsset from "@/assets/editorial/02_medgest_pro.png.asset.json";
+import gestaoAsset from "@/assets/editorial/03_programa_gestao_vendas.png.asset.json";
+import poderAsset from "@/assets/editorial/04_o_poder_da_acao.png.asset.json";
+import heroLeftAsset from "@/assets/editorial/hero_left.jpg.asset.json";
+import heroRightAsset from "@/assets/editorial/hero_right.jpg.asset.json";
+import heroNextAsset from "@/assets/editorial/hero_next.jpg.asset.json";
 
 const CONTACT_EMAIL = "rayssamartins33@gmail.com";
 
@@ -26,6 +31,7 @@ const projects: Project[] = [
     category: "Publicação institucional",
     scope: "Diagramação",
     description: "Publicação institucional com conteúdo extenso, organizada para leitura clara entre capítulos e seções.",
+    cover: agroamigoAsset.url,
     pages: [],
   },
   {
@@ -43,6 +49,7 @@ const projects: Project[] = [
     category: "Apostila",
     scope: "Diagramação",
     description: "Conteúdo de programa de capacitação organizado em módulos, com padrão gráfico aplicado a todas as páginas.",
+    cover: gestaoAsset.url,
     pages: [],
   },
   {
@@ -287,16 +294,16 @@ const EditorialLanding = () => {
             <div style={{ animationDelay: "480ms" }} className="ed-rise lg:col-span-5">
               <div className="ed-scene relative mx-auto flex aspect-[10/9] w-full max-w-[560px] items-center justify-center lg:-mr-6 lg:max-w-none xl:-mr-12">
                 <span aria-hidden="true" className="absolute left-[2%] top-[2%] z-30 h-6 w-6 border-l-2 border-t-2 border-accent" />
-                <div className="ed-flip" role="img" aria-label="Livro Agroamigo abrindo e passando páginas">
-                  <div className="ed-flip-book">
-                    <div className="ed-flip-base ed-flip-base-l"><div className="ed-flip-text" /></div>
-                    <div className="ed-flip-base ed-flip-base-r"><span className="ed-flip-mark" /><div className="ed-flip-text" /></div>
-                    <div className="ed-leaf ed-leaf-3"><div className="ed-face ed-face-front"><div className="ed-flip-text" /></div><div className="ed-face ed-face-back"><div className="ed-flip-text" /></div></div>
-                    <div className="ed-leaf ed-leaf-2"><div className="ed-face ed-face-front ed-face-chapter"><span className="ed-flip-mark" /><div className="ed-flip-text" /></div><div className="ed-face ed-face-back"><div className="ed-flip-text" /></div></div>
-                    <div className="ed-leaf ed-leaf-1"><div className="ed-face ed-face-front ed-face-cover"><img src={heroCapaFace.url} alt="" width={600} height={800} loading="eager" decoding="async" fetchPriority="high" /></div><div className="ed-face ed-face-back ed-face-inside" /></div>
-                  </div>
-                  <div className="ed-flip-shadow" aria-hidden="true" />
-                </div>
+                 <div className="ed-real-book" role="img" aria-label="Livro diagramado Medgest PRO com páginas reais e movimento de virada">
+                   <div className="ed-real-spread">
+                     <img className="ed-real-left" src={heroLeftAsset.url} alt="" width={550} height={760} />
+                     <img className="ed-real-right" src={heroRightAsset.url} alt="" width={550} height={760} />
+                     <div className="ed-real-turn" aria-hidden="true">
+                       <img className="ed-real-front" src={heroRightAsset.url} alt="" />
+                       <img className="ed-real-back" src={heroNextAsset.url} alt="" />
+                     </div>
+                   </div>
+                 </div>
               </div>
               <p className="mt-4 flex flex-wrap justify-between gap-x-4 text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
                 <span><span className="text-accent">Fig. 01</span> — Acervo editorial</span><span>Projetos reais</span>
@@ -329,16 +336,9 @@ const EditorialLanding = () => {
                     </div>
 
                     <div className={`md:col-span-7 ${flip ? "md:order-2" : ""}`}>
-                      <div className={`ed-img-reveal overflow-hidden p-4 md:p-8 ${i === 1 ? "bg-primary" : "bg-card"}`}>
-                        {p.cover
-                          ? <img src={p.cover} alt={`${p.title} — capa`} loading="lazy" decoding="async" width={1752} height={1464} className="aspect-[4/3] w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]" />
-                          : <Plate label="Capa em breve" className="aspect-[4/3] w-full" tone="bg-secondary" />}
-                      </div>
-                      <div className="mt-3 grid grid-cols-3 gap-3">
-                        {(p.pages.length ? p.pages : [null, null, null]).slice(0, 3).map((src, j) =>
-                          src ? <img key={j} src={src} alt={`${p.title} — página interna ${j + 1}`} loading="lazy" className="aspect-[3/4] w-full object-cover" />
-                              : <Plate key={j} label={`p. ${j + 1}`} className="aspect-[3/4] w-full" tone="bg-card" />)}
-                      </div>
+                       <div className="ed-img-reveal flex min-h-[280px] items-center justify-center bg-transparent px-0 py-4 md:min-h-[420px] md:py-6">
+                         <img src={p.cover} alt={`Apresentação editorial do projeto ${p.title}`} loading="lazy" decoding="async" width={1600} height={1200} className="block h-auto w-full max-w-[760px] object-contain transition-transform duration-700 ease-out group-hover:scale-[1.025]" />
+                       </div>
                     </div>
 
                     <div className={`flex flex-col md:col-span-4 ${flip ? "md:order-1 md:col-start-1" : "md:col-start-9"}`}>
