@@ -8,7 +8,6 @@ import Index from "./pages/Index.tsx";
 import ProjectDetail from "./pages/ProjectDetail.tsx";
 import EditorialLanding from "./pages/EditorialLanding.tsx";
 import NotFound from "./pages/NotFound.tsx";
-import AdminSolicitacoes from "./pages/AdminSolicitacoes.tsx";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
 const queryClient = new QueryClient();
@@ -116,7 +115,6 @@ const App = () => (
             <Route path="/projeto/:id" element={<ProjectDetail />} />
             <Route path="/en/projeto/:id" element={<ProjectDetail />} />
             <Route path="/diagramacao-de-livros" element={<EditorialLanding />} />
-            <Route path="/admin/solicitacoes" element={<AdminSolicitacoes />} />
             <Route
               path="*"
               element={

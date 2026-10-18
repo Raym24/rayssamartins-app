@@ -2,7 +2,6 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { ArrowUpRight, BookOpen, Building2, Check, GraduationCap, MessageCircle, Pause, PenLine, Play, Plus, type LucideIcon } from "lucide-react";
-import { enviarSolicitacao } from "@/lib/solicitacoes";
 
 const CONTACT_EMAIL = "rayssamartins33@gmail.com";
 const WHATSAPP_NUMBER = "5585991706850";
