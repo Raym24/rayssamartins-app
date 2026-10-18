@@ -1,3 +1,4 @@
+- [ ] Atualizar apenas /diagramacao-de-livros com a versão aprovada do ZIP e verificar imagens e navegação.
 - [x] Configurar perfil, projetos e contatos públicos para agentes de IA via MCP.
 - [ ] Publicar o MCP — aguardando a próxima publicação do site.
 - [x] Exibir “Rayssa Martins” completo na abertura em telas de celular.
