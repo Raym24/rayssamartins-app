@@ -7,6 +7,27 @@ const CONTACT_EMAIL = "rayssamartins33@gmail.com";
 const WHATSAPP_NUMBER = "5585991706850";
 const SITE = "https://rayssamartins.app";
 const CANONICAL = `${SITE}/diagramacao-de-livros`;
+const GA4_MEASUREMENT_ID = import.meta.env.VITE_GA4_MEASUREMENT_ID as string | undefined;
+const GOOGLE_ADS_ID = import.meta.env.VITE_GOOGLE_ADS_ID as string | undefined;
+const ATTRIBUTION_STORAGE_KEY = "editorial-attribution";
+
+type AnalyticsWindow = Window & {
+  dataLayer?: unknown[];
+  gtag?: (...args: unknown[]) => void;
+};
+
+const trackEvent = (eventName: string, parameters: Record<string, string>) => {
+  const analyticsWindow = window as AnalyticsWindow;
+  analyticsWindow.gtag?.("event", eventName, parameters);
+};
+
+const getStoredAttribution = () => {
+  try {
+    return window.localStorage.getItem(ATTRIBUTION_STORAGE_KEY) ?? "";
+  } catch {
+    return "";
+  }
+};
 
 /** Link do WhatsApp com mensagem pré-preenchida. */
 const wa = (text = "Olá, Rayssa! Vim pela página de diagramação e gostaria de um orçamento.") =>
@@ -292,26 +313,26 @@ const ContactForm = () => {
     const first = (Object.keys(empty) as (keyof FormState)[]).find((k) => e[k]);
     if (first) { ev.currentTarget.querySelector<HTMLElement>(`#${first}`)?.focus(); return; }
 
-    void enviarSolicitacao({
-      nome: form.name,
-      email: form.email,
-      origem: CANONICAL,
-      descricao: [form.type, form.pages && `Páginas: ${form.pages}`, form.deadline && `Prazo: ${form.deadline}`, form.description].filter(Boolean).join("\n"),
-      captchaToken: `dev-${form.captcha.trim()}`,
-      website: form.website,
-    }).catch(() => setSent(""));
-
     const channel = (ev.nativeEvent as SubmitEvent).submitter?.getAttribute("value") === "email" ? "email" : "whatsapp";
+    const attribution = getStoredAttribution();
     const lines = [
       `Olá, Rayssa! Meu nome é ${form.name.trim()} e gostaria de um orçamento.`,
       `Tipo de publicação: ${form.type}`,
       form.pages && `Páginas (aprox.): ${form.pages}`,
       form.deadline && `Prazo desejado: ${form.deadline}`,
       form.description.trim() && `\n${form.description.trim()}`,
+      attribution && `\nReferência da visita: ${attribution}`,
     ].filter(Boolean).join("\n");
 
-    if (channel === "whatsapp") window.open(wa(lines), "_blank", "noopener,noreferrer");
-    else window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Orçamento de diagramação — " + form.name.trim())}&body=${encodeURIComponent(lines)}`;
+    if (channel === "whatsapp") {
+      trackEvent("whatsapp_orcamento_click", {
+        page_location: window.location.href,
+        publication_type: form.type,
+      });
+      window.open(wa(lines), "_blank", "noopener,noreferrer");
+    } else {
+      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Orçamento de diagramação — " + form.name.trim())}&body=${encodeURIComponent(lines)}`;
+    }
     setSent(channel);
   };
 
@@ -363,6 +384,25 @@ const EditorialLanding = () => {
   const ogImage = `${SITE}/editorial/og-diagramacao.jpg`;
   useReveal();
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const attribution = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid"]
+      .map((key) => {
+        const value = params.get(key);
+        return value ? `${key}=${value}` : "";
+      })
+      .filter(Boolean)
+      .join("&");
+
+    if (attribution) {
+      try {
+        window.localStorage.setItem(ATTRIBUTION_STORAGE_KEY, attribution);
+      } catch {
+        // A navegação e o formulário continuam funcionando sem armazenamento local.
+      }
+    }
+  }, []);
+
   const jsonLd = [
     {
       "@context": "https://schema.org",
@@ -408,6 +448,22 @@ const EditorialLanding = () => {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&display=swap" />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        {GA4_MEASUREMENT_ID && (
+          <>
+            <script id="google-analytics-loader" async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`} />
+            <script id="google-analytics-config">
+              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA4_MEASUREMENT_ID}',{send_page_view:true});`}
+            </script>
+          </>
+        )}
+        {GOOGLE_ADS_ID && !GA4_MEASUREMENT_ID && (
+          <>
+            <script id="google-ads-loader" async src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`} />
+            <script id="google-ads-config">
+              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GOOGLE_ADS_ID}');`}
+            </script>
+          </>
+        )}
       </Helmet>
 
       {/* Topo */}
