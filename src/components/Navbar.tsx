@@ -3,15 +3,27 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useLanguage, type Language } from "@/contexts/LanguageContext";
 
-const navLinks = {
+type NavLink = {
+  label: string;
+  href: string;
+  isRoute?: boolean;
+};
+
+const navLinks: Record<Language, NavLink[]> = {
   pt: [
-    { label: "Início", href: "#hero" }, { label: "Sobre", href: "#about" },
-    { label: "Skills", href: "#skills" }, { label: "Projetos", href: "#projects" },
+    { label: "Início", href: "#hero" },
+    { label: "Sobre", href: "#about" },
+    { label: "Skills", href: "#skills" },
+    { label: "Projetos", href: "#projects" },
+    { label: "Diagramação", href: "/diagramacao-de-livros", isRoute: true },
     { label: "Contato", href: "#contact" },
   ],
   en: [
-    { label: "Home", href: "#hero" }, { label: "About", href: "#about" },
-    { label: "Skills", href: "#skills" }, { label: "Projects", href: "#projects" },
+    { label: "Home", href: "#hero" },
+    { label: "About", href: "#about" },
+    { label: "Skills", href: "#skills" },
+    { label: "Projects", href: "#projects" },
+    { label: "Editorial", href: "/diagramacao-de-livros", isRoute: true },
     { label: "Contact", href: "#contact" },
   ],
 };
@@ -29,6 +41,9 @@ const Navbar = () => {
     const el = document.querySelector(href);
     el?.scrollIntoView({ behavior: "smooth" });
   };
+
+  const linkClassName = "relative text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-[2px] after:bottom-[-4px] after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left";
+  const mobileLinkClassName = "text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors";
 
   const LanguageSelector = ({ mobile = false }: { mobile?: boolean }) => (
     <div className={`flex items-center ${mobile ? "min-h-11" : ""}`} aria-label={isEnglish ? "Language" : "Idioma"}>
@@ -59,25 +74,23 @@ const Navbar = () => {
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-8">
           <ul className="flex items-center gap-8">
-          {navLinks[language].map((link) => (
-            <li key={link.href}>
-              {isHome ? (
-                <button
-                  onClick={() => handleClick(link.href)}
-                  className="relative text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-[2px] after:bottom-[-4px] after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left"
-                >
-                  {link.label}
-                </button>
-              ) : (
-                <Link
-                  to={`${homePath}${link.href}`}
-                  className="relative text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-[2px] after:bottom-[-4px] after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left"
-                >
-                  {link.label}
-                </Link>
-              )}
-            </li>
-          ))}
+            {navLinks[language].map((link) => (
+              <li key={link.href}>
+                {link.isRoute ? (
+                  <Link to={link.href} className={linkClassName}>
+                    {link.label}
+                  </Link>
+                ) : isHome ? (
+                  <button onClick={() => handleClick(link.href)} className={linkClassName}>
+                    {link.label}
+                  </button>
+                ) : (
+                  <Link to={`${homePath}${link.href}`} className={linkClassName}>
+                    {link.label}
+                  </Link>
+                )}
+              </li>
+            ))}
           </ul>
           <LanguageSelector />
         </div>
@@ -99,7 +112,7 @@ const Navbar = () => {
       <div
         id="mobile-navigation"
         className={`md:hidden bg-background border-b border-border px-6 overflow-hidden transition-all duration-300 ease-out ${
-          isOpen ? "max-h-64 pb-4 opacity-100" : "max-h-0 pb-0 opacity-0"
+          isOpen ? "max-h-72 pb-4 opacity-100" : "max-h-0 pb-0 opacity-0"
         }`}
       >
         <ul className="flex flex-col gap-3">
@@ -109,19 +122,16 @@ const Navbar = () => {
               style={{ transitionDelay: isOpen ? `${i * 50}ms` : "0ms" }}
               className={`transition-all duration-300 ${isOpen ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"}`}
             >
-              {isHome ? (
-                <button
-                  onClick={() => handleClick(link.href)}
-                  className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors"
-                >
+              {link.isRoute ? (
+                <Link to={link.href} onClick={() => setIsOpen(false)} className={mobileLinkClassName}>
+                  {link.label}
+                </Link>
+              ) : isHome ? (
+                <button onClick={() => handleClick(link.href)} className={mobileLinkClassName}>
                   {link.label}
                 </button>
               ) : (
-                <Link
-                  to={`${homePath}${link.href}`}
-                  onClick={() => setIsOpen(false)}
-                  className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors"
-                >
+                <Link to={`${homePath}${link.href}`} onClick={() => setIsOpen(false)} className={mobileLinkClassName}>
                   {link.label}
                 </Link>
               )}
