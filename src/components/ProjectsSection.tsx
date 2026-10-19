@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { projects } from "@/data/projects";
-import diagramacaoAsset from "@/assets/diagramacao.webp.asset.json";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { projectTranslations } from "@/data/project-translations";
@@ -65,42 +64,6 @@ const ProjectsSection = () => {
               <div className="absolute bottom-0 left-0 w-0 h-[3px] bg-primary group-hover:w-full transition-all duration-500" />
             </Link>
           ))}
-
-          <Link
-            to="/diagramacao-de-livros"
-            aria-label="Conheça meu trabalho editorial: Diagramação de Livros"
-            className="group relative overflow-hidden border border-border hover:border-primary bg-card transition-all duration-500 scroll-reveal stagger-8"
-          >
-            <div className="aspect-[4/3] overflow-hidden relative">
-              <img
-                src={diagramacaoAsset.url}
-                alt="Diagramação editorial de livros"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                loading="lazy"
-                decoding="async"
-              />
-              <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/60 transition-all duration-300 flex items-center justify-center">
-                <span className="text-background font-display-bold text-2xl uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-2">
-                  Conheça meu trabalho editorial <ArrowUpRight size={24} />
-                </span>
-              </div>
-            </div>
-            <div className="p-6 space-y-3">
-              <div className="flex items-start justify-between gap-2">
-                <h3 className="font-heading font-bold text-base uppercase tracking-wide">
-                  Diagramação de Livros
-                </h3>
-                <ArrowUpRight size={18} className="shrink-0 text-muted-foreground group-hover:text-primary group-hover:rotate-45 transition-all duration-300" />
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Diagramação profissional de livros, apostilas, e-books e publicações institucionais, com capa e projeto gráfico.
-              </p>
-              <span className="inline-flex items-center gap-2 pt-2 text-xs font-semibold uppercase tracking-[0.12em] text-primary">
-                Conheça meu trabalho editorial <ArrowUpRight size={15} aria-hidden="true" />
-              </span>
-            </div>
-            <div className="absolute bottom-0 left-0 w-0 h-[3px] bg-primary group-hover:w-full transition-all duration-500" />
-          </Link>
         </div>
       </div>
     </section>
