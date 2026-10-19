@@ -299,6 +299,7 @@ const ContactForm = () => {
   const [form, setForm] = useState<FormState>(empty);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [sent, setSent] = useState<"" | "whatsapp" | "email">("");
+  const submitLock = useRef(false);
 
   const set = (k: keyof FormState) => (ev: { target: { value: string } }) => {
     const value = ev.target.value;
@@ -312,6 +313,8 @@ const ContactForm = () => {
     setErrors(e);
     const first = (Object.keys(empty) as (keyof FormState)[]).find((k) => e[k]);
     if (first) { ev.currentTarget.querySelector<HTMLElement>(`#${first}`)?.focus(); return; }
+    if (submitLock.current) return;
+    submitLock.current = true;
 
     const channel = (ev.nativeEvent as SubmitEvent).submitter?.getAttribute("value") === "email" ? "email" : "whatsapp";
     const attribution = getStoredAttribution();
