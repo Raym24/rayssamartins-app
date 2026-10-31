@@ -14,7 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      solicitacoes_orcamento: {
+        Row: {
+          atualizado_em: string
+          base_legal_atendimento: string
+          consentimento_marketing: boolean
+          consentimento_marketing_em: string | null
+          criado_em: string
+          descricao: string
+          email: string
+          empresa: string | null
+          id: number
+          metadados_auditoria: Json
+          nome: string
+          observacoes: string | null
+          origem: string
+          status: string
+          telefone: string | null
+        }
+        Insert: {
+          atualizado_em?: string
+          base_legal_atendimento?: string
+          consentimento_marketing?: boolean
+          consentimento_marketing_em?: string | null
+          criado_em?: string
+          descricao: string
+          email: string
+          empresa?: string | null
+          id?: never
+          metadados_auditoria?: Json
+          nome: string
+          observacoes?: string | null
+          origem: string
+          status?: string
+          telefone?: string | null
+        }
+        Update: {
+          atualizado_em?: string
+          base_legal_atendimento?: string
+          consentimento_marketing?: boolean
+          consentimento_marketing_em?: string | null
+          criado_em?: string
+          descricao?: string
+          email?: string
+          empresa?: string | null
+          id?: never
+          metadados_auditoria?: Json
+          nome?: string
+          observacoes?: string | null
+          origem?: string
+          status?: string
+          telefone?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
