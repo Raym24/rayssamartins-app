@@ -8,6 +8,7 @@ import Index from "./pages/Index.tsx";
 import ProjectDetail from "./pages/ProjectDetail.tsx";
 import EditorialLanding from "./pages/EditorialLanding.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import WhatsAppFloat from "@/components/WhatsAppFloat";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
 const queryClient = new QueryClient();
@@ -127,6 +128,7 @@ const App = () => (
               }
             />
           </Routes>
+          <WhatsAppFloat />
         </LanguageProvider>
       </BrowserRouter>
     </TooltipProvider>
