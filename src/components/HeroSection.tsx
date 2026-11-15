@@ -45,7 +45,7 @@ const HeroSection = () => {
           {/* Year badge */}
           <div className="flex items-center gap-3 scroll-reveal">
             <span className="sticker-red text-xs tracking-widest uppercase font-semibold">
-              {isEnglish ? "Portfolio 2025" : "Portfólio 2025"}
+              {isEnglish ? "Portfolio 2026" : "Portfólio 2026"}
             </span>
             <span className="sticker-outline text-xs tracking-widest uppercase font-semibold">
                🇧🇷 {isEnglish ? "Brazil" : "Brasil"}
@@ -57,22 +57,22 @@ const HeroSection = () => {
             <span className="block whitespace-nowrap md:hidden">RAYSSA <span className="text-primary">MARTINS</span></span>
             <span className="hidden whitespace-nowrap md:block">RAYSSA</span>
             <span className="hidden whitespace-nowrap text-primary md:block">MARTINS</span>
-            <span className="sr-only"> — UI/UX Designer &amp; Web Designer</span>
+            <span className="sr-only"> — {isEnglish ? "Senior Art Director: websites, visual identity and book layout" : "Diretora de Arte Sênior: sites, identidade visual e diagramação de livros"}</span>
           </h1>
 
           {/* Subtitle */}
           <p className="text-lg md:text-xl text-white/80 font-body max-w-lg scroll-reveal">
-             {isEnglish ? "UI/UX Designer & Web Designer creating digital experiences that delight and convert." : "UI/UX Designer & Web Designer criando experiências digitais que encantam e convertem."}
+             {isEnglish ? "Design that brings clients: websites, visual identity and book layout." : "Design que gera clientes: sites, identidade visual e diagramação de livros."}
           </p>
 
           {/* CTA buttons */}
           <div className="flex gap-4 pt-4 scroll-reveal">
             <a
-              href="#projects"
-              onClick={(e) => { e.preventDefault(); document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" }); }}
+              href="#services"
+              onClick={(e) => { e.preventDefault(); document.querySelector("#services")?.scrollIntoView({ behavior: "smooth" }); }}
               className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 text-sm font-semibold uppercase tracking-wider hover:scale-105 hover:shadow-lg transition-all duration-300"
             >
-               {isEnglish ? "View Projects →" : "Ver Projetos →"}
+               {isEnglish ? "View Services →" : "Ver Serviços →"}
             </a>
             <a
               href="#contact"

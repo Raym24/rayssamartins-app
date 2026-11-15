@@ -79,7 +79,7 @@ const projects: Project[] = [
 
 const audienceIcons: LucideIcon[] = [PenLine, BookOpen, Building2, GraduationCap];
 const audiences = [
-  ["Autores independentes", "Seu livro com padrão profissional, pronto para a gráfica ou para publicação em PDF."],
+  ["Autores independentes", "Romance, poesia, contos ou não ficção: seu livro com padrão profissional, pronto para a gráfica ou para publicação em PDF."],
   ["Editoras", "Diagramação consistente do miolo e ajustes em arquivos editoriais já existentes."],
   ["Empresas e instituições", "Relatórios e publicações institucionais extensos, apresentados com clareza e identidade."],
   ["Cursos e educadores", "Apostilas e materiais didáticos organizados em módulos, com hierarquia que favorece o estudo."],
@@ -107,7 +107,7 @@ const packs: Pack[] = [
   },
 ];
 
-const formats = ["Livros impressos", "Apostilas e materiais didáticos", "E-books em PDF", "Publicações institucionais e relatórios"];
+const formats = ["Livros impressos", "Livros de poesia e literatura", "Apostilas e materiais didáticos", "E-books em PDF", "Publicações institucionais e relatórios"];
 
 const differentials = [
   "Organização de conteúdos extensos",
@@ -128,11 +128,13 @@ const steps = [
 
 const faqs = [
   ["Quanto custa diagramar um livro ou uma apostila?",
-    "O valor depende da quantidade de páginas, da complexidade do conteúdo (tabelas, imagens, gráficos) e do prazo. Envie essas informações e você recebe uma proposta clara, com escopo, etapas e entregas."],
+    "Cada publicação é diferente, por isso o orçamento é feito sob medida. O valor depende da quantidade de páginas, da complexidade do conteúdo (tabelas, imagens, gráficos) e do prazo. Envie essas informações pelo WhatsApp ou pelo formulário e você recebe uma proposta clara, com escopo, etapas e entregas."],
   ["Quanto tempo leva?",
     "O prazo é definido na proposta, de acordo com o volume e a complexidade do material. Se você já tem uma data de lançamento ou de envio para a gráfica, informe logo no primeiro contato."],
   ["O que eu preciso enviar para começar?",
     "O conteúdo da publicação e as imagens que farão parte dela. Na análise do material, definimos juntos o formato, o destino (impresso ou digital) e o que mais for necessário."],
+  ["Você diagrama livros de poesia?",
+    "Sim. Em livros de poesia, a diagramação respeita o ritmo e as quebras de verso de cada poema, com tipografia, margens e respiro pensados para a leitura, seja para impressão ou e-book."],
   ["Você também cria a capa?",
     "Sim. Além da diagramação, é possível contratar a capa e o projeto gráfico completo da publicação, como no Programa de Gestão e Vendas."],
   ["Em que formato recebo os arquivos?",
@@ -383,7 +385,7 @@ const ContactForm = () => {
 
 const EditorialLanding = () => {
   const title = "Diagramação de Livros, Apostilas e E-books | Rayssa Martins";
-  const description = "Diagramação profissional de livros, apostilas, e-books e publicações institucionais, com capa e projeto gráfico. Projetos editoriais de Rayssa Martins, Diretora de Arte Sênior.";
+  const description = "Diagramadora de livros em Fortaleza: diagramação de livros, poesia, apostilas e e-books prontos para gráfica e publicação digital, com capa e projeto gráfico. Orçamento sob medida pelo WhatsApp.";
   const ogImage = `${SITE}/editorial/og-diagramacao.jpg`;
   useReveal();
 
@@ -421,6 +423,14 @@ const EditorialLanding = () => {
     },
     {
       "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Início", item: `${SITE}/` },
+        { "@type": "ListItem", position: 2, name: "Diagramação de livros", item: CANONICAL },
+      ],
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "FAQPage",
       mainEntity: faqs.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
     },
@@ -438,6 +448,8 @@ const EditorialLanding = () => {
         <link rel="canonical" href={CANONICAL} />
         <link rel="alternate" hrefLang="pt-BR" href={CANONICAL} />
         <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Rayssa Martins" />
+        <meta property="og:locale" content="pt_BR" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:url" content={CANONICAL} />
@@ -739,7 +751,7 @@ const EditorialLanding = () => {
               <Eyebrow n="06">Sobre</Eyebrow>
               <h2 className="mt-6 font-serif-ed text-4xl font-light leading-[1.05] md:text-6xl">Sobre Rayssa Martins</h2>
               <p className="mt-10 font-serif-ed text-xl font-light leading-relaxed md:text-2xl">
-                Diretora de Arte Sênior, com atuação em design editorial, comunicação visual e projetos digitais. Mais de 10 anos de experiência criando projetos para marcas do Brasil, Estados Unidos e Portugal, com atenção à tipografia, à hierarquia e à consistência de cada publicação.
+                Diagramadora e Diretora de Arte Sênior, com atuação em design editorial, comunicação visual e projetos digitais. Mais de 10 anos de experiência criando projetos para marcas do Brasil, Estados Unidos e Portugal, com atenção à tipografia, à hierarquia e à consistência de cada publicação.
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-8">
                 <a href={wa()} target="_blank" rel="noopener noreferrer" className={btnPrimary}>

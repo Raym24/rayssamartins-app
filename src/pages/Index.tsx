@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import ServicesSection from "@/components/ServicesSection";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import SkillsSection from "@/components/SkillsSection";
@@ -15,10 +16,10 @@ const Index = () => {
   const { isEnglish } = useLanguage();
   const title = isEnglish
     ? "Rayssa Martins | Senior Art Director & Multidisciplinary Designer"
-    : "Rayssa Martins | Diretora de Arte Sênior e Designer Gráfico";
+    : "Rayssa Martins | Design, Sites e Diagramação de Livros em Fortaleza";
   const description = isEnglish
     ? "Senior Art Director and Multidisciplinary Designer with 10+ years of experience in Branding, Digital Design, UI/UX, Photography and Creative Technology. Based in Brazil, available worldwide."
-    : "Diretora de Arte Sênior em Fortaleza, especializada em design gráfico, branding, identidade visual e design digital. Conheça o portfólio de Rayssa Martins.";
+    : "Diretora de Arte Sênior em Fortaleza: sites e landing pages, identidade visual e diagramação de livros, apostilas e e-books. Veja o portfólio e peça seu orçamento.";
   const canonical = isEnglish ? "https://rayssamartins.app/en" : "https://rayssamartins.app/";
   const ogImage = "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/79176605-7226-473e-978e-d49048c896ae/id-preview-12abf1ae--b3b70294-fc86-45ef-900a-84cc5031300b.lovable.app-1773427478197.png";
 
@@ -91,6 +92,7 @@ const Index = () => {
       <FloatingElements />
       <Navbar />
       <HeroSection />
+      <ServicesSection />
       <AnimatedDivider text={isEnglish ? "ABOUT ME" : "SOBRE MIM"} variant="red" />
       <AboutSection />
       <SkillsSection />
