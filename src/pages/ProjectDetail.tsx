@@ -16,6 +16,9 @@ const ProjectDetail = () => {
   if (!project) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
+        <Helmet>
+          <meta name="robots" content="noindex, nofollow" />
+        </Helmet>
         <div className="text-center space-y-4">
            <h1 className="font-display text-2xl font-bold">{isEnglish ? "Project not found" : "Projeto não encontrado"}</h1>
            <Link to={isEnglish ? "/en" : "/"} className="text-sm text-muted-foreground hover:text-foreground underline">
@@ -26,22 +29,35 @@ const ProjectDetail = () => {
     );
   }
 
+  const pageTitle = `${project.title} | Rayssa Martins`;
+  const pageDescription = isEnglish ? translation?.shortDescription ?? project.shortDescription : project.shortDescription;
+  const pageUrl = `https://rayssamartins.app${isEnglish ? "/en" : ""}/projeto/${project.id}`;
+  const pageImage = project.thumbnailUrl
+    ? new URL(project.thumbnailUrl, "https://rayssamartins.app").href
+    : undefined;
+
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>{`${project.title} — Rayssa Martins`}</title>
-         <html lang={isEnglish ? "en" : "pt-BR"} />
-         <meta name="description" content={isEnglish ? translation?.shortDescription ?? project.shortDescription : project.shortDescription} />
-         <link rel="canonical" href={`https://rayssamartins.app${isEnglish ? "/en" : ""}/projeto/${project.id}`} />
-         <link rel="alternate" hrefLang="pt-BR" href={`https://rayssamartins.app/projeto/${project.id}`} />
-         <link rel="alternate" hrefLang="en" href={`https://rayssamartins.app/en/projeto/${project.id}`} />
-         <link rel="alternate" hrefLang="x-default" href={`https://rayssamartins.app/projeto/${project.id}`} />
-        <meta property="og:title" content={`${project.title} — Rayssa Martins`} />
-         <meta property="og:description" content={isEnglish ? translation?.shortDescription ?? project.shortDescription : project.shortDescription} />
-         <meta property="og:url" content={`https://rayssamartins.app${isEnglish ? "/en" : ""}/projeto/${project.id}`} />
+        <html lang={isEnglish ? "en" : "pt-BR"} />
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href={pageUrl} />
+        <link rel="alternate" hrefLang="pt-BR" href={`https://rayssamartins.app/projeto/${project.id}`} />
+        <link rel="alternate" hrefLang="en" href={`https://rayssamartins.app/en/projeto/${project.id}`} />
+        <link rel="alternate" hrefLang="x-default" href={`https://rayssamartins.app/projeto/${project.id}`} />
         <meta property="og:type" content="website" />
-        <meta name="twitter:title" content={`${project.title} — Rayssa Martins`} />
-         <meta name="twitter:description" content={isEnglish ? translation?.shortDescription ?? project.shortDescription : project.shortDescription} />
+        <meta property="og:site_name" content="Rayssa Martins" />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:url" content={pageUrl} />
+        <meta property="og:locale" content={isEnglish ? "en_US" : "pt_BR"} />
+        {pageImage && <meta property="og:image" content={pageImage} />}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
+        {pageImage && <meta name="twitter:image" content={pageImage} />}
       </Helmet>
       <Navbar />
       <div className="pt-24 pb-16">
