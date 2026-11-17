@@ -133,6 +133,15 @@
 }
 .arrows button:hover { background: var(--red); }
 
+/* Cartão de reserva quando a imagem do projeto não carrega */
+.cine .ph {
+  width: 100%; height: 100%; min-height: 100%; aspect-ratio: 16 / 10; display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(80% 90% at 30% 20%, #3a0a0d, #141414 70%); color: var(--ink);
+  font-weight: 700; letter-spacing: -.03em; text-align: center; padding: 8%; box-sizing: border-box;
+  font-size: clamp(12px, 2.4vw, 40px);
+}
+.thumbs .ph { font-size: 10px; letter-spacing: 0; padding: 4px; }
+
 /* Cenas de projeto */
 .scene { position: relative; height: 190vh; }
 .scene .sticky { position: sticky; top: 0; height: 100svh; overflow: hidden; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: center; gap: clamp(20px, 4vw, 64px); padding: 0 clamp(20px, 6vw, 96px); }

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { projects } from "@/data/projects";
+import cutout from "@/assets/rayssa-recorte.webp";
 import "./novo.css";
 
 /**
@@ -89,6 +90,19 @@ function useScrollY() {
   return y;
 }
 
+/** Imagem de projeto com um cartão de reserva se a imagem não carregar. */
+function Thumb({ src, title, alt = "" }: { src: string; title: string; alt?: string }) {
+  const [failed, setFailed] = useState(false);
+  if (failed) {
+    return (
+      <div className="ph" role={alt ? "img" : undefined} aria-label={alt || undefined}>
+        <span>{title.split(" - ")[0]}</span>
+      </div>
+    );
+  }
+  return <img src={src} alt={alt} loading="lazy" onError={() => setFailed(true)} />;
+}
+
 function Hero() {
   const y = useScrollY();
   const still = reduceMotion();
@@ -101,7 +115,7 @@ function Hero() {
       </div>
       <img
         className="photo"
-        src="/novo/rayssa-recorte.webp"
+        src={cutout}
         alt="Rayssa Martins sorrindo, de óculos e jaqueta jeans, segurando uma mesa digitalizadora"
         style={{ transform: `translateX(-50%) translateY(${still ? 0 : y * 0.12}px) scale(${still ? 1 : 1 + y * 0.00008})` }}
       />
@@ -181,7 +195,7 @@ function Carousel() {
               tabIndex={k === active ? 0 : -1}
               aria-label={`Ver projeto ${p.title}`}
             >
-              <div className="screen"><img src={p.thumbnailUrl} alt="" loading="lazy" /></div>
+              <div className="screen"><Thumb src={p.thumbnailUrl} title={p.title} /></div>
               <div className="base" />
               <div className="tag">{p.title}</div>
             </Link>
@@ -201,7 +215,7 @@ function Carousel() {
               setI(i + d);
             }}
           >
-            <img src={p.thumbnailUrl} alt="" loading="lazy" />
+            <Thumb src={p.thumbnailUrl} title={p.title} />
           </button>
         ))}
       </div>
@@ -236,7 +250,7 @@ function Scene({ index, data }: { index: number; data: (typeof SCENES)[number] }
           <div className="halo" aria-hidden="true" />
           <div className="win" style={{ transform: `translateY(${lift}px) rotateX(${tilt}deg) scale(${scale})` }}>
             <div className="bar" aria-hidden="true"><i /><i /><i /></div>
-            <img src={project.thumbnailUrl} alt={`Projeto ${project.title}`} loading="lazy" />
+            <Thumb src={project.thumbnailUrl} title={project.title} alt={`Projeto ${project.title}`} />
           </div>
         </div>
       </div>
