@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index.tsx";
 import ProjectDetail from "./pages/ProjectDetail.tsx";
 import EditorialLanding from "./pages/EditorialLanding.tsx";
+import Novo from "./pages/Novo.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
 import { LanguageProvider } from "@/contexts/LanguageContext";
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/projeto/:id" element={<ProjectDetail />} />
             <Route path="/en/projeto/:id" element={<ProjectDetail />} />
             <Route path="/diagramacao-de-livros" element={<EditorialLanding />} />
+            <Route path="/novo" element={<Novo />} />
             <Route
               path="*"
               element={
