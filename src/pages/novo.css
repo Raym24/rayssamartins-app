@@ -63,7 +63,7 @@
 @media (max-width: 640px) { .scrollhint { display: none; } }
 .cine-hero .photo {
   position: absolute; left: 50%; bottom: 0; z-index: 1;
-  height: min(88svh, 980px); width: auto; transform: translateX(-50%);
+  height: min(72svh, 760px); width: auto; max-width: none; transform: translateX(-50%);
   filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.6));
   -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent 100%);
   mask-image: linear-gradient(180deg, #000 78%, transparent 100%);
@@ -88,7 +88,7 @@
 .pill.red { background: var(--red); color: #fff !important; }
 .pill.ghost { background: transparent; color: var(--ink) !important; box-shadow: inset 0 0 0 1.5px rgba(245, 242, 236, 0.5); }
 @media (max-width: 640px) {
-  .cine-hero .photo { height: 70svh; }
+  .cine-hero .photo { height: auto; width: 125vw; }
   .cine-hero .word { top: 30%; }
   .cine-hero::after {
   content: ""; position: absolute; inset: auto 0 0 0; height: 38%; z-index: 2; pointer-events: none;

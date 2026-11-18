@@ -3,7 +3,7 @@ import type { PointerEvent as ReactPointerEvent } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { projects } from "@/data/projects";
-import cutout from "@/assets/rayssa-recorte.webp";
+import cutout from "@/assets/rayssa-listrada.webp";
 import "./novo.css";
 
 /**
@@ -230,7 +230,7 @@ function Hero({ ready, s }: { ready: boolean; s: ReturnType<typeof useSmoothScro
       <img
         className="photo"
         src={cutout}
-        alt="Rayssa Martins sorrindo, de óculos e jaqueta jeans, segurando uma mesa digitalizadora"
+        alt="Rayssa Martins de óculos e camiseta listrada vermelha, olhando para cima"
         style={{
           transform: `translateX(calc(-50% + ${s.mx * 18}px)) translateY(${y * 0.15 + s.my * 8}px) scale(${1 + y * 0.0001})`,
         }}
