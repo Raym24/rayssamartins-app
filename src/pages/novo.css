@@ -53,7 +53,7 @@
 }
 .cine-hero.in .word span { transform: translateY(0); }
 .cine-hero .photo { transition: opacity 1.2s ease .45s, filter 1.2s ease .45s; }
-.cine-hero:not(.in) .photo { opacity: 0; filter: blur(12px) drop-shadow(0 30px 60px rgba(0,0,0,.6)); }
+.cine-hero:not(.in) .photo { opacity: 0; filter: blur(12px); }
 .cine-hero .meta { transition: opacity .8s ease .9s, transform .8s ease .9s; }
 .cine-hero:not(.in) .meta { opacity: 0; transform: translateY(20px); }
 .cine-hero .glow { will-change: transform; inset: -5%; }
@@ -64,7 +64,6 @@
 .cine-hero .photo {
   position: absolute; left: 50%; bottom: 0; z-index: 1;
   height: min(72svh, 760px); width: auto; max-width: none; transform: translateX(-50%);
-  filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.6));
   -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent 100%);
   mask-image: linear-gradient(180deg, #000 78%, transparent 100%);
   will-change: transform;
